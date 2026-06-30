@@ -117,20 +117,35 @@ if (btnLogout) {
 }
 
 window.syncCartToCloud = async (cart) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-        await supabase.auth.updateUser({
-            data: { cart: cart }
-        });
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            const { error } = await supabase.auth.updateUser({
+                data: { cart: cart }
+            });
+            if (error) {
+                console.error("Cart Sync Error:", error);
+                alert("Failed to sync cart to cloud: " + error.message);
+            }
+        }
+    } catch (e) {
+        console.error("Cart Sync Exception:", e);
     }
 };
 
 async function mergeAndSyncCart(cachedUser) {
     // Force fetch the latest user data from the server to avoid stale cached metadata
     const { data: { user }, error } = await supabase.auth.getUser();
-    if (error || !user) return;
+    if (error) {
+        console.error("Cart Sync Error:", error);
+        return;
+    }
+    if (!user) return;
 
-    const cloudCart = user.user_metadata?.cart || [];
+    // Deep clone to avoid mutating the original cloudCart array during merge
+    const cloudCart = JSON.parse(JSON.stringify(user.user_metadata?.cart || []));
+    const originalCloudCartString = JSON.stringify(cloudCart);
+    
     let localCart = [];
     try {
         const cartStr = localStorage.getItem('pall_and_pearl_cart');
@@ -159,7 +174,7 @@ async function mergeAndSyncCart(cachedUser) {
         window.renderCartPage();
     }
     
-    if (JSON.stringify(cloudCart) !== JSON.stringify(mergedCart)) {
+    if (originalCloudCartString !== JSON.stringify(mergedCart)) {
         await supabase.auth.updateUser({ data: { cart: mergedCart } });
     }
 }
