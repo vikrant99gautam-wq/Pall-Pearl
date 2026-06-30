@@ -68,9 +68,46 @@ async function loadDashboardData() {
             
         if (error) throw error;
         
+        // Calculate Stats
+        let totalRevenue = 0;
+        let pendingCount = 0;
+        let newCount = 0;
+        
+        const now = new Date();
+        const oneDayMs = 24 * 60 * 60 * 1000;
+        
+        orders.forEach(order => {
+            // Revenue
+            if (order.total) {
+                totalRevenue += parseFloat(order.total) || 0;
+            }
+            
+            // Pending
+            if (!order.status || order.status.toLowerCase() === 'pending') {
+                pendingCount++;
+            }
+            
+            // New (last 24h)
+            if (order.createdat) {
+                const orderDate = new Date(order.createdat);
+                if ((now - orderDate) < oneDayMs) {
+                    newCount++;
+                }
+            }
+        });
+
         // Update Stats
         const statOrders = document.getElementById("stat-orders");
         if (statOrders) statOrders.textContent = orders.length;
+        
+        const statRevenue = document.getElementById("stat-revenue");
+        if (statRevenue) statRevenue.textContent = `₹${totalRevenue.toFixed(2)}`;
+        
+        const statPending = document.getElementById("stat-pending");
+        if (statPending) statPending.textContent = pendingCount;
+        
+        const statNew = document.getElementById("stat-new");
+        if (statNew) statNew.textContent = newCount;
         
         // Render Orders Table
         renderOrdersTable(orders);
