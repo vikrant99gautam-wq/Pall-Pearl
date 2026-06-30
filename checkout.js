@@ -68,43 +68,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Build WhatsApp Message
-        let message = '\u{1F338} *Namaste from Pall & Pearl!* \u{2728}\\n\\n';
-        message += 'Thank you so much for shopping with us. \u{1F496}\\n';
-        message += 'Your order request has been received successfully!\\n\\n';
-        message += '━━━━━━━━━━━━━━━━━━\\n';
-        message += '\u{1F6CD}\u{FE0F} *ORDER SUMMARY*\\n\\n';
-        message += '\u{1F464} *Customer:* ' + fullName + '\\n';
-        message += '\u{1F4DE} *Phone:* ' + phone + '\\n';
-        if (email) message += '\u{1F4E7} *Email:* ' + email + '\\n';
-        message += '\\n\u{1F4CD} *Shipping Address:*\\n';
-        message += address + '\\n' + city + ', ' + state + ' - ' + pincode + '\\n\\n';
-        message += '━━━━━━━━━━━━━━━━━━\\n';
-        message += '\u{2728} *Items Ordered*\\n\\n';
+        let message = '\u{1F338} *Namaste from Pall & Pearl!* \u{2728}\n\n';
+        message += 'Thank you so much for shopping with us. \u{1F496}\n';
+        message += 'Your order request has been received successfully!\n\n';
+        message += '━━━━━━━━━━━━━━━━━━\n';
+        message += '\u{1F6CD}\u{FE0F} *ORDER SUMMARY*\n\n';
+        message += '\u{1F464} *Customer:* ' + fullName + '\n';
+        message += '\u{1F4DE} *Phone:* ' + phone + '\n';
+        if (email) message += '\u{1F4E7} *Email:* ' + email + '\n';
+        message += '\n\u{1F4CD} *Shipping Address:*\n';
+        message += address + '\n' + city + ', ' + state + ' - ' + pincode + '\n\n';
+        message += '━━━━━━━━━━━━━━━━━━\n';
+        message += '\u{2728} *Items Ordered*\n\n';
 
         checkoutCart.forEach((item) => {
-            message += '\u{1FA77} *' + item.name + '*\\n';
-            if (item.size) message += '• Size: ' + item.size + '\\n';
-            if (item.color) message += '• Color: ' + item.color + '\\n';
-            if (item.sleeve) message += '• Style: ' + item.sleeve + '\\n';
-            message += '• Quantity: ' + item.quantity + '\\n';
-            message += '• Price: ' + item.price + '\\n';
+            message += '\u{1FA77} *' + item.name + '*\n';
+            if (item.size) message += '• Size: ' + item.size + '\n';
+            if (item.color) message += '• Color: ' + item.color + '\n';
+            if (item.sleeve) message += '• Style: ' + item.sleeve + '\n';
+            message += '• Quantity: ' + item.quantity + '\n';
+            message += '• Price: ' + item.price + '\n';
             if (item.image) {
                 const imgUrl = item.image.split(',')[0].trim();
-                message += '• Image: ' + imgUrl + '\\n';
+                message += '• Image: ' + imgUrl + '\n';
             }
             if (item.customization) {
-                message += '\\n\u{1F4DD} *Customization Note:*\\n' + item.customization + '\\n';
+                message += '\n\u{1F4DD} *Customization Note:*\n' + item.customization + '\n';
             }
-            message += '\\n';
+            message += '\n';
         });
 
-        message += '━━━━━━━━━━━━━━━━━━\\n';
-        message += '\u{1F4B3} *Total Amount:* *₹' + totalAmount.toLocaleString('en-IN') + '*\\n\\n';
+        message += '━━━━━━━━━━━━━━━━━━\n';
+        message += '\u{1F4B3} *Total Amount:* *₹' + totalAmount.toLocaleString('en-IN') + '*\n\n';
         
-        message += '\u{1F496} *What happens next?*\\n\\n';
-        message += 'Our team will carefully review your order and our seller will personally contact you shortly to confirm all the details before processing your order.\\n\\n';
-        message += 'If you have any questions or want to make any changes, feel free to reply to this chat. We\'re always happy to help! \u{1F60A}\\n\\n';
-        message += 'Thank you for choosing *Pall & Pearl* \u{1F337}\\n\\n';
+        message += '\u{1F496} *What happens next?*\n\n';
+        message += 'Our team will carefully review your order and our seller will personally contact you shortly to confirm all the details before processing your order.\n\n';
+        message += 'If you have any questions or want to make any changes, feel free to reply to this chat. We\'re always happy to help! \u{1F60A}\n\n';
+        message += 'Thank you for choosing *Pall & Pearl* \u{1F337}\n\n';
         message += '*Chatpate Tops for Chatpati Girls* \u{2728}';
 
         // Encode and open WhatsApp
