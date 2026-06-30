@@ -125,7 +125,11 @@ window.syncCartToCloud = async (cart) => {
     }
 };
 
-async function mergeAndSyncCart(user) {
+async function mergeAndSyncCart(cachedUser) {
+    // Force fetch the latest user data from the server to avoid stale cached metadata
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error || !user) return;
+
     const cloudCart = user.user_metadata?.cart || [];
     let localCart = [];
     try {
