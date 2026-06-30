@@ -14,7 +14,7 @@ const profileInitial = document.getElementById('profile-initial');
 const btnLogout = document.getElementById('btn-logout');
 
 // DOM Elements - Cart Checkout
-const btnCheckout = document.getElementById('btn-checkout');
+// (Checkout logic moved to cart.js)
 
 // Utility to show alerts
 function showAlert(message, type = 'error') {
@@ -224,65 +224,6 @@ supabase.auth.onAuthStateChange(async (event, session) => {
         // Update global nav profile link
         updateNavProfileLink('profile.html');
         
-        if (btnCheckout) {
-            btnCheckout.onclick = async () => {
-                try {
-                    // Check if cart is empty
-                    let cart = [];
-                    try {
-                        cart = JSON.parse(localStorage.getItem('cart')) || [];
-                    } catch (e) {
-                        cart = [];
-                    }
-                    
-                    if (cart.length === 0) {
-                        showAlert("Your cart is empty!", "error");
-                        return;
-                    }
-
-                    // Calculate total
-                    let total = 0;
-                    cart.forEach(item => {
-                        let price = parseFloat(item.price.replace('₹', ''));
-                        total += price * item.quantity;
-                    });
-
-                    // Disable button
-                    btnCheckout.disabled = true;
-                    btnCheckout.textContent = "Processing...";
-                    btnCheckout.classList.add("opacity-50");
-
-                    const displayName = user.user_metadata?.display_name || "Unknown";
-
-                    // Create order in Supabase
-                    const { data, error } = await supabase.from('orders').insert([{
-                        customername: displayName,
-                        customeremail: user.email,
-                        total: total,
-                        status: "Pending",
-                        items: JSON.stringify(cart)
-                    }]).select();
-                    
-                    if (error) throw error;
-
-                    // Clear cart
-                    localStorage.setItem('cart', JSON.stringify([]));
-                    
-                    // Alert and redirect
-                    const orderId = data[0].id;
-                    alert(`Order #${orderId.substring(0,8).toUpperCase()} placed successfully!`);
-                    window.location.href = "profile.html";
-
-                } catch (e) {
-                    console.error("Error placing order:", e);
-                    showAlert("Failed to place order. Please try again.", "error");
-                    btnCheckout.disabled = false;
-                    btnCheckout.textContent = "Proceed to Checkout";
-                    btnCheckout.classList.remove("opacity-50");
-                }
-            };
-        }
-        
     } else {
         // User is logged out
         if (isProfilePage) {
@@ -291,13 +232,6 @@ supabase.auth.onAuthStateChange(async (event, session) => {
         
         // Update global nav profile link
         updateNavProfileLink('auth.html');
-        
-        if (btnCheckout) {
-            btnCheckout.onclick = () => {
-                alert("Please log in or create an account to place an order.");
-                window.location.href = 'auth.html';
-            };
-        }
     }
 });
 

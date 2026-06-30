@@ -123,6 +123,12 @@
     </style>
 </head>
 <body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<script>
+    window.onerror = function(message, source, lineno, colno, error) {
+        // alert("Global Error: " + message);
+        console.error("Global Error:", message);
+    };
+</script>
 <!-- TopNavBar -->
 <nav class="bg-surface/80 backdrop-blur-xl dark:bg-surface/80 text-primary dark:text-primary-fixed-dim font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg sticky top-0 w-full z-50 border-b border-white/20 dark:border-outline-variant/20 shadow-sm backdrop-saturate-150 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-[1440px] mx-auto">
 <a class="font-headline-lg text-headline-lg text-primary dark:text-primary-fixed-dim italic tracking-tight" href="hero.html">Pall &amp; Pearl</a>
@@ -183,7 +189,7 @@
                     <span>Total</span>
                     <span id="cart-total">₹0.00</span>
                 </div>
-                <button id="btn-checkout" class="w-full py-4 rounded-xl bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest hover:opacity-90 transition-opacity">
+                <button onclick="try { proceedToCheckout(); } catch(e) { alert('Button error: ' + e); }" class="w-full py-4 rounded-xl bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest hover:opacity-90 transition-opacity">
                     Proceed to Checkout
                 </button>
             </div>
@@ -248,6 +254,27 @@
         const formattedTotal = "₹" + total.toFixed(2);
         document.getElementById("cart-subtotal").textContent = formattedTotal;
         document.getElementById("cart-total").textContent = formattedTotal;
+    }
+
+    function proceedToCheckout() {
+        console.log("Proceed to checkout clicked");
+        let cart = typeof getCart === 'function' ? getCart() : [];
+        if (cart.length === 0) {
+            try {
+                cart = JSON.parse(localStorage.getItem('pall_and_pearl_cart')) || [];
+            } catch (e) {
+                cart = [];
+            }
+        }
+        
+        if (cart.length === 0) {
+            alert("Your bag is empty! Please add some items first.");
+            return;
+        }
+
+        console.log("Setting checkout cart:", cart);
+        localStorage.setItem('checkout_cart', JSON.stringify(cart));
+        window.location.href = "checkout.html";
     }
 
     document.addEventListener("DOMContentLoaded", renderCartPage);

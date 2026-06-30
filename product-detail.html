@@ -212,8 +212,8 @@
 </div>
 <!-- Actions -->
 <div class="flex flex-col gap-4 mb-12">
-<button onclick="addProductToCart()" class="w-full py-4 rounded-xl glass-panel text-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-container transition-all">Add to Bag</button>
-<button class="w-full py-4 rounded-xl glass-panel text-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-container transition-all">
+<button onclick="try { addProductToCart(); } catch(e) { alert('Cart error: ' + e); }" class="w-full py-4 rounded-xl glass-panel text-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-container transition-all">Add to Bag</button>
+<button onclick="try { buyNowCheckout(); } catch(e) { alert('Buy error: ' + e); }" class="w-full py-4 rounded-xl glass-panel text-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-container transition-all">
                         Buy Now
                     </button>
 </div>
@@ -392,6 +392,59 @@
             color: color,
             customMod: customMod
         });
+    }
+
+    window.buyNowCheckout = function() {
+        try {
+            console.log("Buy Now Checkout Clicked");
+            let size = "M"; // fallback
+            const activeBtn = document.querySelector(".size-btn.border-2");
+            if (activeBtn) {
+                size = activeBtn.textContent.trim();
+            }
+
+            let sleeve = undefined;
+            const sleeveSection = document.getElementById('sleeve-section');
+            if (sleeveSection && sleeveSection.style.display !== 'none') {
+                sleeve = "Sleeve"; // fallback
+                const activeSleeveBtn = document.querySelector(".sleeve-btn.border-2");
+                if (activeSleeveBtn) {
+                    sleeve = activeSleeveBtn.textContent.trim();
+                }
+            }
+
+            let color = undefined;
+            const colorSection = document.getElementById('color-section');
+            if (colorSection && colorSection.style.display !== 'none') {
+                const activeColorBtn = document.querySelector(".color-btn.border-2");
+                if (activeColorBtn) {
+                    color = activeColorBtn.dataset.colorName;
+                }
+            }
+
+            const customModInput = document.getElementById('custom-mod');
+            const customMod = customModInput ? customModInput.value.trim() : '';
+
+            const item = {
+                id: Date.now().toString(),
+                name: document.getElementById('product-title').textContent, 
+                price: document.getElementById('product-price').textContent, 
+                image: document.getElementById('product-image').src,
+                size: size,
+                quantity: 1
+            };
+
+            if (sleeve) item.sleeve = sleeve;
+            if (color) item.color = color;
+            if (customMod) item.customization = customMod;
+
+            console.log("Setting checkout cart:", [item]);
+            localStorage.setItem('checkout_cart', JSON.stringify([item]));
+            window.location.href = 'checkout.html';
+        } catch (e) {
+            console.error("Error in Buy Now Checkout:", e);
+            alert("Something went wrong! Please try again.");
+        }
     }
 </script>
 <script src="cart.js"></script>

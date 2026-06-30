@@ -138,4 +138,24 @@ function parsePrice(priceStr) {
 // Initialize on load
 document.addEventListener("DOMContentLoaded", () => {
     updateCartBadge();
+    
+    // Checkout button listener
+    const btnCheckout = document.getElementById('btn-checkout');
+    if (btnCheckout) {
+        btnCheckout.addEventListener('click', () => {
+            const cart = getCart();
+            
+            if (cart.length === 0) {
+                if (typeof showAlert === 'function') {
+                    showAlert("Your bag is empty!", "error");
+                } else {
+                    alert("Your bag is empty!");
+                }
+                return;
+            }
+
+            localStorage.setItem('checkout_cart', JSON.stringify(cart));
+            window.location.href = "checkout.html";
+        });
+    }
 });
