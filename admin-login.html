@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>System Access</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: {
+                "body": ["DM Sans"]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-gray-950 text-gray-100 antialiased min-h-screen flex items-center justify-center font-body selection:bg-pink-500 selection:text-white">
+    
+    <div class="w-full max-w-md p-8 bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl">
+        <div class="mb-10 text-center">
+            <div class="w-12 h-12 bg-gray-800 rounded-xl mx-auto flex items-center justify-center mb-4 border border-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight text-white">Secure Portal</h1>
+            <p class="text-gray-500 text-sm mt-2">Authorized personnel only</p>
+        </div>
+
+        <div id="alert-box" class="hidden mb-6 p-4 rounded-xl text-sm font-medium bg-red-900/50 text-red-200 border border-red-800/50"></div>
+
+        <form id="admin-login-form" class="space-y-6">
+            <div>
+                <label for="email" class="block text-xs font-semibold tracking-wider text-gray-400 uppercase mb-2">Admin Identity</label>
+                <input type="email" id="email" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-colors">
+            </div>
+            <div>
+                <label for="password" class="block text-xs font-semibold tracking-wider text-gray-400 uppercase mb-2">Passphrase</label>
+                <input type="password" id="password" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-colors">
+            </div>
+            
+            <button type="submit" id="btn-submit" class="w-full bg-white text-black font-semibold py-3 px-4 rounded-xl hover:bg-gray-200 transition-colors mt-4">
+                Authenticate
+            </button>
+        </form>
+    </div>
+
+    <script type="module" src="admin-login.js?v=2"></script>
+</body>
+</html>

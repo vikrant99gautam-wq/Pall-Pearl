@@ -1,0 +1,570 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Pall &amp; Pearl - Editorial Hero Variant 3</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Comfortaa:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "on-secondary-fixed": "#320f1e",
+                "on-primary-fixed-variant": "#851c48",
+                "tertiary-container": "#aca3c3",
+                "secondary-container": "#fec1d5",
+                "surface-container-highest": "#f1dee1",
+                "outline": "#887177",
+                "on-tertiary": "#ffffff",
+                "error-container": "#ffdad6",
+                "inverse-on-surface": "#ffecef",
+                "error": "#ba1a1a",
+                "surface-container": "#fde9ed",
+                "tertiary": "#625a77",
+                "primary-container": "#ff7da9",
+                "surface-container-low": "#fff0f2",
+                "on-tertiary-fixed": "#1e1830",
+                "on-tertiary-container": "#403953",
+                "tertiary-fixed-dim": "#ccc1e2",
+                "surface-tint": "#a43560",
+                "primary-fixed": "#ffd9e2",
+                "secondary-fixed": "#ffd9e4",
+                "outline-variant": "#dbc0c6",
+                "on-error-container": "#93000a",
+                "on-surface": "#23191b",
+                "on-surface-variant": "#554247",
+                "on-primary": "#ffffff",
+                "secondary-fixed-dim": "#f2b6ca",
+                "tertiary-fixed": "#e8ddff",
+                "surface-container-high": "#f7e3e7",
+                "on-background": "#23191b",
+                "surface-variant": "#f1dee1",
+                "on-primary-fixed": "#3f001c",
+                "surface": "#fff8f8",
+                "on-error": "#ffffff",
+                "primary": "#a43560",
+                "surface-bright": "#fff8f8",
+                "surface-container-lowest": "#ffffff",
+                "primary-fixed-dim": "#ffb1c7",
+                "surface-dim": "#e9d5d9",
+                "on-tertiary-fixed-variant": "#4a435e",
+                "on-secondary-fixed-variant": "#65394a",
+                "on-secondary": "#ffffff",
+                "inverse-primary": "#ffb1c7",
+                "on-primary-container": "#770f3e",
+                "inverse-surface": "#392d30",
+                "on-secondary-container": "#7b4c5d",
+                "background": "#fff8f8",
+                "secondary": "#805062"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "margin-desktop": "64px",
+                      "gutter": "24px",
+                      "unit": "8px",
+                      "section-gap": "120px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "DM Sans"
+                      ],
+                      "accent-script": [
+                              "Comfortaa"
+                      ],
+                      "headline-lg": [
+                              "Playfair Display"
+                      ],
+                      "headline-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "display-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "display-lg": [
+                              "Playfair Display"
+                      ],
+                      "label-sm": [
+                              "DM Sans"
+                      ],
+                      "body-md": [
+                              "DM Sans"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "accent-script": [
+                              "20px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "fontWeight": "300",
+                                      "letterSpacing": "0.02em"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "38px",
+                                      "fontWeight": "300",
+                                      "letterSpacing": "0.02em"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "48px",
+                              {
+                                      "lineHeight": "54px",
+                                      "fontWeight": "300",
+                                      "letterSpacing": "0.02em"
+                              }
+                      ],
+                      "display-lg": [
+                              "80px",
+                              {
+                                      "lineHeight": "90px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "300"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        .float-animation-delayed {
+            animation: float 6s ease-in-out 3s infinite;
+        }
+        .float-fast {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .blob-bg {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.5;
+            z-index: -1;
+            border-radius: 50%;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: theme('colors.primary');
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+        
+        /* Thin ribbon style using SVG curve */
+        .ribbon {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.2;
+            fill: none;
+            stroke: theme('colors.primary');
+            stroke-width: 1;
+        }
+
+        /* Editorial Section Styles */
+        .masonry-card {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .masonry-card:hover {
+            transform: translateY(-8px);
+        }
+        .masonry-card:hover .card-image {
+            transform: scale(1.05);
+        }
+        .masonry-card:hover .glass-text-panel {
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .masonry-card:hover .arrow-icon {
+            transform: translateX(4px);
+        }
+        .card-image {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-text-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: background-color 0.4s ease;
+        }
+        .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-[#FFFDFB] text-on-surface antialiased overflow-x-hidden min-h-screen flex flex-col">
+<!-- Background Blobs & Ribbons - Flowing across both columns -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
+<div class="blob-bg bg-primary-fixed-dim w-[800px] h-[800px] -top-[10%] -left-[10%] mix-blend-multiply float-animation"></div>
+<div class="blob-bg bg-tertiary-fixed w-[600px] h-[600px] top-[20%] right-[10%] mix-blend-multiply float-animation-delayed"></div>
+<div class="blob-bg bg-secondary-container w-[900px] h-[900px] -bottom-[20%] left-[30%] mix-blend-multiply float-animation"></div>
+<!-- Decorative Ribbons -->
+<svg class="ribbon top-20 left-0 w-full h-[500px]" preserveAspectRatio="none" viewBox="0 0 1440 500">
+<path d="M-100,100 C200,300 400,0 800,200 C1200,400 1400,100 1600,150"></path>
+</svg>
+<svg class="ribbon bottom-20 left-0 w-full h-[300px]" preserveAspectRatio="none" viewBox="0 0 1440 300">
+<path d="M-100,200 C300,50 600,250 1000,100 C1300,-50 1500,150 1600,200"></path>
+</svg>
+<!-- Tiny Sparkles -->
+<div class="sparkle top-[15%] left-[25%] float-fast"></div>
+<div class="sparkle top-[35%] left-[5%] float-animation" style="animation-delay: 1s;"></div>
+<div class="sparkle top-[45%] right-[25%] float-animation-delayed"></div>
+<div class="sparkle bottom-[25%] left-[45%] float-fast" style="animation-delay: 0.5s;"></div>
+<div class="sparkle bottom-[15%] right-[15%] float-animation" style="animation-delay: 2s;"></div>
+</div>
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#FFFDFB]/60 backdrop-blur-xl border-b border-white/20 flat no shadows flex justify-between items-center px-margin-mobile lg:px-margin-desktop py-4">
+<a href="hero.html" class="font-display-lg-mobile lg:font-display-lg text-primary text-3xl lg:text-4xl hover:opacity-80 transition-opacity block">Pall &amp; Pearl</a>
+<div class="hidden lg:flex gap-8">
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors hover:opacity-80 transition-opacity duration-300" href="collection.html">Collections</a>
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-primary border-b border-primary pb-1 hover:opacity-80 transition-opacity duration-300" href="new-arrivals.html">New Arrivals</a>
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors hover:opacity-80 transition-opacity duration-300" href="tops.html">Tops</a>
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors hover:opacity-80 transition-opacity duration-300" href="kurtis.html">Kurtis</a>
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors hover:opacity-80 transition-opacity duration-300" href="hero.html">About</a>
+</div>
+<div class="flex gap-4 text-primary items-center">
+<a href="cart.html"  class="hover:opacity-80 transition-opacity duration-300 Active: scale-95 transition-transform duration-200" style="position:relative; display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="cart-badge absolute -top-1 -right-1 bg-error text-on-error font-label-sm w-4 h-4 rounded-full flex items-center justify-center text-[10px]" style="display:none;">0</span>
+</a>
+<button class="hover:opacity-80 transition-opacity duration-300 Active: scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+<a href="auth.html" class="nav-profile-link hover:opacity-80 transition-opacity duration-300" style="display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+    <span class="material-symbols-outlined">person</span>
+</a>
+<button class="lg:hidden hover:opacity-80 transition-opacity duration-300 ml-2" id="mobile-menu-toggle">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</div>
+</nav>
+<!-- Mobile Menu Overlay -->
+<div class="fixed inset-0 bg-on-background/30 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300" id="mobile-menu-overlay"></div>
+<!-- Mobile Menu Drawer -->
+<div class="fixed top-0 right-0 h-full w-[85vw] sm:w-[400px] bg-gradient-to-br from-[#FFFDFB]/95 to-primary-fixed/95 backdrop-blur-xl z-[60] rounded-l-3xl shadow-2xl transform translate-x-full transition-transform duration-500 ease-in-out flex flex-col pt-24 px-8 pb-12" id="mobile-menu-drawer">
+<!-- Close button -->
+<button class="absolute top-6 right-6 text-primary hover:opacity-80 transition-opacity" id="close-menu-btn">
+<span class="material-symbols-outlined text-3xl">close</span>
+</button>
+<!-- Menu Links -->
+<div class="flex flex-col gap-8 flex-grow">
+<a class="font-headline-lg-mobile text-3xl text-on-surface hover:text-primary transition-colors" href="collection.html">Collections</a>
+<a class="font-headline-lg-mobile text-3xl text-primary" href="new-arrivals.html">New Arrivals</a>
+<a class="font-headline-lg-mobile text-3xl text-on-surface hover:text-primary transition-colors" href="tops.html">Tops</a>
+<a class="font-headline-lg-mobile text-3xl text-on-surface hover:text-primary transition-colors" href="kurtis.html">Kurtis</a>
+<a class="font-headline-lg-mobile text-3xl text-on-surface hover:text-primary transition-colors" href="hero.html">About</a>
+</div>
+<!-- Bottom Section Icons -->
+<div class="mt-auto flex justify-between items-center text-primary pt-8 border-t border-primary/20">
+<button class="flex flex-col items-center gap-1 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-sm text-[10px] uppercase">Search</span>
+</button>
+<button class="flex flex-col items-center gap-1 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-label-sm text-[10px] uppercase">Wishlist</span>
+</button>
+<button class="flex flex-col items-center gap-1 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-[10px] uppercase">Profile</span>
+</button>
+<button class="flex flex-col items-center gap-1 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="font-label-sm text-[10px] uppercase">Cart</span>
+</button>
+</div>
+</div>
+<!-- Main Content -->
+<main class="flex-grow pt-32 pb-section-gap px-margin-mobile md:px-margin-desktop relative">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 min-h-[80vh] items-center relative">
+<!-- Left Side: Editorial Text -->
+<div class="relative z-10 flex flex-col justify-center">
+<!-- Large Background Text (Left Only) -->
+<div class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/4 -z-10 font-display-lg text-[150px] leading-none text-primary opacity-[0.03] select-none whitespace-nowrap hidden md:block">
+                    PALL &amp; PEARL
+                </div>
+<div class="space-y-8">
+<div class="glass-panel inline-flex items-center gap-2 px-4 py-2 rounded-full w-max float-animation text-primary font-label-sm text-label-sm uppercase tracking-widest">
+<span>✨</span> JUST DROPPED
+                </div>
+<div>
+<div class="font-accent-script text-primary text-2xl md:text-3xl mb-4 -rotate-2 origin-left">
+                        A modern tale of elegance...
+                    </div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-on-surface text-5xl md:text-7xl font-light leading-tight tracking-wide">
+                        Pretty<br>Starts Here.
+                    </h1>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-sm leading-relaxed">
+                    Discover our latest collection of premium Tops &amp; Kurtis. Handcrafted with exquisite details for a dreamy, elegant look.
+                </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<a href="collection.html" class="bg-primary text-on-primary px-8 py-4 rounded-xl font-label-sm text-label-sm uppercase tracking-widest hover:bg-secondary transition-colors duration-300 shadow-lg shadow-primary/20 inline-flex">
+                        Shop Collection
+                    </a>
+<a href="new-arrivals.html" class="glass-panel text-primary px-8 py-4 rounded-xl font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-variant transition-colors duration-300 inline-flex">
+                        Explore New Arrivals
+                    </a>
+</div>
+<!-- Feature Strip -->
+<div class="mt-8 bg-surface-container-low/80 backdrop-blur-sm rounded-2xl p-4 flex flex-wrap gap-4 justify-between items-center shadow-sm border border-white/50 max-w-lg">
+<div class="flex items-center gap-2 font-label-sm text-on-surface-variant"><span class="text-lg">🚚</span> Free Shipping</div>
+<div class="flex items-center gap-2 font-label-sm text-on-surface-variant"><span class="text-lg">🌸</span> Premium Fabric</div>
+<div class="flex items-center gap-2 font-label-sm text-on-surface-variant"><span class="text-lg">💕</span> Loved by 10K+ Girls</div>
+<div class="flex items-center gap-2 font-label-sm text-on-surface-variant"><span class="text-lg">✨</span> New Arrivals Weekly</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Duo Composition -->
+<div class="relative flex flex-col items-center justify-center min-h-[600px] w-full">
+<!-- Composition Container -->
+<div class="relative w-full max-w-[700px] h-[600px] md:h-[750px] mx-auto z-10">
+<!-- Background Glass Accent for Composition -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 rounded-full border border-primary/20 bg-gradient-to-tr from-white/10 to-transparent backdrop-blur-sm -z-10 hidden md:block"></div>
+<!-- Image 8 (Navy Kurti) -->
+<div class="absolute right-[5%] top-[5%] w-[45%] h-[65%] float-animation-delayed z-10 rounded-t-[100px] rounded-b-3xl overflow-hidden shadow-2xl border border-white/60">
+<img alt="Navy Kurti" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARsm7bYDN7cdLhaoTnGrwtkWoKQsCt4bFz5pT7aGq7GTMAdAxBvnotoiK0o4L0AmsIkvC4Ow8A3aXsyRUBGo64wYGw1_k4vYdDOj17_0wJb8HfFYPnuSasPqU8H6sLzINhEevlwNLAwzMjEXmTt4ckxeFSrZZMQYDRwsY0JcLuflc775vTmD57z-Y6hZ_mdhU0yo9nCtk8FsULOhIoeqbWqcMFkveoPDNFsp_Ha29P7B0cK5RNRC44ET1u6wgBKUD2KigaN0VtcC06">
+</div>
+<!-- Image 6 (Purple Kurti) -->
+<div class="absolute left-[5%] bottom-[10%] w-[45%] h-[65%] float-animation z-20 rounded-t-[100px] rounded-b-3xl overflow-hidden shadow-2xl border border-white/60">
+<img alt="Purple Kurti" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApoN3Tslw6fJKervWF6tuX7RwC9s0pBG4drIOeca3g8SiTXqZFmzQXAAJPpdlnsboylN26c0OxybXPXnmPiA04QwE-7LXU3fs6RqDNtsdnx306F1ZNarKNVgAMiUwbMDwtS0MKer1FzBbJOwMQWSM5hI0ydr66LG2W-tbznD7SVOwCvdb1Z8-flM0q-cR_TGoB8DUC0qLCs33rg5EJNJlXMrORRpNebmmkyR2MV9BN8VWfAnO32H3OgZQImjZrCJPUgaNjlTysYntB">
+</div>
+<!-- Image 7 (Pink Top) -->
+<div class="absolute left-[55%] top-[55%] -translate-x-1/2 -translate-y-1/2 w-[35%] h-[40%] float-fast z-30 rounded-2xl overflow-hidden shadow-xl border-4 border-white/80">
+<img alt="Pink Top Detail" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuMQ5xaOW1PSnzf7ZoN6Bb6xZ_NLeCga9536rQgpVbqu-iMc2Cvd8vJj8sfrJh-6YpuqIDXh4wYZ2bFMPrrC27por7YXWErNQCdjQ8ogjJiWIWzmWxibR42LxkEJp4AHAfcn0MAaacpPMGd-p6cf3MxDM788RDDVLYqkFsI48EqyjgbSFQr9MDJCVUcYdshFam3h6JQ8uBlPc_RoSqYlspKJCbnyZx2erGGNdz3JxTCwVxzS8aEzyONDZBBHNaHwXyZ34he8dWPXqb">
+</div>
+<!-- Floating Info Cards -->
+<div class="absolute top-[15%] left-[5%] glass-panel px-4 py-3 rounded-xl flex items-center gap-3 float-animation shadow-lg z-40">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-primary">✨</div>
+<div class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface">New Drop</div>
+</div>
+<div class="absolute bottom-[20%] right-[-5%] glass-panel px-4 py-3 rounded-xl flex items-center gap-3 float-animation-delayed shadow-lg z-40 hidden md:flex">
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container">🌸</div>
+<div class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface">Soft Fabric</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- The Edit Section -->
+<section class="relative py-24 px-margin-mobile md:px-margin-desktop overflow-hidden z-10">
+<!-- Section Background -->
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-surface-container-low/50 to-surface-container-high/30 -z-10"></div>
+<div class="absolute top-1/4 right-0 w-[600px] h-[600px] bg-secondary-fixed opacity-30 rounded-full blur-[100px] -z-10 mix-blend-multiply pointer-events-none float-animation"></div>
+<div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary-fixed opacity-20 rounded-full blur-[100px] -z-10 mix-blend-multiply pointer-events-none float-animation-delayed"></div>
+<!-- Floating Labels -->
+<div class="absolute top-[15%] left-[5%] glass-panel px-4 py-3 rounded-xl flex items-center gap-3 float-animation shadow-lg z-30 hidden lg:flex">
+<div class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface">HANDPICKED</div>
+</div>
+<div class="absolute top-[45%] right-[2%] glass-panel px-4 py-3 rounded-xl flex items-center gap-3 float-animation-delayed shadow-lg z-30 hidden lg:flex">
+<div class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface">SOFT FABRIC</div>
+</div>
+<div class="absolute bottom-[25%] left-[3%] glass-panel px-4 py-3 rounded-xl flex items-center gap-3 float-fast shadow-lg z-30 hidden lg:flex">
+<div class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface">PASTEL EDIT</div>
+</div>
+<!-- Header -->
+<div class="text-center mb-16 max-w-[700px] mx-auto relative z-20">
+<div class="font-label-sm text-primary tracking-widest uppercase mb-4">✦ CURATED COLLECTIONS</div>
+<h2 class="font-headline-lg md:font-display-lg text-on-surface mb-6 font-light">Shop the Edit</h2>
+<p class="font-body-lg text-on-surface-variant">Curated collections designed for every mood, every occasion, and every version of you.</p>
+</div>
+<!-- Main Grid - Pinterest Asymmetric Masonry -->
+<div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 items-start relative z-20">
+<!-- Card 1: New Arrivals (Portrait) -->
+<div onclick="window.location.href='new-arrivals.html'" class="md:col-span-4 h-[500px] md:h-[600px] masonry-card relative rounded-[36px] overflow-hidden group cursor-pointer shadow-lg w-full">
+<img alt="Fresh styles just landed." class="card-image w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhZWnRC3BdmXssvgpHkOlm3MWlD4bEUMjljYjVlnS3_lQQ57yBImkCOycfRSV-hdFocWHND4GxI_H3yyXqrHGtRPwua00cuL_03Fw_Jf5UUsSaC7OhK_e60QD-CUSXvoNvlTXALfWw6UdNJsusDQgN7KHMBQBm62l0hdqtlhLQZw90alzMKsUFt_o728LQ9CXGMcusKYzTtD3J1187TMMMyQxIuHkSAAcHtNmc4Ur1VkbGQJtU8VoTMtZjFF0KfT87IVNaDOxx1zoA">
+<div class="absolute top-6 right-6 glass-panel px-4 py-2 rounded-full flex items-center gap-1 shadow-md z-20">
+<span class="text-xs">✨</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider text-on-surface">Just Dropped</span>
+</div>
+<div class="absolute bottom-4 left-4 right-4 glass-text-panel rounded-[24px] p-6 flex flex-col gap-2 z-20">
+<h3 class="font-headline-lg-mobile text-2xl text-on-surface font-medium">NEW ARRIVALS</h3>
+<p class="font-body-md text-sm text-on-surface-variant line-clamp-2">Fresh styles just landed.</p>
+<div class="mt-2 flex items-center gap-2 text-primary font-label-sm uppercase tracking-widest group-hover:text-secondary transition-colors">
+                    Explore <span class="material-symbols-outlined text-sm arrow-icon">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Tops (Square) -->
+<div onclick="window.location.href='tops.html'" class="md:col-span-4 h-[500px] md:h-[450px] md:mt-12 masonry-card relative rounded-[36px] overflow-hidden group cursor-pointer shadow-lg w-full">
+<img alt="Everyday pieces with personality." class="card-image w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAE0ZuRZoMcclM7svH3yJV94e7FlLXzWDDRJBHNIl2TrLGrC6Vg7vMLvjYQiWGb4xTresOFrztj_PVdSix2f-TmU2GOxbgkR5oCuTKoLddK1OFZu9BRtJPvW08May37ZSg4HZ0iGTh4oElFewxDFOqugp-8Ufwt1FSVOFiVMaU97LbuXlIFgv20kUpd1IUFxiXeQDCKiZs0kU90GjZEIUN_tAMhXwzNpZzEL_K4hKbNCYNUXM5WcpQCklbjgWtTr4NDx-u9J1cYxdR0">
+<div class="absolute top-6 right-6 glass-panel px-4 py-2 rounded-full flex items-center gap-1 shadow-md z-20">
+<span class="text-xs">🔥</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider text-on-surface">Trending</span>
+</div>
+<div class="absolute bottom-4 left-4 right-4 glass-text-panel rounded-[24px] p-6 flex flex-col gap-2 z-20">
+<h3 class="font-headline-lg-mobile text-2xl text-on-surface font-medium">TOPS</h3>
+<p class="font-body-md text-sm text-on-surface-variant line-clamp-2">Everyday pieces with personality.</p>
+<div class="mt-2 flex items-center gap-2 text-primary font-label-sm uppercase tracking-widest group-hover:text-secondary transition-colors">
+                    Explore <span class="material-symbols-outlined text-sm arrow-icon">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Kurtis (Tall Portrait) -->
+<div onclick="window.location.href='kurtis.html'" class="md:col-span-4 h-[500px] md:h-[650px] masonry-card relative rounded-[36px] overflow-hidden group cursor-pointer shadow-lg w-full">
+<img alt="Timeless elegance with modern comfort." class="card-image w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTHqZdVUe-NQHeO6PnpOumWTzgzN8eCrFR0zKxW-Eg6TcrZytbmU4MCdaXjB1rP9M-je4UliqrQYebnXJREBF0-Hzov0_5NmUFBdl8ZgTT0-JC2QwxARTMZ8Qukyqfrdq8IuMs99wjUoSC5DV2t-63ihuqzdmown36Tzbx-N8zlFfMqQo3yv-H4W6tqyYmtCk-0jMsMlbLiDqqwLyTVJyfRZdD3DNUCAMi28uQdyPmI6nKrykHSC6aaPU3ZxwTv7jAxkzwdHMYRVsk">
+<div class="absolute top-6 right-6 glass-panel px-4 py-2 rounded-full flex items-center gap-1 shadow-md z-20">
+<span class="text-xs">🌸</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider text-on-surface">Bestseller</span>
+</div>
+<div class="absolute bottom-4 left-4 right-4 glass-text-panel rounded-[24px] p-6 flex flex-col gap-2 z-20">
+<h3 class="font-headline-lg-mobile text-2xl text-on-surface font-medium">KURTIS</h3>
+<p class="font-body-md text-sm text-on-surface-variant line-clamp-2">Timeless elegance with modern comfort.</p>
+<div class="mt-2 flex items-center gap-2 text-primary font-label-sm uppercase tracking-widest group-hover:text-secondary transition-colors">
+                    Explore <span class="material-symbols-outlined text-sm arrow-icon">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Card 4: Co-ord Sets (Landscape) -->
+<div onclick="window.location.href='coord-sets.html'" class="md:col-span-4 h-[400px] md:h-[350px] md:-mt-6 masonry-card relative rounded-[36px] overflow-hidden group cursor-pointer shadow-lg w-full">
+<img alt="Perfectly matched. Perfectly effortless." class="card-image w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2_QVHP6RiAIKNufWmUuXVT27E99ZDM88Otb35cpieHXR6e4c8xK0wVcvKtiFUKtgIypf73EaKnlIdf6Fy6LI2uCL1PD3qkFoNrpFhLgL4lNVbRZ1qsIPHkeQuLvAhJZUqJwRhi_Yr-0vXZeyI0u_Ia5fx2kKCOffg2YGHC-yLGvkl-MDGh-AGyG2zAvxVkAoXfdIFziVf1OUtS9fPsyu4Z-w_TGOOxFxTuP5Gt8Vp3ExcxuCqFzffl2ve8zpQNDkO-ui4b1Juoplp">
+<div class="absolute top-6 right-6 glass-panel px-4 py-2 rounded-full flex items-center gap-1 shadow-md z-20">
+<span class="text-xs">💖</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider text-on-surface">Most Loved</span>
+</div>
+<div class="absolute bottom-4 left-4 right-4 glass-text-panel rounded-[24px] p-6 flex flex-col gap-2 z-20">
+<h3 class="font-headline-lg-mobile text-2xl text-on-surface font-medium">CO-ORD SETS</h3>
+<p class="font-body-md text-sm text-on-surface-variant line-clamp-2">Perfectly matched. Perfectly effortless.</p>
+<div class="mt-2 flex items-center gap-2 text-primary font-label-sm uppercase tracking-widest group-hover:text-secondary transition-colors">
+                    Explore <span class="material-symbols-outlined text-sm arrow-icon">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Card 5: Summer Edit (Wide Banner) -->
+<div onclick="window.location.href='summer-collection.html'" class="md:col-span-5 h-[400px] md:h-[400px] md:-mt-12 masonry-card relative rounded-[36px] overflow-hidden group cursor-pointer shadow-lg w-full">
+<img alt="Light fabrics. Soft colors." class="card-image w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWKq_QV_iQrhPYbqrEfn0N4nRc1eUWQmC-hY66QmXn9P-PDHCNVwuBZ1u9kXezUIh05kb9_7crBTM6z5OT8OxB04N_m_ll5VDJw1eAGIaYwlLwBd7e10swHZ-CvEWL3Hxvr1vQGpimrru2JkWwDyIInm691flaTja8BqTauqm6uJH8AmAWSxCBXvXResCksoOQGVNnq3Lw1rBw_ovVLIQcxXaaKKt25dgtJVB6JP9g7zY3a-ERg22rUwqjxH_wBlyhYRRTOpKb1_86">
+<div class="absolute top-6 right-6 glass-panel px-4 py-2 rounded-full flex items-center gap-1 shadow-md z-20">
+<span class="text-xs">☀</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider text-on-surface">Limited Drop</span>
+</div>
+<div class="absolute bottom-4 left-4 right-4 glass-text-panel rounded-[24px] p-6 flex flex-col gap-2 z-20">
+<h3 class="font-headline-lg-mobile text-2xl text-on-surface font-medium">SUMMER EDIT</h3>
+<p class="font-body-md text-sm text-on-surface-variant line-clamp-2">Light fabrics. Soft colors.</p>
+<div class="mt-2 flex items-center gap-2 text-primary font-label-sm uppercase tracking-widest group-hover:text-secondary transition-colors">
+                    Explore <span class="material-symbols-outlined text-sm arrow-icon">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Card 6: Festive Edit (Small Portrait) -->
+<div onclick="window.location.href='festive-collection.html'" class="md:col-span-3 h-[450px] md:h-[450px] md:-mt-24 masonry-card relative rounded-[36px] overflow-hidden group cursor-pointer shadow-lg w-full">
+<img alt="Celebrate beautifully." class="card-image w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPNd1viLCS-ns7kn1oiwAOZrNKirC1g3FvcIS2Cbntq5A539FbrB-Ohrfm-5gPb36P5E11qNXmmQ-EwZPwjnJru08AUZ7Hu9OaJWtyA5-u8C6-tBNe8aIWwE6R3RUssjmhOz5faXsblkBUdIH82WEFvkE0V4PDUtz7U5iexuvDkyXJVQwemz8eFavA9um72zjCxqDxHS4OWui1Xwd21LZTKYaQAt4PvfdGlHyQrV6xcZbK1uRJPUDw3tdJcGmwdEy3-6kxJtZgr8-o">
+<div class="absolute top-6 right-6 glass-panel px-4 py-2 rounded-full flex items-center gap-1 shadow-md z-20">
+<span class="text-xs">✨</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider text-on-surface">Editor's Pick</span>
+</div>
+<div class="absolute bottom-4 left-4 right-4 glass-text-panel rounded-[24px] p-6 flex flex-col gap-2 z-20">
+<h3 class="font-headline-lg-mobile text-2xl text-on-surface font-medium">FESTIVE EDIT</h3>
+<p class="font-body-md text-sm text-on-surface-variant line-clamp-2">Celebrate beautifully.</p>
+<div class="mt-2 flex items-center gap-2 text-primary font-label-sm uppercase tracking-widest group-hover:text-secondary transition-colors">
+                    Explore <span class="material-symbols-outlined text-sm arrow-icon">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom CTA -->
+<div class="mt-24 text-center flex flex-col items-center justify-center gap-6 relative z-20">
+<div class="font-headline-lg text-2xl md:text-3xl text-on-surface font-light">Find Your Perfect Collection</div>
+<p class="font-body-md text-on-surface-variant max-w-md mx-auto">Discover more pieces that speak to your style.</p>
+<a href="collection.html" class="bg-primary-fixed-dim text-on-primary-fixed px-10 py-4 rounded-full font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-colors duration-300 shadow-xl shadow-primary-fixed-dim/30 flex items-center gap-2 inline-flex">
+            Explore All Collections <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full bg-surface-container mt-auto flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop py-12 gap-gutter border-t bg-surface-container-low flat no shadows relative z-10">
+<a href="hero.html" class="font-display-lg-mobile md:font-display-lg text-primary text-2xl font-light hover:opacity-80 transition-opacity block">Pall &amp; Pearl</a>
+<div class="flex flex-col md:flex-row gap-6 items-center">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors Active: opacity-70" href="hero.html">Sustainability</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors Active: opacity-70" href="hero.html">Shipping &amp; Returns</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors Active: opacity-70" href="hero.html">Contact Us</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors Active: opacity-70" href="hero.html">Privacy Policy</a>
+</div>
+<div class="font-body-md text-body-md text-secondary">
+            © 2024 Pall &amp; Pearl. All rights reserved.
+        </div>
+</footer>
+<script>
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    const menuClose = document.getElementById('close-menu-btn');
+    const menuOverlay = document.getElementById('mobile-menu-overlay');
+    const menuDrawer = document.getElementById('mobile-menu-drawer');
+
+    function openMenu() {
+        menuDrawer.classList.remove('translate-x-full');
+        menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
+        menuOverlay.classList.add('opacity-100');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+        menuDrawer.classList.add('translate-x-full');
+        menuOverlay.classList.remove('opacity-100');
+        menuOverlay.classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = '';
+    }
+
+    menuToggle.addEventListener('click', openMenu);
+    menuClose.addEventListener('click', closeMenu);
+    menuOverlay.addEventListener('click', closeMenu);
+</script>
+<script src="cart.js"></script>
+<script src="wishlist.js"></script>
+<script type="module" src="auth.js"></script>
+</body></html>

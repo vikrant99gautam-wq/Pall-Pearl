@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sale - Pall &amp; Pearl</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400&amp;family=DM+Sans:wght@400;600&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#403953",
+                    "on-primary-fixed-variant": "#851c48",
+                    "tertiary-container": "#aca3c3",
+                    "inverse-on-surface": "#ffecef",
+                    "surface-container-high": "#f7e3e7",
+                    "on-surface-variant": "#554247",
+                    "surface-bright": "#fff8f8",
+                    "primary": "#a43560",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#f2b6ca",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#a43560",
+                    "surface-container-highest": "#f1dee1",
+                    "outline-variant": "#dbc0c6",
+                    "on-surface": "#23191b",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#ffd9e2",
+                    "background": "#fff8f8",
+                    "outline": "#887177",
+                    "on-secondary-fixed": "#320f1e",
+                    "surface-container": "#fde9ed",
+                    "tertiary": "#625a77",
+                    "surface-dim": "#e9d5d9",
+                    "on-error-container": "#93000a",
+                    "on-background": "#23191b",
+                    "primary-container": "#ff7da9",
+                    "on-tertiary-fixed": "#1e1830",
+                    "surface-container-low": "#fff0f2",
+                    "on-secondary": "#ffffff",
+                    "secondary-container": "#fec1d5",
+                    "on-secondary-container": "#7b4c5d",
+                    "secondary": "#805062",
+                    "on-primary-fixed": "#3f001c",
+                    "primary-fixed-dim": "#ffb1c7",
+                    "inverse-primary": "#ffb1c7",
+                    "on-secondary-fixed-variant": "#65394a",
+                    "on-primary-container": "#770f3e",
+                    "on-tertiary-fixed-variant": "#4a435e",
+                    "inverse-surface": "#392d30",
+                    "secondary-fixed": "#ffd9e4",
+                    "tertiary-fixed": "#e8ddff",
+                    "surface-variant": "#f1dee1",
+                    "tertiary-fixed-dim": "#ccc1e2",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#fff8f8",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "margin-desktop": "64px",
+                    "gutter": "24px",
+                    "section-gap": "120px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Playfair Display"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "label-sm": ["DM Sans"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "body-md": ["DM Sans"],
+                    "accent-script": ["Comfortaa"],
+                    "display-lg": ["Playfair Display"],
+                    "body-lg": ["DM Sans"]
+            },
+            "fontSize": {
+                    "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "500"}],
+                    "display-lg-mobile": ["48px", {"lineHeight": "54px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "38px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "accent-script": ["20px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["80px", {"lineHeight": "90px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 24px;
+        }
+        @media (min-width: 768px) {
+            .masonry-grid { column-count: 2; }
+        }
+        @media (min-width: 1024px) {
+            .masonry-grid { column-count: 3; }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 24px;
+        }
+        .blob-1 { animation: float 15s ease-in-out infinite; }
+        .blob-2 { animation: float 18s ease-in-out infinite reverse; }
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate(30px, -50px) rotate(10deg) scale(1.1); }
+            66% { transform: translate(-20px, 20px) rotate(-5deg) scale(0.9); }
+            100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl border-b border-white/20 dark:border-outline-variant/20 shadow-sm">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-[1440px] mx-auto">
+<!-- Mobile Menu Button -->
+<button class="md:hidden text-primary dark:text-primary-fixed hover:opacity-70 transition-opacity duration-300">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Brand Logo -->
+<a class="font-display-lg text-headline-lg-mobile md:text-headline-lg text-on-surface dark:text-surface-bright tracking-tighter" href="hero.html">
+                Pall &amp; Pearl
+            </a>
+<!-- Desktop Navigation Links -->
+<div class="hidden md:flex items-center space-x-8">
+<a class="font-body-md text-body-md uppercase tracking-widest text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-colors duration-300" href="collection.html">Collections</a>
+<a class="font-body-md text-body-md uppercase tracking-widest text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1" href="sale.html">Sale</a>
+<a class="font-body-md text-body-md uppercase tracking-widest text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-colors duration-300" href="tops.html">Tops</a>
+<a class="font-body-md text-body-md uppercase tracking-widest text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-colors duration-300" href="kurtis.html">Kurtis</a>
+<a class="font-body-md text-body-md uppercase tracking-widest text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-colors duration-300" href="hero.html">About</a>
+</div>
+<!-- Trailing Icons -->
+<div class="flex items-center space-x-4">
+<button class="text-primary dark:text-primary-fixed hover:opacity-70 transition-opacity duration-300 scale-95 hover:scale-100 ease-out">
+<span class="material-symbols-outlined">search</span>
+</button>
+<a href="auth.html" class="nav-profile-link text-primary dark:text-primary-fixed hover:opacity-70 transition-opacity duration-300 scale-95 hover:scale-100 ease-out" style="position:relative; display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+    <span class="material-symbols-outlined text-[28px] font-light">person</span>
+</a>
+<a href="wishlist.html" class="text-primary dark:text-primary-fixed hover:opacity-70 transition-opacity duration-300 scale-95 hover:scale-100 ease-out" style="position:relative; display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+<span class="material-symbols-outlined">favorite</span>
+<span class="wishlist-badge absolute -top-1 -right-1 bg-primary text-on-primary font-label-sm w-4 h-4 rounded-full flex items-center justify-center text-[10px]" style="display:none;">0</span>
+</a>
+<a href="cart.html"  class="text-primary dark:text-primary-fixed hover:opacity-70 transition-opacity duration-300 scale-95 hover:scale-100 ease-out" style="position:relative; display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="cart-badge absolute -top-1 -right-1 bg-error text-on-error font-label-sm w-4 h-4 rounded-full flex items-center justify-center text-[10px]" style="display:none;">0</span>
+</a>
+<a href="auth.html" class="nav-profile-link hover:opacity-80 transition-opacity duration-300" style="display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+    <span class="material-symbols-outlined">person</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Header Section -->
+<header class="relative pt-32 pb-16 md:pt-48 md:pb-24 px-margin-mobile md:px-margin-desktop overflow-hidden bg-surface-container-low">
+<!-- Decorative Blobs -->
+<div class="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary-fixed-dim/30 rounded-full blur-3xl blob-1 -z-10"></div>
+<div class="absolute bottom-0 left-[-100px] w-[400px] h-[400px] bg-primary-fixed/40 rounded-full blur-3xl blob-2 -z-10"></div>
+<div class="max-w-[1440px] mx-auto text-center relative z-10">
+<!-- Breadcrumbs -->
+<nav class="flex justify-center items-center space-x-2 text-on-surface-variant font-label-sm uppercase tracking-widest mb-6">
+<a class="hover:text-primary transition-colors" href="hero.html">Home</a>
+<span>/</span>
+<a class="hover:text-primary transition-colors" href="collection.html">Collections</a>
+<span>/</span>
+<span class="text-primary">Sale</span>
+</nav>
+<span class="inline-block py-1 px-3 rounded-full bg-surface text-primary border border-primary-fixed-dim font-label-sm uppercase mb-4">
+                ✦ JUST DROPPED
+            </span>
+<h1 class="font-display-lg-mobile md:font-display-lg text-on-surface mb-6">
+                Sale
+            </h1>
+<p class="font-body-lg text-on-surface-variant max-w-2xl mx-auto mb-8">
+                Discover the latest additions to our collection. Thoughtfully curated pieces that blend modern elegance with dreamy romance.
+            </p>
+<!-- Info Badges -->
+<div class="flex flex-wrap justify-center gap-4">
+<div class="glass-panel px-4 py-2 rounded-full flex items-center space-x-2">
+<span class="text-lg">✨</span>
+<span class="font-label-sm uppercase text-on-surface">Updated Weekly</span>
+</div>
+<div class="glass-panel px-4 py-2 rounded-full flex items-center space-x-2">
+<span class="text-lg">🛍</span>
+<span class="font-label-sm uppercase text-on-surface">Fresh Drops</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop py-8">
+<!-- Sticky Filter Bar -->
+<div class="sticky top-[72px] z-40 glass-panel rounded-xl py-3 px-4 md:px-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm">
+<div class="flex items-center space-x-4 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+<button class="flex items-center space-x-1 text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap">
+<span class="font-label-sm uppercase">Category</span>
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+</button>
+<div class="w-px h-4 bg-outline-variant/50"></div>
+<button class="flex items-center space-x-1 text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap">
+<span class="font-label-sm uppercase">Color</span>
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+</button>
+<div class="w-px h-4 bg-outline-variant/50"></div>
+<button class="flex items-center space-x-1 text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap">
+<span class="font-label-sm uppercase">Size</span>
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+</button>
+<div class="w-px h-4 bg-outline-variant/50"></div>
+<button class="flex items-center space-x-1 text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap">
+<span class="font-label-sm uppercase">Price</span>
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+</button>
+</div>
+<div class="flex items-center justify-between w-full md:w-auto">
+<span class="text-on-surface-variant font-label-sm hidden md:inline-block mr-4">124 Results</span>
+<button class="flex items-center space-x-2 bg-surface px-4 py-2 rounded-lg border border-outline-variant hover:border-primary transition-colors">
+<span class="font-label-sm uppercase text-on-surface">Sort By: Featured</span>
+<span class="material-symbols-outlined text-[18px]">swap_vert</span>
+</button>
+</div>
+</div>
+<!-- Quick Filters -->
+<div class="flex overflow-x-auto space-x-3 mb-10 pb-2 scrollbar-hide">
+<button class="px-5 py-2 rounded-full bg-primary text-on-primary font-label-sm uppercase whitespace-nowrap shadow-sm">All New</button>
+<button class="px-5 py-2 rounded-full glass-panel text-on-surface font-label-sm uppercase whitespace-nowrap hover:bg-surface-container transition-colors">Trending</button>
+<button class="px-5 py-2 rounded-full glass-panel text-on-surface font-label-sm uppercase whitespace-nowrap hover:bg-surface-container transition-colors">Summer Edit</button>
+<button class="px-5 py-2 rounded-full glass-panel text-on-surface font-label-sm uppercase whitespace-nowrap hover:bg-surface-container transition-colors">Florals</button>
+<button class="px-5 py-2 rounded-full glass-panel text-on-surface font-label-sm uppercase whitespace-nowrap hover:bg-surface-container transition-colors">Evening Wear</button>
+</div>
+<!-- Product Grid -->
+<div id="product-grid" class="masonry-grid" data-category="All">
+    <!-- Products will be injected here by public-store.js -->
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full rounded-t-xl bg-surface-container-low dark:bg-surface-container-high border-t border-outline-variant dark:border-outline mt-24">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop py-section-gap w-full max-w-[1440px] mx-auto">
+<!-- Brand Column -->
+<div class="flex flex-col space-y-4">
+<a href="hero.html" class="font-accent-script text-accent-script text-primary dark:text-primary-container" style="display:inline-block; cursor:pointer;" class="hover:opacity-80 transition-opacity">Pall &amp; Pearl</a>
+<p class="font-body-md text-secondary dark:text-secondary-fixed">Elevating everyday elegance with dreamy silhouettes and conscious craftsmanship.</p>
+</div>
+<!-- Links Column 1 -->
+<div class="flex flex-col space-y-4">
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface hover:text-primary dark:hover:text-primary-fixed underline underline-offset-4 transition-all opacity-80 hover:opacity-100" href="hero.html">Sustainability</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface hover:text-primary dark:hover:text-primary-fixed underline underline-offset-4 transition-all opacity-80 hover:opacity-100" href="hero.html">Shipping &amp; Returns</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface hover:text-primary dark:hover:text-primary-fixed underline underline-offset-4 transition-all opacity-80 hover:opacity-100" href="#">Store Locator</a>
+</div>
+<!-- Links Column 2 -->
+<div class="flex flex-col space-y-4">
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface hover:text-primary dark:hover:text-primary-fixed underline underline-offset-4 transition-all opacity-80 hover:opacity-100" href="hero.html">Privacy Policy</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface hover:text-primary dark:hover:text-primary-fixed underline underline-offset-4 transition-all opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface hover:text-primary dark:hover:text-primary-fixed underline underline-offset-4 transition-all opacity-80 hover:opacity-100" href="hero.html">Contact Us</a>
+</div>
+<!-- Newsletter Column -->
+<div class="flex flex-col space-y-4">
+<h4 class="font-headline-lg-mobile text-[24px] text-on-surface">Join the Pretty Club</h4>
+<p class="font-body-md text-secondary dark:text-secondary-fixed">Subscribe for early access to new drops and editorial content.</p>
+<div class="flex w-full mt-2 relative">
+<input class="w-full bg-transparent border-0 border-b border-tertiary-fixed focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-on-surface placeholder:text-on-surface-variant/50 transition-colors" placeholder="Email address" type="email"/>
+<button class="absolute right-0 bottom-2 text-primary hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="w-full text-center py-6 border-t border-outline-variant/30">
+<p class="font-body-md text-body-md text-secondary dark:text-secondary-fixed opacity-70">© 2024 Pall &amp; Pearl. Consciously Crafted.</p>
+</div>
+</footer>
+<script src="cart.js"></script>
+<script src="wishlist.js"></script>
+<script type="module" src="auth.js"></script>
+    <script type="module" src="public-store.js"></script>
+</body></html>

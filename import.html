@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Import Products to Supabase</title>
+    <style>body{font-family:sans-serif; padding:2rem;}</style>
+</head>
+<body>
+    <h2>Importing Products...</h2>
+    <div id="log"></div>
+    
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        
+        const supabaseUrl = 'https://sydswktememhjapothib.supabase.co'
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN5ZHN3a3RlbWVtaGphcG90aGliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MDkwNzUsImV4cCI6MjA5ODI4NTA3NX0._0lwAmNk8o0E6WBvqyubWlIS4Q3pYhUGIaiJ5Zzpdh4'
+        const supabase = createClient(supabaseUrl, supabaseAnonKey)
+        
+        const products = [
+            {
+                name: "Blush Silk Georgette Dress",
+                price: 285.00,
+                category: "Dresses",
+                imageurl: "https://lh3.googleusercontent.com/aida/AP1WRLtgYrNqJIzmAoi62UCYJGPn2DrgyVnwAKY3iMwMtsYWntDRD7_QeJdJBRN_04Imst3TzFgfiihRLrWKVxqhUYJ53TIAYa5ZgrNtD9F8J-BVDaVtu6XrG92Sap2me8U6PvWt6ss0gNK6K1DbrWHq63eHvdOdD13ItNbysmq6Uohf2CcD_G8A-K6ZvtCqlFXIkIG-rPQnL9GWHkEKWblABTEbwZ_ClVU8_IjEfSnPb8JbRNVhvS-fNdWeSdOG",
+                description: "Soft Pink"
+            },
+            {
+                name: "Embroidered Tulle Top",
+                price: 195.00,
+                category: "Tops",
+                imageurl: "https://lh3.googleusercontent.com/aida/AP1WRLscIjFxAZKF2tPQPahT-Vstzv5mpyOtY5OtbXQ5WwHnRw-7MIdAikL-YF7R4McDiO-EFLQHBwRnoGYRHBSSLndQkz_A9FtxrTyJ42mZTHPu7DkXVzSq4AZEGt53bRXgPQgg0vwa2CvgXujHQnZCRSHsiZJH8fdBxRWpgpvWL3hv-J4hQNHKALDyMyY09gCKBnk1tVH0m7PJQNW0LOaQwg3RMeIiI2TCrogZEu2ArwEOKJA09_WwHM7kMOM",
+                description: "Ivory/Gold"
+            },
+            {
+                name: "Lavender Breeze Kurti",
+                price: 150.00,
+                category: "Kurtis",
+                imageurl: "https://lh3.googleusercontent.com/aida/AP1WRLuYL4mPrBtaoA4buuhTtw1BXfKUtoXN35MyYiscMJNTR2gYXe995e_yk53iB5VdhyuTPHseGEyLLbRYIdmBhOOsPAbyhaOx0lFUHctF7F1aqPQAXtlCz-P8tHwMRFic0sXApKKJ7_NWNv8pssMTTTI76_UOnSqdGaUvwMRpA0Z1WLw8dljKOIiCXekKN_fq7WwWFf2WoRxgfzOmr3yLilEQLIOtWUAZB34AIgg0yfafF-5m1O6joF_93L6I",
+                description: "Lilac"
+            },
+            {
+                name: "Pleated Organza Skirt",
+                price: 210.00,
+                category: "Bottom Wear",
+                imageurl: "https://lh3.googleusercontent.com/aida/AP1WRLsjqvf2JAKvtXGntdJy8JUlPGPAywseYHOb-u1hvl1DPYtTs7U6vyWwzBHMnBg9ttUZjo7CZ3UmvyxP574lrvtQ1lyOfo3_1yx_wn9jess1FYIxznJLne3d5UK7f5uq3h5G1k6bllMHcNzAn9d2p53Fo65JoUPPgf0TDaHxEoMiMtRwbphFCw_bNucFPD82gfymPcNLiExpoYBQd60m-1lojmYFnnb6ZQizvxw_eYqGqo2uV6Yi79WyDAfT",
+                description: "Mint Green"
+            }
+        ];
+        
+        async function run() {
+            const log = document.getElementById('log');
+            for(const p of products) {
+                try {
+                    const { error } = await supabase.from('products').insert([p]);
+                    if (error) throw error;
+                    log.innerHTML += `<p style="color:green">Successfully imported: ${p.name}</p>`;
+                } catch(e) {
+                    log.innerHTML += `<p style="color:red">Failed: ${p.name} - ${e.message}</p>`;
+                }
+            }
+            log.innerHTML += `<p><b>Done! You can now close this page and check your Admin Panel.</b></p>`;
+        }
+        
+        run();
+    </script>
+</body>
+</html>

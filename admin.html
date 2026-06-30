@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Pall & Pearl - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "on-secondary-fixed": "#320f1e",
+                "on-primary-fixed-variant": "#851c48",
+                "tertiary-container": "#aca3c3",
+                "secondary-container": "#fec1d5",
+                "surface-container-highest": "#f1dee1",
+                "outline": "#887177",
+                "on-tertiary": "#ffffff",
+                "error-container": "#ffdad6",
+                "inverse-on-surface": "#ffecef",
+                "error": "#ba1a1a",
+                "surface-container": "#fde9ed",
+                "tertiary": "#625a77",
+                "primary-container": "#ff7da9",
+                "surface-container-low": "#fff0f2",
+                "on-tertiary-fixed": "#1e1830",
+                "on-tertiary-container": "#403953",
+                "tertiary-fixed-dim": "#ccc1e2",
+                "surface-tint": "#a43560",
+                "primary-fixed": "#ffd9e2",
+                "secondary-fixed": "#ffd9e4",
+                "outline-variant": "#dbc0c6",
+                "on-error-container": "#93000a",
+                "on-surface": "#23191b",
+                "on-surface-variant": "#554247",
+                "on-primary": "#ffffff",
+                "secondary-fixed-dim": "#f2b6ca",
+                "tertiary-fixed": "#e8ddff",
+                "surface-container-high": "#f7e3e7",
+                "on-background": "#23191b",
+                "surface-variant": "#f1dee1",
+                "on-primary-fixed": "#3f001c",
+                "surface": "#fff8f8",
+                "on-error": "#ffffff",
+                "primary": "#a43560",
+                "surface-bright": "#fff8f8",
+                "surface-container-lowest": "#ffffff",
+                "primary-fixed-dim": "#ffb1c7",
+                "surface-dim": "#e9d5d9",
+                "on-tertiary-fixed-variant": "#4a435e",
+                "on-secondary-fixed-variant": "#65394a",
+                "on-secondary": "#ffffff",
+                "inverse-primary": "#ffb1c7",
+                "on-primary-container": "#770f3e",
+                "inverse-surface": "#392d30",
+                "on-secondary-container": "#7b4c5d",
+                "background": "#fff8f8",
+                "secondary": "#805062"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "margin-desktop": "64px",
+                      "gutter": "24px",
+                      "unit": "8px",
+                      "section-gap": "120px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "DM Sans"
+                      ],
+                      "accent-script": [
+                              "Comfortaa"
+                      ],
+                      "headline-lg": [
+                              "Playfair Display"
+                      ],
+                      "headline-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "display-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "display-lg": [
+                              "Playfair Display"
+                      ],
+                      "label-sm": [
+                              "DM Sans"
+                      ],
+                      "body-md": [
+                              "DM Sans"
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-[#FFFDFB] text-on-surface antialiased min-h-screen flex hidden" id="admin-body">
+    
+    <!-- Sidebar -->
+    <aside class="w-64 bg-surface-container-high border-r border-outline-variant/30 flex flex-col justify-between hidden md:flex shrink-0 min-h-screen fixed left-0 top-0">
+        <div class="p-8">
+            <h1 class="font-display-lg-mobile text-primary text-3xl mb-12 leading-tight">Pall &amp;<br>Pearl <span class="block text-sm font-label-sm uppercase tracking-widest text-on-surface-variant mt-2">Admin</span></h1>
+            
+            <nav class="space-y-4">
+                <button id="tab-btn-dashboard" class="admin-tab-btn w-full text-left py-3 px-4 rounded-xl bg-primary text-on-primary font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </button>
+                <button id="tab-btn-orders" class="admin-tab-btn w-full text-left py-3 px-4 rounded-xl hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
+                    <span class="material-symbols-outlined">shopping_cart</span> Orders
+                </button>
+                <button id="tab-btn-products" class="admin-tab-btn w-full text-left py-3 px-4 rounded-xl hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
+                    <span class="material-symbols-outlined">inventory_2</span> Products
+                </button>
+                <button id="tab-btn-customers" class="admin-tab-btn w-full text-left py-3 px-4 rounded-xl hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
+                    <span class="material-symbols-outlined">group</span> Customers
+                </button>
+            </nav>
+        </div>
+        
+        <div class="p-8 border-t border-outline-variant/30">
+            <button id="btn-admin-logout" class="w-full text-left py-3 px-4 rounded-xl text-error hover:bg-error-container font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
+                <span class="material-symbols-outlined">logout</span> Log Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow ml-0 md:ml-64 p-6 md:p-12 relative min-h-screen">
+        <!-- Ambient Background -->
+        <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-primary-fixed/20 rounded-full blur-[80px] -z-10 pointer-events-none"></div>
+
+        <!-- DASHBOARD TAB -->
+        <div id="tab-dashboard" class="admin-tab block">
+            <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary mb-8">Dashboard Overview</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="glass-panel p-6 rounded-3xl smooth-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-label-sm uppercase tracking-widest text-on-surface-variant">Total Revenue</h3>
+                        <span class="material-symbols-outlined text-primary">payments</span>
+                    </div>
+                    <p class="font-headline-lg-mobile text-3xl text-on-surface">₹0.00</p>
+                </div>
+                <div class="glass-panel p-6 rounded-3xl smooth-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-label-sm uppercase tracking-widest text-on-surface-variant">Total Orders</h3>
+                        <span class="material-symbols-outlined text-primary">local_shipping</span>
+                    </div>
+                    <p class="font-headline-lg-mobile text-3xl text-on-surface" id="stat-orders">0</p>
+                </div>
+                <div class="glass-panel p-6 rounded-3xl smooth-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-label-sm uppercase tracking-widest text-on-surface-variant">Total Customers</h3>
+                        <span class="material-symbols-outlined text-primary">group</span>
+                    </div>
+                    <p class="font-headline-lg-mobile text-3xl text-on-surface">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ORDERS TAB -->
+        <div id="tab-orders" class="admin-tab hidden">
+            <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary mb-8">Order Management</h2>
+            
+            <div class="glass-panel rounded-3xl overflow-hidden smooth-shadow">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-surface-container-high border-b border-outline-variant/30">
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Order ID</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Customer</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Date</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Total</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Status</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body" class="divide-y divide-outline-variant/20">
+                            <!-- Orders populated by JS -->
+                            <tr>
+                                <td colspan="6" class="p-6 text-center font-body-md text-on-surface-variant">Loading orders...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRODUCTS TAB -->
+        <div id="tab-products" class="admin-tab hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary">Product Management</h2>
+                <button id="btn-add-product" class="px-6 py-3 rounded-xl bg-primary text-on-primary font-label-sm uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center gap-2">
+                    <span class="material-symbols-outlined">add</span> Add Product
+                </button>
+            </div>
+            
+            <!-- Category Filters -->
+            <div class="flex overflow-x-auto space-x-3 mb-6 pb-2 scrollbar-hide" id="product-category-filters">
+                <button class="filter-btn active px-5 py-2 rounded-full bg-primary text-on-primary font-label-sm uppercase whitespace-nowrap shadow-sm border border-primary transition-colors" data-category="All">All</button>
+                <button class="filter-btn px-5 py-2 rounded-full bg-surface-container-low text-on-surface font-label-sm uppercase whitespace-nowrap hover:bg-surface-container transition-colors border border-outline-variant/30" data-category="Tops">Tops</button>
+                <button class="filter-btn px-5 py-2 rounded-full bg-surface-container-low text-on-surface font-label-sm uppercase whitespace-nowrap hover:bg-surface-container transition-colors border border-outline-variant/30" data-category="Kurtis">Kurtis</button>
+                <button class="filter-btn px-5 py-2 rounded-full bg-surface-container-low text-on-surface font-label-sm uppercase whitespace-nowrap hover:bg-surface-container transition-colors border border-outline-variant/30" data-category="Dresses">Dresses</button>
+                <button class="filter-btn px-5 py-2 rounded-full bg-surface-container-low text-on-surface font-label-sm uppercase whitespace-nowrap hover:bg-surface-container transition-colors border border-outline-variant/30" data-category="Co-ord Sets">Co-ord Sets</button>
+                <button class="filter-btn px-5 py-2 rounded-full bg-surface-container-low text-on-surface font-label-sm uppercase whitespace-nowrap hover:bg-surface-container transition-colors border border-outline-variant/30" data-category="Bottom Wear">Bottom Wear</button>
+                <button class="filter-btn px-5 py-2 rounded-full bg-surface-container-low text-on-surface font-label-sm uppercase whitespace-nowrap hover:bg-surface-container transition-colors border border-outline-variant/30" data-category="Ethnic Wear">Ethnic Wear</button>
+            </div>
+            
+            <div class="glass-panel rounded-3xl overflow-hidden smooth-shadow">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-surface-container-high border-b border-outline-variant/30">
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Image</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Name</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Category</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Price</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table-body" class="divide-y divide-outline-variant/20">
+                            <tr>
+                                <td colspan="5" class="p-6 text-center font-body-md text-on-surface-variant">Loading products...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CUSTOMERS TAB -->
+        <div id="tab-customers" class="admin-tab hidden">
+            <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary mb-8">Customer Management</h2>
+            
+            <div class="glass-panel p-12 text-center rounded-3xl smooth-shadow">
+                <span class="material-symbols-outlined text-6xl text-on-surface-variant/30 mb-4">construction</span>
+                <h3 class="font-headline-lg-mobile text-2xl text-on-surface mb-2">Coming Soon</h3>
+                <p class="font-body-md text-on-surface-variant max-w-md mx-auto">The customer directory is currently under construction.</p>
+            </div>
+        </div>
+
+        <!-- Product Modal -->
+        <div id="product-modal" class="fixed inset-0 bg-on-background/30 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+            <div class="bg-surface rounded-[36px] w-full max-w-2xl max-h-[90vh] overflow-y-auto smooth-shadow">
+                <div class="p-8 border-b border-outline-variant/30 flex justify-between items-center sticky top-0 bg-surface z-10">
+                    <h2 id="product-modal-title" class="font-headline-lg-mobile text-2xl text-primary">Add Product</h2>
+                    <button id="btn-close-product-modal" class="text-on-surface-variant hover:text-error transition-colors">
+                        <span class="material-symbols-outlined text-3xl">close</span>
+                    </button>
+                </div>
+                <div class="p-8">
+                    <form id="product-form" class="space-y-6">
+                        <input type="hidden" id="product-id">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="col-span-1 md:col-span-2">
+                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Product Name</label>
+                                <input type="text" id="product-name" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                            </div>
+                            
+                            <div>
+                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Price (₹)</label>
+                                <input type="number" step="0.01" id="product-price" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                            </div>
+                            
+                            <div>
+                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Category</label>
+                                <select id="product-category" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                                    <option value="Tops">Tops</option>
+                                    <option value="Kurtis">Kurtis</option>
+                                    <option value="Dresses">Dresses</option>
+                                    <option value="Co-ord Sets">Co-ord Sets</option>
+                                    <option value="Bottom Wear">Bottom Wear</option>
+                                    <option value="Ethnic Wear">Ethnic Wear</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-span-1 md:col-span-2">
+                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Upload Image (Optional)</label>
+                                <input type="file" accept="image/*" id="product-image-file" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                            </div>
+                            <div class="col-span-1 md:col-span-2">
+                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">OR Image URL</label>
+                                <input type="url" id="product-image" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none" placeholder="https://...">
+                            </div>
+                            
+                            <div class="col-span-1 md:col-span-2">
+                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Color Options (Comma separated, e.g. Red, Blue)</label>
+                                <input type="text" id="product-colors" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none" placeholder="Red, Pink, Black">
+                            </div>
+                            
+                            <div class="col-span-1 md:col-span-2">
+                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Description</label>
+                                <textarea id="product-desc" rows="3" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-4 flex justify-end gap-4">
+                            <button type="button" id="btn-cancel-product" class="px-6 py-3 rounded-xl hover:bg-surface-container-highest text-on-surface-variant font-label-sm uppercase tracking-widest transition-colors">Cancel</button>
+                            <button type="submit" id="btn-save-product" class="px-8 py-3 rounded-xl bg-primary text-on-primary font-label-sm uppercase tracking-widest hover:opacity-90 transition-opacity">Save Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="admin.js?v=2"></script>
+</body>
+</html>

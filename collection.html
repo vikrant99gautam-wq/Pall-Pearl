@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Collections - Pall &amp; Pearl</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&amp;family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#a43560",
+                        "secondary-fixed": "#ffd9e4",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#23191b",
+                        "surface-container-low": "#fff0f2",
+                        "surface-bright": "#fff8f8",
+                        "outline-variant": "#dbc0c6",
+                        "secondary-container": "#fec1d5",
+                        "on-secondary-fixed-variant": "#65394a",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#1e1830",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ccc1e2",
+                        "surface-variant": "#f1dee1",
+                        "inverse-primary": "#ffb1c7",
+                        "background": "#fff8f8",
+                        "surface-tint": "#a43560",
+                        "on-tertiary-container": "#403953",
+                        "surface-dim": "#e9d5d9",
+                        "secondary": "#805062",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#f2b6ca",
+                        "on-secondary-container": "#7b4c5d",
+                        "on-tertiary-fixed-variant": "#4a435e",
+                        "on-surface-variant": "#554247",
+                        "on-primary-container": "#770f3e",
+                        "inverse-surface": "#392d30",
+                        "surface-container-highest": "#f1dee1",
+                        "surface-container": "#fde9ed",
+                        "tertiary-fixed": "#e8ddff",
+                        "on-surface": "#23191b",
+                        "on-primary-fixed": "#3f001c",
+                        "tertiary": "#625a77",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#320f1e",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#ffb1c7",
+                        "primary-fixed": "#ffd9e2",
+                        "tertiary-container": "#aca3c3",
+                        "surface": "#fff8f8",
+                        "on-primary-fixed-variant": "#851c48",
+                        "primary-container": "#ff7da9",
+                        "surface-container-high": "#f7e3e7",
+                        "outline": "#887177",
+                        "inverse-on-surface": "#ffecef"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "3xl": "1.875rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "section-gap": "120px",
+                        "margin-desktop": "64px",
+                        "unit": "8px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["DM Sans"],
+                        "body-lg": ["DM Sans"],
+                        "body-md": ["DM Sans"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "accent-script": ["Comfortaa"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["48px", { "lineHeight": "54px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "38px", "fontWeight": "500" }],
+                        "display-lg": ["80px", { "lineHeight": "90px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-lg": ["40px", { "lineHeight": "48px", "fontWeight": "500" }],
+                        "accent-script": ["20px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 24px;
+        }
+        @media (min-width: 768px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+        @media (min-width: 1024px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 24px;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .blob-bg {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #fec1d5 0%, #e8ddff 100%);
+            filter: blur(80px);
+            opacity: 0.5;
+            z-index: -1;
+            border-radius: 50%;
+            animation: float 10s ease-in-out infinite alternate;
+        }
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(20px, 20px) scale(1.1); }
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased overflow-x-hidden">
+<!-- Blob Backgrounds -->
+<div class="blob-bg top-[10%] left-[-100px]"></div>
+<div class="blob-bg top-[40%] right-[-100px]" style="background: linear-gradient(135deg, #ffd9e4 0%, #fff0f2 100%); animation-delay: -2s;"></div>
+<div class="blob-bg bottom-[10%] left-[20%]" style="background: linear-gradient(135deg, #ccc1e2 0%, #f1dee1 100%); animation-delay: -5s;"></div>
+<!-- TopNavBar -->
+<nav class="bg-white/60 backdrop-blur-xl dark:bg-surface/60 border-b border-white/20 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 sticky top-0 z-50">
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-sm text-label-sm uppercase" href="collection.html">Collections</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300 font-label-sm text-label-sm uppercase" href="new-arrivals.html">New Arrivals</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300 font-label-sm text-label-sm uppercase" href="tops.html">Tops</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300 font-label-sm text-label-sm uppercase" href="kurtis.html">Kurtis</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300 font-label-sm text-label-sm uppercase" href="hero.html">About</a>
+</div>
+<div class="flex-1 md:flex-none text-center">
+<a class="font-display-lg-mobile md:font-display-lg text-headline-lg-mobile md:text-headline-lg text-primary dark:text-primary-fixed tracking-tighter" href="hero.html">Pall &amp; Pearl</a>
+</div>
+<div class="flex items-center gap-4">
+<a href="auth.html" class="nav-profile-link text-primary dark:text-primary-fixed hover:opacity-70 transition-opacity duration-300 scale-95 hover:scale-100 ease-out" style="position:relative; display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+    <span class="material-symbols-outlined text-[28px] font-light">person</span>
+</a>
+<a href="wishlist.html" class="text-primary dark:text-primary-fixed hover:opacity-70 transition-opacity duration-300 scale-95 hover:scale-100 ease-out" style="position:relative; display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+<span class="material-symbols-outlined">favorite</span>
+<span class="wishlist-badge absolute -top-1 -right-1 bg-primary text-on-primary font-label-sm w-4 h-4 rounded-full flex items-center justify-center text-[10px]" style="display:none;">0</span>
+</a>
+<a href="auth.html" class="nav-profile-link hover:opacity-80 transition-opacity duration-300" style="display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+    <span class="material-symbols-outlined">person</span>
+</a>
+<a href="cart.html"  class="text-primary dark:text-primary-fixed scale-95 active:scale-90 transition-transform" style="position:relative; display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="cart-badge absolute -top-1 -right-1 bg-error text-on-error font-label-sm w-4 h-4 rounded-full flex items-center justify-center text-[10px]" style="display:none;">0</span>
+</a>
+</div>
+</nav>
+<main class="w-full max-w-[1600px] mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-24">
+<!-- Header Section -->
+<header class="text-center mb-16 md:mb-24">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6">Curated Collections</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Discover our thoughtfully assembled edits. Soft silhouettes, luminous fabrics, and timeless elegance for every moment.</p>
+</header>
+<!-- Masonry Grid -->
+<div id="product-grid" class="masonry-grid" data-category="All">
+    <!-- Products will be injected here by public-store.js -->
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-surface-dim full-width rounded-t-lg border-t border-outline-variant flat no shadows w-full px-margin-mobile md:px-margin-desktop py-section-gap flex flex-col md:flex-row justify-between items-center gap-gutter">
+<a href="hero.html" class="font-display-lg text-headline-lg-mobile text-primary tracking-tighter mb-8 md:mb-0 block hover:opacity-80 transition-opacity">
+            Pall &amp; Pearl
+        </a>
+<div class="flex flex-wrap justify-center gap-6 md:gap-8 mb-8 md:mb-0">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors opacity-80 hover:opacity-100 uppercase tracking-wider" href="hero.html">Sustainability</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors opacity-80 hover:opacity-100 uppercase tracking-wider" href="hero.html">Shipping &amp; Returns</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors opacity-80 hover:opacity-100 uppercase tracking-wider" href="hero.html">Contact Us</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors opacity-80 hover:opacity-100 uppercase tracking-wider" href="hero.html">Privacy Policy</a>
+</div>
+<div class="font-body-md text-body-md text-secondary dark:text-secondary-fixed text-center md:text-right">
+            © 2024 Pall &amp; Pearl. All rights reserved.
+        </div>
+</footer>
+<script src="cart.js"></script>
+<script src="wishlist.js"></script>
+<script type="module" src="auth.js"></script>
+    <script type="module" src="public-store.js"></script>
+</body></html>
