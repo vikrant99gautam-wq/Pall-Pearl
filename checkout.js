@@ -26,8 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Render items
     checkoutItemsContainer.innerHTML = checkoutCart.map(item => {
-        const price = parseFloat(item.price.replace('₹', '').replace(',', ''));
-        const itemTotal = price * item.quantity;
+        const priceStr = String(item.price || '0');
+        const price = parseFloat(priceStr.replace(/[₹,]/g, '').trim());
+        const itemQuantity = item.quantity || 1;
+        const itemTotal = price * itemQuantity;
         totalAmount += itemTotal;
 
         return `
