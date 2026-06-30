@@ -1,6 +1,6 @@
 import { supabase } from './supabase-config.js';
 
-const adminEmails = ["admin@pallandpearls.com", "vikrantgautammm@gmail.com"];
+const adminEmails = ["admin@pallandpearls.com", "vikrantgautammm@gmail.com", "avnithetic@gmail.com"];
 const adminBody = document.getElementById("admin-body");
 const btnLogout = document.getElementById("btn-admin-logout");
 
