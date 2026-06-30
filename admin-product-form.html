@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Pall & Pearl - Product Form</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "on-secondary-fixed": "#320f1e",
+                "on-primary-fixed-variant": "#851c48",
+                "tertiary-container": "#aca3c3",
+                "secondary-container": "#fec1d5",
+                "surface-container-highest": "#f1dee1",
+                "outline": "#887177",
+                "on-tertiary": "#ffffff",
+                "error-container": "#ffdad6",
+                "inverse-on-surface": "#ffecef",
+                "error": "#ba1a1a",
+                "surface-container": "#fde9ed",
+                "tertiary": "#625a77",
+                "primary-container": "#ff7da9",
+                "surface-container-low": "#fff0f2",
+                "on-tertiary-fixed": "#1e1830",
+                "on-tertiary-container": "#403953",
+                "tertiary-fixed-dim": "#ccc1e2",
+                "surface-tint": "#a43560",
+                "primary-fixed": "#ffd9e2",
+                "secondary-fixed": "#ffd9e4",
+                "outline-variant": "#dbc0c6",
+                "on-error-container": "#93000a",
+                "on-surface": "#23191b",
+                "on-surface-variant": "#554247",
+                "on-primary": "#ffffff",
+                "secondary-fixed-dim": "#f2b6ca",
+                "tertiary-fixed": "#e8ddff",
+                "surface-container-high": "#f7e3e7",
+                "on-background": "#23191b",
+                "surface-variant": "#f1dee1",
+                "on-primary-fixed": "#3f001c",
+                "surface": "#fff8f8",
+                "on-error": "#ffffff",
+                "primary": "#a43560",
+                "surface-bright": "#fff8f8",
+                "surface-container-lowest": "#ffffff",
+                "primary-fixed-dim": "#ffb1c7",
+                "surface-dim": "#e9d5d9",
+                "on-tertiary-fixed-variant": "#4a435e",
+                "on-secondary-fixed-variant": "#65394a",
+                "on-secondary": "#ffffff",
+                "inverse-primary": "#ffb1c7",
+                "on-primary-container": "#770f3e",
+                "inverse-surface": "#392d30",
+                "on-secondary-container": "#7b4c5d",
+                "background": "#fff8f8",
+                "secondary": "#805062"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "margin-desktop": "64px",
+                      "gutter": "24px",
+                      "unit": "8px",
+                      "section-gap": "120px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "DM Sans"
+                      ],
+                      "accent-script": [
+                              "Comfortaa"
+                      ],
+                      "headline-lg": [
+                              "Playfair Display"
+                      ],
+                      "headline-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "display-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "display-lg": [
+                              "Playfair Display"
+                      ],
+                      "label-sm": [
+                              "DM Sans"
+                      ],
+                      "body-md": [
+                              "DM Sans"
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-[#FFFDFB] text-on-surface antialiased min-h-screen flex hidden" id="admin-body">
+    
+    <!-- Sidebar -->
+    <aside class="w-64 bg-surface-container-high border-r border-outline-variant/30 flex flex-col justify-between hidden md:flex shrink-0 min-h-screen fixed left-0 top-0">
+        <div class="p-8">
+            <h1 class="font-display-lg-mobile text-primary text-3xl mb-12 leading-tight">Pall &amp;<br>Pearl <span class="block text-sm font-label-sm uppercase tracking-widest text-on-surface-variant mt-2">Admin</span></h1>
+            
+            <nav class="space-y-4">
+                <a href="admin.html" class="block w-full text-left py-3 px-4 rounded-xl hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
+                    <span class="material-symbols-outlined">arrow_back</span> Back to Dashboard
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow ml-0 md:ml-64 p-6 md:p-12 relative min-h-screen">
+        <!-- Ambient Background -->
+        <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-primary-fixed/20 rounded-full blur-[80px] -z-10 pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto">
+            <div class="flex items-center gap-4 mb-8">
+                <a href="admin.html" class="md:hidden text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined text-3xl">arrow_back</span>
+                </a>
+                <h2 id="page-title" class="font-headline-lg-mobile md:font-headline-lg text-primary">Add Product</h2>
+            </div>
+            
+            <div class="glass-panel p-8 rounded-[36px] smooth-shadow">
+                <form id="product-form" class="space-y-8">
+                    <input type="hidden" id="product-id">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Product Name</label>
+                            <input type="text" id="product-name" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                        
+                        <div>
+                            <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Price (₹)</label>
+                            <input type="number" step="0.01" id="product-price" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                        
+                        <div>
+                            <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Category</label>
+                            <select id="product-category" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                                <option value="Tops">Tops</option>
+                                <option value="Kurtis">Kurtis</option>
+                                <option value="Dresses">Dresses</option>
+                                <option value="Co-ord Sets">Co-ord Sets</option>
+                                <option value="Bottom Wear">Bottom Wear</option>
+                                <option value="Ethnic Wear">Ethnic Wear</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Image Section -->
+                        <div class="col-span-1 md:col-span-2 bg-surface rounded-2xl p-6 border border-outline-variant/30">
+                            <h3 class="font-label-sm text-on-surface-variant uppercase tracking-widest mb-4">Product Image</h3>
+                            
+                            <!-- Current Image Preview (Hidden by default) -->
+                            <div id="current-image-container" class="hidden mb-6">
+                                <p class="text-sm text-on-surface-variant mb-2">Current Image:</p>
+                                <div class="relative inline-block">
+                                    <img id="current-image-preview" src="" alt="Current Product Image" class="w-48 h-48 object-cover rounded-xl border border-outline-variant/30">
+                                    <button type="button" id="btn-remove-image" class="absolute -top-3 -right-3 bg-error text-on-error w-8 h-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md">
+                                        <span class="material-symbols-outlined text-sm">close</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" id="product-image-url">
+                            </div>
+
+                            <!-- Upload New Image -->
+                            <div id="upload-image-container">
+                                <div class="mb-4">
+                                    <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Upload New Image</label>
+                                    <input type="file" accept="image/*" id="product-image-file" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                                </div>
+                                <div>
+                                    <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">OR Image URL</label>
+                                    <input type="url" id="product-image-url-input" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none" placeholder="https://...">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Color Options (Comma separated, e.g. Red, Blue)</label>
+                            <input type="text" id="product-colors" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none" placeholder="Red, Pink, Black">
+                        </div>
+                        
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Description</label>
+                            <textarea id="product-desc" rows="4" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-6 flex justify-end gap-4 border-t border-outline-variant/30 mt-8">
+                        <a href="admin.html" class="px-6 py-3 rounded-xl hover:bg-surface-container-highest text-on-surface-variant font-label-sm uppercase tracking-widest transition-colors flex items-center">Cancel</a>
+                        <button type="submit" id="btn-save-product" class="px-8 py-3 rounded-xl bg-primary text-on-primary font-label-sm uppercase tracking-widest hover:opacity-90 transition-opacity">Save Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="admin-product-form.js?v=2"></script>
+</body>
+</html>

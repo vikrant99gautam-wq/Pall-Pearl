@@ -122,31 +122,14 @@ function renderOrdersTable(orders) {
 }
 
 // --- PRODUCT MANAGEMENT ---
-const productModal = document.getElementById('product-modal');
-const productForm = document.getElementById('product-form');
 const btnAddProduct = document.getElementById('btn-add-product');
-const btnCloseProductModal = document.getElementById('btn-close-product-modal');
-const btnCancelProduct = document.getElementById('btn-cancel-product');
-const modalTitle = document.getElementById('product-modal-title');
 
-// Open Modal for Add
+// Open Dedicated Page for Add
 if (btnAddProduct) {
     btnAddProduct.addEventListener('click', () => {
-        productForm.reset();
-        document.getElementById('product-id').value = '';
-        modalTitle.textContent = 'Add Product';
-        productModal.classList.remove('hidden');
-        productModal.classList.add('flex');
+        window.location.href = 'admin-product-form.html';
     });
 }
-
-function closeProductModal() {
-    productModal.classList.add('hidden');
-    productModal.classList.remove('flex');
-}
-
-if (btnCloseProductModal) btnCloseProductModal.addEventListener('click', closeProductModal);
-if (btnCancelProduct) btnCancelProduct.addEventListener('click', closeProductModal);
 
 let allProducts = [];
 let currentCategoryFilter = 'All';
@@ -218,7 +201,7 @@ function renderProductsTable() {
                 <td class="p-4 font-body-md text-on-surface-variant">${product.category}</td>
                 <td class="p-4 font-body-md font-medium text-primary">₹${parseFloat(product.price).toFixed(2)}</td>
                 <td class="p-4 text-right">
-                    <button onclick="editProduct('${prodData}')" class="text-primary hover:opacity-70 transition-opacity font-label-sm uppercase tracking-widest text-sm font-semibold mr-4">Edit</button>
+                    <button onclick="editProduct('${product.id}')" class="text-primary hover:opacity-70 transition-opacity font-label-sm uppercase tracking-widest text-sm font-semibold mr-4">Edit</button>
                     <button onclick="deleteProduct('${product.id}')" class="text-error hover:opacity-70 transition-opacity font-label-sm uppercase tracking-widest text-sm font-semibold">Delete</button>
                 </td>
             </tr>
@@ -228,88 +211,9 @@ function renderProductsTable() {
     tbody.innerHTML = html;
 }
 
-// Add/Edit Product Submission
-if (productForm) {
-    productForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const id = document.getElementById('product-id').value;
-        const name = document.getElementById('product-name').value;
-        const price = parseFloat(document.getElementById('product-price').value);
-        const category = document.getElementById('product-category').value;
-        const desc = document.getElementById('product-desc').value;
-        const colors = document.getElementById('product-colors').value;
-        
-        let imageUrl = document.getElementById('product-image').value;
-        const fileInput = document.getElementById('product-image-file');
-        
-        const btnSave = document.getElementById('btn-save-product');
-        btnSave.disabled = true;
-        btnSave.textContent = 'Saving...';
-        
-        try {
-            // Handle file upload if a file is selected
-            if (fileInput.files.length > 0) {
-                btnSave.textContent = 'Uploading Image...';
-                const file = fileInput.files[0];
-                const fileExt = file.name.split('.').pop();
-                const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-                
-                const { error: uploadError } = await supabase.storage
-                    .from('product-images')
-                    .upload(fileName, file);
-                
-                if (uploadError) throw uploadError;
-                
-                const { data: publicUrlData } = supabase.storage
-                    .from('product-images')
-                    .getPublicUrl(fileName);
-                    
-                imageUrl = publicUrlData.publicUrl;
-            }
-            
-            const productData = {
-                name, price, category, imageurl: imageUrl, description: desc, colors
-            };
-            
-            if (id) {
-                // Update
-                const { error } = await supabase.from('products').update(productData).eq('id', id);
-                if (error) throw error;
-            } else {
-                // Add
-                const { error } = await supabase.from('products').insert([productData]);
-                if (error) throw error;
-            }
-            
-            closeProductModal();
-            loadProductsData(); // Reload table
-        } catch (error) {
-            console.error("Error saving product: ", error);
-            alert("Error saving product: \n" + error.message);
-        } finally {
-            btnSave.disabled = false;
-            btnSave.textContent = 'Save Product';
-        }
-    });
-}
-
 // Global functions for inline event handlers
-window.editProduct = (encodedData) => {
-    const product = JSON.parse(decodeURIComponent(encodedData));
-    
-    document.getElementById('product-id').value = product.id;
-    document.getElementById('product-name').value = product.name;
-    document.getElementById('product-price').value = product.price;
-    document.getElementById('product-category').value = product.category;
-    document.getElementById('product-image').value = product.imageurl || '';
-    document.getElementById('product-image-file').value = ''; // Reset file input
-    document.getElementById('product-desc').value = product.description;
-    document.getElementById('product-colors').value = product.colors || '';
-    
-    modalTitle.textContent = 'Edit Product';
-    productModal.classList.remove('hidden');
-    productModal.classList.add('flex');
+window.editProduct = (id) => {
+    window.location.href = 'admin-product-form.html?id=' + id;
 };
 
 window.deleteProduct = async (id) => {

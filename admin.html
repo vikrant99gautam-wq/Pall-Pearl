@@ -258,70 +258,7 @@
             </div>
         </div>
 
-        <!-- Product Modal -->
-        <div id="product-modal" class="fixed inset-0 bg-on-background/30 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
-            <div class="bg-surface rounded-[36px] w-full max-w-2xl max-h-[90vh] overflow-y-auto smooth-shadow">
-                <div class="p-8 border-b border-outline-variant/30 flex justify-between items-center sticky top-0 bg-surface z-10">
-                    <h2 id="product-modal-title" class="font-headline-lg-mobile text-2xl text-primary">Add Product</h2>
-                    <button id="btn-close-product-modal" class="text-on-surface-variant hover:text-error transition-colors">
-                        <span class="material-symbols-outlined text-3xl">close</span>
-                    </button>
-                </div>
-                <div class="p-8">
-                    <form id="product-form" class="space-y-6">
-                        <input type="hidden" id="product-id">
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="col-span-1 md:col-span-2">
-                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Product Name</label>
-                                <input type="text" id="product-name" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
-                            </div>
-                            
-                            <div>
-                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Price (₹)</label>
-                                <input type="number" step="0.01" id="product-price" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
-                            </div>
-                            
-                            <div>
-                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Category</label>
-                                <select id="product-category" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
-                                    <option value="Tops">Tops</option>
-                                    <option value="Kurtis">Kurtis</option>
-                                    <option value="Dresses">Dresses</option>
-                                    <option value="Co-ord Sets">Co-ord Sets</option>
-                                    <option value="Bottom Wear">Bottom Wear</option>
-                                    <option value="Ethnic Wear">Ethnic Wear</option>
-                                </select>
-                            </div>
-                            
-                            <div class="col-span-1 md:col-span-2">
-                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Upload Image (Optional)</label>
-                                <input type="file" accept="image/*" id="product-image-file" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
-                            </div>
-                            <div class="col-span-1 md:col-span-2">
-                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">OR Image URL</label>
-                                <input type="url" id="product-image" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none" placeholder="https://...">
-                            </div>
-                            
-                            <div class="col-span-1 md:col-span-2">
-                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Color Options (Comma separated, e.g. Red, Blue)</label>
-                                <input type="text" id="product-colors" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none" placeholder="Red, Pink, Black">
-                            </div>
-                            
-                            <div class="col-span-1 md:col-span-2">
-                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Description</label>
-                                <textarea id="product-desc" rows="3" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none"></textarea>
-                            </div>
-                        </div>
-                        
-                        <div class="pt-4 flex justify-end gap-4">
-                            <button type="button" id="btn-cancel-product" class="px-6 py-3 rounded-xl hover:bg-surface-container-highest text-on-surface-variant font-label-sm uppercase tracking-widest transition-colors">Cancel</button>
-                            <button type="submit" id="btn-save-product" class="px-8 py-3 rounded-xl bg-primary text-on-primary font-label-sm uppercase tracking-widest hover:opacity-90 transition-opacity">Save Product</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+
     </main>
 
     <script type="module" src="admin.js?v=2"></script>
