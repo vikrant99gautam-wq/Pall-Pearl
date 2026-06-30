@@ -63,6 +63,55 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (countEl) countEl.textContent = `${productsToRender.length} Results`;
     };
 
+    // Store original array for resetting
+    let currentFilteredProducts = [];
+
+    const applyFiltersAndSort = () => {
+        let filtered = [...allProducts];
+        
+        // 1. Color Filter
+        const colorSelect = document.getElementById('filter-color');
+        if (colorSelect && colorSelect.value) {
+            const color = colorSelect.value.toLowerCase();
+            filtered = filtered.filter(p => {
+                const colors = (p.colors || '').toLowerCase();
+                const desc = (p.description || '').toLowerCase();
+                const name = (p.name || '').toLowerCase();
+                return colors.includes(color) || desc.includes(color) || name.includes(color);
+            });
+        }
+        
+        // 2. Price Filter
+        const priceSelect = document.getElementById('filter-price');
+        if (priceSelect && priceSelect.value) {
+            const priceVal = priceSelect.value;
+            filtered = filtered.filter(p => {
+                const price = parseFloat(p.price);
+                if (isNaN(price)) return true;
+                if (priceVal === 'under1000') return price < 1000;
+                if (priceVal === '1000to2000') return price >= 1000 && price <= 2000;
+                if (priceVal === 'over2000') return price > 2000;
+                return true;
+            });
+        }
+        
+        // 3. Sort By
+        const sortSelect = document.getElementById('sort-by');
+        if (sortSelect && sortSelect.value) {
+            const sortVal = sortSelect.value;
+            if (sortVal === 'newest') {
+                filtered.sort((a, b) => new Date(b.createdat || 0) - new Date(a.createdat || 0));
+            } else if (sortVal === 'price-low') {
+                filtered.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+            } else if (sortVal === 'price-high') {
+                filtered.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+            }
+        }
+        
+        currentFilteredProducts = filtered;
+        renderProducts(filtered);
+    };
+
     try {
         let query = supabase.from('products').select('*').order('createdat', { ascending: false });
         
@@ -76,6 +125,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (error) throw error;
         
         allProducts = products || [];
+        currentFilteredProducts = [...allProducts];
+        
+        // Initial setup of filter listeners
+        ['filter-color', 'filter-price', 'sort-by'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('change', applyFiltersAndSort);
+        });
+
+        // Add auto-select current category for category dropdown
+        const catSelect = document.getElementById('filter-category');
+        if (catSelect) {
+            const currentPath = window.location.pathname.split('/').pop();
+            for (let i = 0; i < catSelect.options.length; i++) {
+                if (catSelect.options[i].value === currentPath) {
+                    catSelect.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+
         renderProducts(allProducts);
 
     } catch (e) {

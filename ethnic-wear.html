@@ -212,34 +212,62 @@
 <main class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop py-8">
 <!-- Sticky Filter Bar -->
 <div class="sticky top-[72px] z-40 glass-panel rounded-xl py-3 px-4 md:px-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm">
-<div class="flex items-center space-x-4 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
-<button class="flex items-center space-x-1 text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap">
-<span class="font-label-sm uppercase">Category</span>
-<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
-</button>
-<div class="w-px h-4 bg-outline-variant/50"></div>
-<button class="flex items-center space-x-1 text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap">
-<span class="font-label-sm uppercase">Color</span>
-<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
-</button>
-<div class="w-px h-4 bg-outline-variant/50"></div>
-<button class="flex items-center space-x-1 text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap">
-<span class="font-label-sm uppercase">Size</span>
-<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
-</button>
-<div class="w-px h-4 bg-outline-variant/50"></div>
-<button class="flex items-center space-x-1 text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap">
-<span class="font-label-sm uppercase">Price</span>
-<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
-</button>
-</div>
-<div class="flex items-center justify-between w-full md:w-auto">
-<span class="text-on-surface-variant font-label-sm hidden md:inline-block mr-4">124 Results</span>
-<button class="flex items-center space-x-2 bg-surface px-4 py-2 rounded-lg border border-outline-variant hover:border-primary transition-colors">
-<span class="font-label-sm uppercase text-on-surface">Sort By: Featured</span>
-<span class="material-symbols-outlined text-[18px]">swap_vert</span>
-</button>
-</div>
+    <div class="flex items-center space-x-4 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+        <!-- Category -->
+        <div class="relative flex items-center group">
+            <select id="filter-category" onchange="if(this.value) window.location.href=this.value" class="appearance-none bg-transparent font-label-sm uppercase text-on-surface-variant group-hover:text-primary transition-colors cursor-pointer outline-none pr-6">
+                <option value="">CATEGORY</option>
+                <option value="collection.html">All Products</option>
+                <option value="tops.html">Tops</option>
+                <option value="kurtis.html">Kurtis</option>
+                <option value="dresses.html">Dresses</option>
+                <option value="coord-sets.html">Co-ord Sets</option>
+                <option value="bottom-wear.html">Bottom Wear</option>
+                <option value="ethnic-wear.html">Ethnic Wear</option>
+            </select>
+            <span class="material-symbols-outlined text-[18px] absolute right-0 pointer-events-none text-on-surface-variant group-hover:text-primary">keyboard_arrow_down</span>
+        </div>
+        <div class="w-px h-4 bg-outline-variant/50"></div>
+        <!-- Color -->
+        <div class="relative flex items-center group">
+            <select id="filter-color" class="appearance-none bg-transparent font-label-sm uppercase text-on-surface-variant group-hover:text-primary transition-colors cursor-pointer outline-none pr-6">
+                <option value="">COLOR (ALL)</option>
+                <option value="black">Black</option>
+                <option value="white">White</option>
+                <option value="red">Red</option>
+                <option value="blue">Blue</option>
+                <option value="pink">Pink</option>
+                <option value="green">Green</option>
+                <option value="yellow">Yellow</option>
+            </select>
+            <span class="material-symbols-outlined text-[18px] absolute right-0 pointer-events-none text-on-surface-variant group-hover:text-primary">keyboard_arrow_down</span>
+        </div>
+        <div class="w-px h-4 bg-outline-variant/50"></div>
+        <!-- Price -->
+        <div class="relative flex items-center group">
+            <select id="filter-price" class="appearance-none bg-transparent font-label-sm uppercase text-on-surface-variant group-hover:text-primary transition-colors cursor-pointer outline-none pr-6">
+                <option value="">PRICE (ALL)</option>
+                <option value="under1000">Under ₹1000</option>
+                <option value="1000to2000">₹1000 - ₹2000</option>
+                <option value="over2000">Over ₹2000</option>
+            </select>
+            <span class="material-symbols-outlined text-[18px] absolute right-0 pointer-events-none text-on-surface-variant group-hover:text-primary">keyboard_arrow_down</span>
+        </div>
+    </div>
+    
+    <div class="flex items-center justify-between w-full md:w-auto">
+        <span id="result-count" class="text-on-surface-variant font-label-sm hidden md:inline-block mr-4">Loading...</span>
+        
+        <!-- Sort By -->
+        <div class="relative flex items-center group bg-surface px-4 py-2 rounded-lg border border-outline-variant hover:border-primary transition-colors cursor-pointer">
+            <select id="sort-by" class="appearance-none bg-transparent font-label-sm uppercase text-on-surface cursor-pointer outline-none pr-6">
+                <option value="newest">Sort By: Newest</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+            </select>
+            <span class="material-symbols-outlined text-[18px] absolute right-2 pointer-events-none text-on-surface">swap_vert</span>
+        </div>
+    </div>
 </div>
 <!-- Quick Filters -->
 <div class="flex overflow-x-auto space-x-3 mb-10 pb-2 scrollbar-hide">
