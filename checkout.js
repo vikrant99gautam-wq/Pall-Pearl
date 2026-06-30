@@ -86,6 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (item.sleeve) message += `• Style: ${item.sleeve}\n`;
             message += `• Quantity: ${item.quantity}\n`;
             message += `• Price: ${item.price}\n`;
+            if (item.image) {
+                // Remove trailing comma from split arrays in case it's a comma-separated list of images
+                const imgUrl = item.image.split(',')[0].trim();
+                message += `• Image: ${imgUrl}\n`;
+            }
             if (item.customization) {
                 message += `\n📝 *Customization Note:*\n${item.customization}\n`;
             }
