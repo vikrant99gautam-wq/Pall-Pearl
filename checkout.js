@@ -105,7 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
         message += 'Our team will carefully review your order and our seller will personally contact you shortly to confirm all the details before processing your order.\\n\\n';
         message += 'If you have any questions or want to make any changes, feel free to reply to this chat. We\'re always happy to help! \u{1F60A}\\n\\n';
         message += 'Thank you for choosing *Pall & Pearl* \u{1F337}\\n\\n';
-        message += '*Chatpate Tops for Chatpati Girls* \u{2728}\\n\\n        // Encode and open WhatsApp
+        message += '*Chatpate Tops for Chatpati Girls* \u{2728}';
+
+        // Encode and open WhatsApp
         const encodedMessage = encodeURIComponent(message);
         const whatsappUrl = `https://wa.me/${SELLER_WHATSAPP}?text=${encodedMessage}`;
         
