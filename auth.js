@@ -200,9 +200,9 @@ supabase.auth.onAuthStateChange(async (event, session) => {
     const isProfilePage = window.location.pathname.endsWith('profile.html');
 
     if (user) {
-        // Sync Cart
+        // Sync Cart without awaiting to prevent blocking the login redirect
         if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-            await mergeAndSyncCart(user);
+            mergeAndSyncCart(user).catch(e => console.error("Cart sync failed in background:", e));
         }
 
         // User is logged in
