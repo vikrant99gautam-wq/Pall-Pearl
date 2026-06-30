@@ -9,31 +9,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!grid) return;
 
     const category = grid.dataset.category;
+    let allProducts = [];
     
     // Show a loading state
     grid.innerHTML = '<div class="col-span-full py-12 text-center text-on-surface-variant font-body-lg">Loading products...</div>';
 
-    try {
-        let query = supabase.from('products').select('*').order('createdat', { ascending: false });
-        
-        // Filter by category if one is specified and it's not "All"
-        if (category && category !== 'All' && category !== 'New Arrivals' && category !== 'Best Sellers' && category !== 'Sale') {
-            query = query.eq('category', category);
-        }
-        
-        const { data: products, error } = await query;
-
-        if (error) throw error;
-
-        if (!products || products.length === 0) {
-            grid.innerHTML = '<div class="col-span-full py-12 text-center text-on-surface-variant font-body-lg">No products found in this category.</div>';
+    // Render function
+    const renderProducts = (productsToRender) => {
+        if (!productsToRender || productsToRender.length === 0) {
+            grid.innerHTML = '<div class="col-span-full py-12 text-center text-on-surface-variant font-body-lg">No products found for this filter.</div>';
             return;
         }
 
         let html = '';
         const aspectRatios = ["aspect-[3/4]", "aspect-[4/5]", "aspect-square", "aspect-[4/5]", ""];
         
-        products.forEach((p, index) => {
+        productsToRender.forEach((p, index) => {
             const aspect = aspectRatios[index % aspectRatios.length];
             const colors = p.colors || '';
             const defaultColor = colors.split(',')[0]?.trim() || '';
@@ -69,10 +60,76 @@ document.addEventListener("DOMContentLoaded", async () => {
         
         // Also update the result count if it exists
         const countEl = document.getElementById("result-count");
-        if (countEl) countEl.textContent = `${products.length} Results`;
+        if (countEl) countEl.textContent = `${productsToRender.length} Results`;
+    };
+
+    try {
+        let query = supabase.from('products').select('*').order('createdat', { ascending: false });
+        
+        // Filter by category if one is specified and it's not "All"
+        if (category && category !== 'All' && category !== 'New Arrivals' && category !== 'Best Sellers' && category !== 'Sale') {
+            query = query.eq('category', category);
+        }
+        
+        const { data: products, error } = await query;
+
+        if (error) throw error;
+        
+        allProducts = products || [];
+        renderProducts(allProducts);
 
     } catch (e) {
         console.error("Error loading products:", e);
         grid.innerHTML = '<div class="col-span-full py-12 text-center text-error font-body-lg">Error loading products.</div>';
+    }
+
+    // Set up filter tabs
+    const tabContainer = document.querySelector('.overflow-x-auto.space-x-3');
+    if (tabContainer) {
+        const buttons = tabContainer.querySelectorAll('button');
+        
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active classes from all buttons
+                buttons.forEach(b => {
+                    b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+                    b.classList.add('glass-panel', 'text-on-surface', 'hover:bg-surface-container');
+                });
+                
+                // Add active classes to clicked button
+                btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+                btn.classList.remove('glass-panel', 'text-on-surface', 'hover:bg-surface-container');
+                
+                // Filter products based on tab text
+                const filter = btn.textContent.trim().toLowerCase();
+                let filteredProducts = [...allProducts];
+                
+                if (filter === 'all new' || filter === 'all') {
+                    // Already sorted by new
+                    filteredProducts = allProducts;
+                } else if (filter === 'trending') {
+                    // Randomly sort to simulate trending or pick a subset
+                    filteredProducts = allProducts.slice().sort(() => 0.5 - Math.random()).slice(0, Math.ceil(allProducts.length * 0.7));
+                } else if (filter === 'summer edit') {
+                    filteredProducts = allProducts.filter(p => 
+                        (p.name + " " + (p.description || "")).toLowerCase().match(/summer|cotton|light|breezy|linen/i)
+                    );
+                    // Fallback to random if empty
+                    if (filteredProducts.length === 0) filteredProducts = allProducts.slice(0, 3);
+                } else if (filter === 'florals') {
+                    filteredProducts = allProducts.filter(p => 
+                        (p.name + " " + (p.description || "")).toLowerCase().match(/floral|flower|print|blossom/i)
+                    );
+                    if (filteredProducts.length === 0) filteredProducts = allProducts.slice(0, 3);
+                } else if (filter === 'evening wear') {
+                    filteredProducts = allProducts.filter(p => 
+                        (p.name + " " + (p.description || "")).toLowerCase().match(/evening|party|silk|dark|elegant/i)
+                    );
+                    if (filteredProducts.length === 0) filteredProducts = allProducts.slice(0, 3);
+                }
+                
+                renderProducts(filteredProducts);
+            });
+        });
     }
 });
