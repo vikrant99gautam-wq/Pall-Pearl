@@ -19,6 +19,11 @@ function getCart() {
 function saveCart(cart) {
     localStorage.setItem(CART_KEY, JSON.stringify(cart));
     updateCartBadge();
+    
+    // Sync with cloud if user is logged in (function defined in auth.js)
+    if (typeof window.syncCartToCloud === 'function') {
+        window.syncCartToCloud(cart);
+    }
 }
 
 // Add item to cart

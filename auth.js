@@ -116,6 +116,50 @@ if (btnLogout) {
     });
 }
 
+window.syncCartToCloud = async (cart) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+        await supabase.auth.updateUser({
+            data: { cart: cart }
+        });
+    }
+};
+
+async function mergeAndSyncCart(user) {
+    const cloudCart = user.user_metadata?.cart || [];
+    let localCart = [];
+    try {
+        const cartStr = localStorage.getItem('pall_and_pearl_cart');
+        if (cartStr) localCart = JSON.parse(cartStr);
+    } catch (e) {}
+
+    const mergedMap = new Map();
+    const getKey = (item) => `${item.name}-${item.size||''}-${item.color||''}-${item.sleeve||''}-${item.customMod||''}`;
+    
+    cloudCart.forEach(item => mergedMap.set(getKey(item), item));
+    localCart.forEach(item => {
+        const key = getKey(item);
+        if (mergedMap.has(key)) {
+            const existing = mergedMap.get(key);
+            existing.quantity = Math.max(existing.quantity, item.quantity);
+        } else {
+            mergedMap.set(key, item);
+        }
+    });
+    
+    const mergedCart = Array.from(mergedMap.values());
+    localStorage.setItem('pall_and_pearl_cart', JSON.stringify(mergedCart));
+    
+    if (typeof window.updateCartBadge === 'function') window.updateCartBadge();
+    if (window.location.pathname.endsWith('cart.html') && typeof window.renderCartPage === 'function') {
+        window.renderCartPage();
+    }
+    
+    if (JSON.stringify(cloudCart) !== JSON.stringify(mergedCart)) {
+        await supabase.auth.updateUser({ data: { cart: mergedCart } });
+    }
+}
+
 // Auth State Observer
 supabase.auth.onAuthStateChange(async (event, session) => {
     const user = session?.user;
@@ -123,6 +167,11 @@ supabase.auth.onAuthStateChange(async (event, session) => {
     const isProfilePage = window.location.pathname.endsWith('profile.html');
 
     if (user) {
+        // Sync Cart
+        if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+            await mergeAndSyncCart(user);
+        }
+
         // User is logged in
         if (isAuthPage) {
             window.location.href = 'profile.html'; // Redirect away from login
