@@ -168,31 +168,83 @@
                             </select>
                         </div>
                         
-                        <!-- Image Section -->
+                        <!-- Image 1 (Main) -->
                         <div class="col-span-1 md:col-span-2 bg-surface rounded-2xl p-6 border border-outline-variant/30">
-                            <h3 class="font-label-sm text-on-surface-variant uppercase tracking-widest mb-4">Product Image</h3>
+                            <h3 class="font-label-sm text-on-surface-variant uppercase tracking-widest mb-4">Main Product Image (Required)</h3>
                             
-                            <!-- Current Image Preview (Hidden by default) -->
-                            <div id="current-image-container" class="hidden mb-6">
+                            <div id="current-image-container-1" class="hidden mb-6">
                                 <p class="text-sm text-on-surface-variant mb-2">Current Image:</p>
                                 <div class="relative inline-block">
-                                    <img id="current-image-preview" src="" alt="Current Product Image" class="w-48 h-48 object-cover rounded-xl border border-outline-variant/30">
-                                    <button type="button" id="btn-remove-image" class="absolute -top-3 -right-3 bg-error text-on-error w-8 h-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md">
+                                    <img id="current-image-preview-1" src="" alt="Current Product Image 1" class="w-48 h-48 object-cover rounded-xl border border-outline-variant/30">
+                                    <button type="button" id="btn-remove-image-1" class="absolute -top-3 -right-3 bg-error text-on-error w-8 h-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md">
                                         <span class="material-symbols-outlined text-sm">close</span>
                                     </button>
                                 </div>
-                                <input type="hidden" id="product-image-url">
+                                <input type="hidden" id="product-image-url-1">
                             </div>
 
-                            <!-- Upload New Image -->
-                            <div id="upload-image-container">
+                            <div id="upload-image-container-1">
                                 <div class="mb-4">
                                     <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Upload New Image</label>
-                                    <input type="file" accept="image/*" id="product-image-file" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                                    <input type="file" accept="image/*" id="product-image-file-1" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
                                 </div>
                                 <div>
                                     <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">OR Image URL</label>
-                                    <input type="url" id="product-image-url-input" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none" placeholder="https://...">
+                                    <input type="url" id="product-image-url-input-1" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none" placeholder="https://...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image 2 -->
+                        <div class="col-span-1 md:col-span-2 bg-surface rounded-2xl p-6 border border-outline-variant/30">
+                            <h3 class="font-label-sm text-on-surface-variant uppercase tracking-widest mb-4">Product Image 2 (Optional)</h3>
+                            
+                            <div id="current-image-container-2" class="hidden mb-6">
+                                <p class="text-sm text-on-surface-variant mb-2">Current Image:</p>
+                                <div class="relative inline-block">
+                                    <img id="current-image-preview-2" src="" alt="Current Product Image 2" class="w-48 h-48 object-cover rounded-xl border border-outline-variant/30">
+                                    <button type="button" id="btn-remove-image-2" class="absolute -top-3 -right-3 bg-error text-on-error w-8 h-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md">
+                                        <span class="material-symbols-outlined text-sm">close</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" id="product-image-url-2">
+                            </div>
+
+                            <div id="upload-image-container-2">
+                                <div class="mb-4">
+                                    <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Upload New Image</label>
+                                    <input type="file" accept="image/*" id="product-image-file-2" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                                </div>
+                                <div>
+                                    <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">OR Image URL</label>
+                                    <input type="url" id="product-image-url-input-2" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none" placeholder="https://...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image 3 -->
+                        <div class="col-span-1 md:col-span-2 bg-surface rounded-2xl p-6 border border-outline-variant/30">
+                            <h3 class="font-label-sm text-on-surface-variant uppercase tracking-widest mb-4">Product Image 3 (Optional)</h3>
+                            
+                            <div id="current-image-container-3" class="hidden mb-6">
+                                <p class="text-sm text-on-surface-variant mb-2">Current Image:</p>
+                                <div class="relative inline-block">
+                                    <img id="current-image-preview-3" src="" alt="Current Product Image 3" class="w-48 h-48 object-cover rounded-xl border border-outline-variant/30">
+                                    <button type="button" id="btn-remove-image-3" class="absolute -top-3 -right-3 bg-error text-on-error w-8 h-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md">
+                                        <span class="material-symbols-outlined text-sm">close</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" id="product-image-url-3">
+                            </div>
+
+                            <div id="upload-image-container-3">
+                                <div class="mb-4">
+                                    <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Upload New Image</label>
+                                    <input type="file" accept="image/*" id="product-image-file-3" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                                </div>
+                                <div>
+                                    <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">OR Image URL</label>
+                                    <input type="url" id="product-image-url-input-3" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none" placeholder="https://...">
                                 </div>
                             </div>
                         </div>

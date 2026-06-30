@@ -28,22 +28,23 @@ document.addEventListener("DOMContentLoaded", async () => {
             const aspect = aspectRatios[index % aspectRatios.length];
             const colors = p.colors || '';
             const defaultColor = colors.split(',')[0]?.trim() || '';
+            const firstImage = p.imageurl ? p.imageurl.split(',')[0].trim() : '';
             
             html += `
             <a class="masonry-item block group relative" href="product-detail.html?name=${encodeURIComponent(p.name)}&price=${encodeURIComponent('₹' + p.price)}&desc=${encodeURIComponent(p.description || '')}&image=${encodeURIComponent(p.imageurl)}&category=${encodeURIComponent(p.category)}&colors=${encodeURIComponent(colors)}">
                 <div class="relative overflow-hidden rounded-xl mb-4 bg-surface-container-low ${aspect}">
-                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" alt="${p.name}" src="${p.imageurl}"/>
+                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" alt="${p.name}" src="${firstImage}"/>
                     
                     ${index < 2 ? `<div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full"><span class="font-label-sm text-primary uppercase">New</span></div>` : ''}
                     
                     <!-- Hover Actions -->
                     <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
-                        <button onclick="event.preventDefault(); addToCart({name: '${p.name.replace(/'/g, "\\'")}', price: '₹${p.price}', image: '${p.imageurl}', desc: '${defaultColor}', size: 'M', color: '${defaultColor}'})" class="glass-panel w-full py-3 px-4 rounded-xl flex justify-between items-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-white/90">
+                        <button onclick="event.preventDefault(); addToCart({name: '${p.name.replace(/'/g, "\\'")}', price: '₹${p.price}', image: '${firstImage}', desc: '${defaultColor}', size: 'M', color: '${defaultColor}'})" class="glass-panel w-full py-3 px-4 rounded-xl flex justify-between items-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-white/90">
                             <span class="font-label-sm uppercase text-on-surface">Quick Add</span>
                             <span class="material-symbols-outlined text-on-surface">shopping_bag</span>
                         </button>
                     </div>
-                    <button onclick="event.preventDefault(); toggleWishlist({name: '${p.name.replace(/'/g, "\\'")}', price: '₹${p.price}', image: '${p.imageurl}', desc: '${defaultColor}'}, this)" class="wishlist-btn absolute top-4 right-4 w-10 h-10 rounded-full glass-panel flex items-center justify-center text-on-surface hover:text-primary transition-colors opacity-0 group-hover:opacity-100 z-10" data-name="${p.name.replace(/'/g, "\\'")}">
+                    <button onclick="event.preventDefault(); toggleWishlist({name: '${p.name.replace(/'/g, "\\'")}', price: '₹${p.price}', image: '${firstImage}', desc: '${defaultColor}'}, this)" class="wishlist-btn absolute top-4 right-4 w-10 h-10 rounded-full glass-panel flex items-center justify-center text-on-surface hover:text-primary transition-colors opacity-0 group-hover:opacity-100 z-10" data-name="${p.name.replace(/'/g, "\\'")}">
                         <span class="material-symbols-outlined">favorite</span>
                     </button>
                 </div>

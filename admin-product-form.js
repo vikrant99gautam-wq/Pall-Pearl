@@ -13,16 +13,6 @@ const inputCategory = document.getElementById('product-category');
 const inputDesc = document.getElementById('product-desc');
 const inputColors = document.getElementById('product-colors');
 
-// Image Elements
-const currentImageContainer = document.getElementById('current-image-container');
-const currentImagePreview = document.getElementById('current-image-preview');
-const inputImageUrlHidden = document.getElementById('product-image-url');
-const btnRemoveImage = document.getElementById('btn-remove-image');
-
-const uploadImageContainer = document.getElementById('upload-image-container');
-const inputImageFile = document.getElementById('product-image-file');
-const inputImageUrlInput = document.getElementById('product-image-url-input');
-
 const btnSave = document.getElementById('btn-save-product');
 
 // Parse URL for ID
@@ -62,10 +52,15 @@ async function loadProduct(id) {
             inputColors.value = product.colors || '';
             
             if (product.imageurl) {
-                inputImageUrlHidden.value = product.imageurl;
-                currentImagePreview.src = product.imageurl;
-                currentImageContainer.classList.remove('hidden');
-                uploadImageContainer.classList.add('hidden');
+                const urls = product.imageurl.split(',').map(u => u.trim());
+                for (let i = 1; i <= 3; i++) {
+                    if (urls[i-1]) {
+                        document.getElementById(`product-image-url-${i}`).value = urls[i-1];
+                        document.getElementById(`current-image-preview-${i}`).src = urls[i-1];
+                        document.getElementById(`current-image-container-${i}`).classList.remove('hidden');
+                        document.getElementById(`upload-image-container-${i}`).classList.add('hidden');
+                    }
+                }
             }
         }
     } catch (e) {
@@ -74,20 +69,42 @@ async function loadProduct(id) {
     }
 }
 
-// Remove Image Button
-if (btnRemoveImage) {
-    btnRemoveImage.addEventListener('click', () => {
-        if (confirm("Remove this image? You will need to upload a new one or provide a URL.")) {
-            // We do not delete from Storage immediately to prevent accidental loss if they cancel,
-            // we just clear it from the form. It will be replaced upon save.
-            inputImageUrlHidden.value = '';
-            currentImagePreview.src = '';
-            currentImageContainer.classList.add('hidden');
-            uploadImageContainer.classList.remove('hidden');
-            inputImageFile.value = '';
-            inputImageUrlInput.value = '';
-        }
-    });
+// Remove Image Buttons
+for (let i = 1; i <= 3; i++) {
+    const btnRemoveImage = document.getElementById(`btn-remove-image-${i}`);
+    if (btnRemoveImage) {
+        btnRemoveImage.addEventListener('click', () => {
+            if (confirm("Remove this image? You will need to upload a new one or provide a URL.")) {
+                document.getElementById(`product-image-url-${i}`).value = '';
+                document.getElementById(`current-image-preview-${i}`).src = '';
+                document.getElementById(`current-image-container-${i}`).classList.add('hidden');
+                document.getElementById(`upload-image-container-${i}`).classList.remove('hidden');
+                document.getElementById(`product-image-file-${i}`).value = '';
+                document.getElementById(`product-image-url-input-${i}`).value = '';
+            }
+        });
+    }
+}
+
+async function uploadImage(fileInput) {
+    if (fileInput.files && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+            .from('product-images')
+            .upload(fileName, file);
+        
+        if (uploadError) throw uploadError;
+        
+        const { data: publicUrlData } = supabase.storage
+            .from('product-images')
+            .getPublicUrl(fileName);
+            
+        return publicUrlData.publicUrl;
+    }
+    return null;
 }
 
 // Form Submission
@@ -102,34 +119,28 @@ if (productForm) {
         const desc = inputDesc.value;
         const colors = inputColors.value;
         
-        let finalImageUrl = inputImageUrlHidden.value; // Use existing if not removed
-        
         btnSave.disabled = true;
         btnSave.textContent = 'Saving...';
         
         try {
-            // If they are uploading a NEW image
-            if (inputImageFile.files && inputImageFile.files.length > 0) {
-                btnSave.textContent = 'Uploading Image...';
-                const file = inputImageFile.files[0];
-                const fileExt = file.name.split('.').pop();
-                const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+            const finalUrls = [];
+            for (let i = 1; i <= 3; i++) {
+                const hiddenUrl = document.getElementById(`product-image-url-${i}`).value;
+                const fileInput = document.getElementById(`product-image-file-${i}`);
+                const urlInput = document.getElementById(`product-image-url-input-${i}`).value;
                 
-                const { error: uploadError } = await supabase.storage
-                    .from('product-images')
-                    .upload(fileName, file);
-                
-                if (uploadError) throw uploadError;
-                
-                const { data: publicUrlData } = supabase.storage
-                    .from('product-images')
-                    .getPublicUrl(fileName);
-                    
-                finalImageUrl = publicUrlData.publicUrl;
-            } else if (inputImageUrlInput.value) {
-                // If they provided a URL instead of a file
-                finalImageUrl = inputImageUrlInput.value;
+                if (fileInput.files && fileInput.files.length > 0) {
+                    btnSave.textContent = `Uploading Image ${i}...`;
+                    const uploadedUrl = await uploadImage(fileInput);
+                    if (uploadedUrl) finalUrls.push(uploadedUrl);
+                } else if (urlInput) {
+                    finalUrls.push(urlInput);
+                } else if (hiddenUrl) {
+                    finalUrls.push(hiddenUrl);
+                }
             }
+            
+            const finalImageUrl = finalUrls.join(',');
             
             const productData = {
                 name, price, category, imageurl: finalImageUrl, description: desc, colors

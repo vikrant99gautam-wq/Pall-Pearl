@@ -192,10 +192,11 @@ function renderProductsTable() {
     let html = "";
     filteredProducts.forEach(product => {
         const prodData = encodeURIComponent(JSON.stringify(product));
+        const firstImage = product.imageurl ? product.imageurl.split(',')[0].trim() : 'https://via.placeholder.com/80';
         html += `
             <tr class="hover:bg-surface-container-highest transition-colors">
                 <td class="p-4">
-                    <img src="${product.imageurl || 'https://via.placeholder.com/80'}" alt="${product.name}" class="w-16 h-16 object-cover rounded-lg border border-outline-variant/30">
+                    <img src="${firstImage}" alt="${product.name}" class="w-16 h-16 object-cover rounded-lg border border-outline-variant/30">
                 </td>
                 <td class="p-4 font-body-md text-on-surface font-medium">${product.name}</td>
                 <td class="p-4 font-body-md text-on-surface-variant">${product.category}</td>

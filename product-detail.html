@@ -156,7 +156,8 @@
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter md:gap-[64px]">
 <!-- Gallery (Left Column) -->
 <div class="lg:col-span-7 flex flex-col-reverse md:flex-row gap-4 h-[600px] md:h-[800px]">
-<!-- Thumbnails (Removed as they were hardcoded placeholders) -->
+<!-- Thumbnails Container -->
+<div id="product-thumbnails-container" class="flex md:flex-col gap-4 overflow-x-auto md:overflow-y-auto no-scrollbar w-full md:w-24 shrink-0 pb-4 md:pb-0 hidden"></div>
 <!-- Main Image -->
 <div class="flex-grow rounded-[32px] overflow-hidden glass-panel smooth-shadow relative group">
 <img class="w-full h-full object-cover img-zoom-hover" data-alt="A stunning full-length editorial photograph of a deep purple velvet kurti with intricate gold embroidery, displayed elegantly against a soft pastel pink background. The fabric looks rich and luxurious." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAPi5JDT8fDwdGna_DfDuL10DLH8GuzGbklv3F3cybWDUWLF7f-v9yZ-njohT4n1zYxtUR2XDJUCDbk018YxltGqnOt9oK3FvuVTEqxr-5ngFOMTmZgyXB6G8gZ0FVUd96a3VEU54MzBpqwC_fQbH3dqPT93GCgF-McNGZj6ToQUqLdzTnSc6WYup88EZgZUNfOyXLHO5Vkf9XQemerHaOEF0KwW7RnQrP3PrwAu6wRHeZGUts0vASvs1jeWj3HoNrCj4fLzzpTE-2" id="product-image"/>
@@ -284,7 +285,25 @@
             document.getElementById("product-price").textContent = price;
         }
         if (image) {
-            document.getElementById("product-image").src = image;
+            const urls = image.split(',').map(u => u.trim()).filter(u => u);
+            if (urls.length > 0) {
+                document.getElementById("product-image").src = urls[0];
+                
+                if (urls.length > 1) {
+                    const thumbnailsContainer = document.getElementById("product-thumbnails-container");
+                    thumbnailsContainer.classList.remove("hidden");
+                    let html = '';
+                    urls.forEach(url => {
+                        html += `
+                        <button class="w-20 h-24 md:w-24 md:h-32 rounded-2xl overflow-hidden border-2 border-transparent hover:border-outline-variant transition-colors shrink-0 relative group" onclick="document.getElementById('product-image').src='${url}'">
+                            <img class="w-full h-full object-cover" src="${url}"/>
+                            <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </button>
+                        `;
+                    });
+                    thumbnailsContainer.innerHTML = html;
+                }
+            }
         }
         if (desc) {
             document.getElementById("product-desc").textContent = desc;
