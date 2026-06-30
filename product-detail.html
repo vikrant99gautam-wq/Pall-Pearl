@@ -340,44 +340,7 @@
             });
         });
         
-        const colors = params.get("colors");
-        
-        if (colors) {
-            document.getElementById("color-section").style.display = "block";
-            const colorArray = colors.split(',').map(c => c.trim()).filter(c => c);
-            const container = document.getElementById("color-options-container");
-            container.innerHTML = "";
-            
-            if (colorArray.length > 0) {
-                document.getElementById("selected-color-text").textContent = "Color: " + colorArray[0]; // default select first
-                colorArray.forEach((color, index) => {
-                    // Try to use a valid CSS color if possible, otherwise use a placeholder or the string itself
-                    // We'll just write the color name inside the button if it's not a hex, or just use the background color
-                    let bgColor = color.toLowerCase();
-                    if (bgColor === "midnight purple") bgColor = "#4a1a36";
-                    
-                    const isSelected = index === 0;
-                    
-                    const btn = document.createElement("button");
-                    btn.className = "color-btn px-4 py-2 rounded-xl border transition-colors font-body-md font-semibold text-sm " + 
-                                    (isSelected ? "border-2 border-primary bg-primary-fixed/20 text-primary" : "border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary");
-                    btn.textContent = color;
-                    btn.dataset.colorName = color;
-                    
-                    btn.addEventListener("click", () => {
-                        document.querySelectorAll(".color-btn").forEach(b => {
-                            b.className = "color-btn px-4 py-2 rounded-xl border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary transition-colors font-body-md font-semibold text-sm";
-                        });
-                        btn.className = "color-btn px-4 py-2 rounded-xl border-2 border-primary bg-primary-fixed/20 text-primary transition-colors font-body-md font-semibold text-sm";
-                        document.getElementById("selected-color-text").textContent = "Color: " + color;
-                    });
-                    
-                    container.appendChild(btn);
-                });
-            } else {
-                document.getElementById("color-section").style.display = "none";
-            }
-        }
+        // Color options are now handled dynamically via Supabase in the module script below
         
     });
 
@@ -425,6 +388,58 @@
 </script>
 <script src="cart.js"></script>
 <script src="wishlist.js"></script>
+<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    const supabase = createClient('https://sydswktememhjapothib.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN5ZHN3a3RlbWVtaGphcG90aGliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MDkwNzUsImV4cCI6MjA5ODI4NTA3NX0._0lwAmNk8o0E6WBvqyubWlIS4Q3pYhUGIaiJ5Zzpdh4');
+
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name");
+    const currentColor = params.get("colors"); // Current product's color
+
+    if (name) {
+        supabase.from('products').select('*').eq('name', name).then(({data, error}) => {
+            if (data && data.length > 0) {
+                // Filter out empty colors and get unique valid ones
+                const validVariants = data.filter(p => p.colors && p.colors.trim() !== '');
+                
+                if (validVariants.length > 0) {
+                    document.getElementById("color-section").style.display = "block";
+                    const container = document.getElementById("color-options-container");
+                    container.innerHTML = "";
+                    
+                    let selectedVariantColor = currentColor || validVariants[0].colors.trim();
+                    document.getElementById("selected-color-text").textContent = "Color: " + selectedVariantColor;
+                    
+                    validVariants.forEach(variant => {
+                        const vColor = variant.colors.trim();
+                        const isSelected = vColor === selectedVariantColor;
+                        
+                        const btn = document.createElement("button");
+                        btn.className = "color-btn px-4 py-2 rounded-xl border transition-colors font-body-md font-semibold text-sm " + 
+                                        (isSelected ? "border-2 border-primary bg-primary-fixed/20 text-primary" : "border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary");
+                        btn.textContent = vColor;
+                        btn.dataset.colorName = vColor;
+                        
+                        btn.addEventListener("click", () => {
+                            // Redirect to this variant
+                            const url = new URL(window.location.href);
+                            url.searchParams.set("price", '₹' + variant.price);
+                            url.searchParams.set("desc", variant.description || '');
+                            url.searchParams.set("image", variant.imageurl || '');
+                            url.searchParams.set("category", variant.category || '');
+                            url.searchParams.set("colors", vColor);
+                            window.location.href = url.toString();
+                        });
+                        
+                        container.appendChild(btn);
+                    });
+                } else {
+                    document.getElementById("color-section").style.display = "none";
+                }
+            }
+        });
+    }
+</script>
 <script type="module" src="auth.js"></script>
 
 <!-- Mobile Menu Overlay -->
