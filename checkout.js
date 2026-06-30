@@ -66,26 +66,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Build WhatsApp Message
-        let message = `*NEW ORDER - Pall & Pearl*\n\n`;
-        
-        message += `*Customer Details:*\n`;
-        message += `Name: ${fullName}\n`;
-        message += `Phone: ${phone}\n`;
-        if (email) message += `Email: ${email}\n`;
-        message += `\n*Shipping Address:*\n`;
+        let message = `🌸 *Namaste from Pall & Pearl!* ✨\n\n`;
+        message += `Thank you so much for shopping with us. 💖\n`;
+        message += `Your order request has been received successfully!\n\n`;
+        message += `━━━━━━━━━━━━━━━━━━\n`;
+        message += `🛍️ *ORDER SUMMARY*\n\n`;
+        message += `👤 *Customer:* ${fullName}\n`;
+        message += `📞 *Phone:* ${phone}\n`;
+        if (email) message += `📧 *Email:* ${email}\n`;
+        message += `\n📍 *Shipping Address:*\n`;
         message += `${address}\n${city}, ${state} - ${pincode}\n\n`;
+        message += `━━━━━━━━━━━━━━━━━━\n`;
+        message += `✨ *Items Ordered*\n\n`;
 
-        message += `*Order Details:*\n`;
-        checkoutCart.forEach((item, index) => {
-            message += `${index + 1}. ${item.name}\n`;
-            message += `   Size: ${item.size} | Qty: ${item.quantity} | Price: ${item.price}\n`;
+        checkoutCart.forEach((item) => {
+            message += `🩷 *${item.name}*\n`;
+            if (item.size) message += `• Size: ${item.size}\n`;
+            if (item.color) message += `• Color: ${item.color}\n`;
+            if (item.sleeve) message += `• Style: ${item.sleeve}\n`;
+            message += `• Quantity: ${item.quantity}\n`;
+            message += `• Price: ${item.price}\n`;
             if (item.customization) {
-                message += `   Note: ${item.customization}\n`;
+                message += `\n📝 *Customization Note:*\n${item.customization}\n`;
             }
+            message += `\n`;
         });
 
-        message += `\n*Total Amount:* ₹${totalAmount.toLocaleString('en-IN')}\n`;
-        message += `\nThank you!`;
+        message += `━━━━━━━━━━━━━━━━━━\n`;
+        message += `💳 *Total Amount:* *₹${totalAmount.toLocaleString('en-IN')}*\n\n`;
+        
+        message += `💖 *What happens next?*\n\n`;
+        message += `Our team will carefully review your order and our seller will personally contact you shortly to confirm all the details before processing your order.\n\n`;
+        message += `If you have any questions or want to make any changes, feel free to reply to this chat. We're always happy to help! 😊\n\n`;
+        message += `Thank you for choosing *Pall & Pearl* 🌷\n\n`;
+        message += `*Chatpate Tops for Chatpati Girls* ✨`;
 
         // Encode and open WhatsApp
         const encodedMessage = encodeURIComponent(message);
