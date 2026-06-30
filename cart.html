@@ -220,7 +220,7 @@
                     <div>
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="font-headline-lg-mobile text-xl text-on-surface">${item.name}</h3>
-                            <button onclick="removeFromCart('${item.name.replace(/'/g, "\\'")}', '${item.size || ''}', '${item.sleeve || ''}', '${item.color || ''}')" class="text-on-surface-variant hover:text-error transition-colors p-2 -mr-2 -mt-2">
+                            <button onclick="removeFromCart('${item.name.replace(/'/g, "\\'")}', '${item.size || ''}', '${item.sleeve || ''}', '${item.color || ''}', '${(item.customMod || '').replace(/'/g, "\\'")}')" class="text-on-surface-variant hover:text-error transition-colors p-2 -mr-2 -mt-2">
                                 <span class="material-symbols-outlined text-[20px]">close</span>
                             </button>
                         </div>
@@ -228,12 +228,13 @@
                         ${item.size ? `<p class="font-body-md font-semibold text-secondary">Size: ${item.size}</p>` : ''}
                         ${item.sleeve ? `<p class="font-body-md font-semibold text-secondary">Style: ${item.sleeve}</p>` : ''}
                         ${item.color ? `<p class="font-body-md font-semibold text-secondary">Color: ${item.color}</p>` : ''}
+                        ${item.customMod ? `<p class="font-body-md text-secondary mt-1"><span class="font-semibold text-primary">Modifications:</span> ${item.customMod}</p>` : ''}
                     </div>
                     <div class="flex justify-between items-end">
                         <div class="flex items-center gap-4 bg-surface-container-high rounded-full px-4 py-1">
-                            <button onclick="updateQuantity('${item.name.replace(/'/g, "\\'")}', '${item.size || ''}', '${item.sleeve || ''}', '${item.color || ''}', -1)" class="text-primary hover:opacity-70 transition-opacity text-xl font-medium">-</button>
+                            <button onclick="updateQuantity('${item.name.replace(/'/g, "\\'")}', '${item.size || ''}', '${item.sleeve || ''}', '${item.color || ''}', '${(item.customMod || '').replace(/'/g, "\\'")}', -1)" class="text-primary hover:opacity-70 transition-opacity text-xl font-medium">-</button>
                             <span class="font-label-sm text-on-surface w-4 text-center">${item.quantity}</span>
-                            <button onclick="updateQuantity('${item.name.replace(/'/g, "\\'")}', '${item.size || ''}', '${item.sleeve || ''}', '${item.color || ''}', 1)" class="text-primary hover:opacity-70 transition-opacity text-xl font-medium">+</button>
+                            <button onclick="updateQuantity('${item.name.replace(/'/g, "\\'")}', '${item.size || ''}', '${item.sleeve || ''}', '${item.color || ''}', '${(item.customMod || '').replace(/'/g, "\\'")}', 1)" class="text-primary hover:opacity-70 transition-opacity text-xl font-medium">+</button>
                         </div>
                         <p class="font-body-lg text-primary font-medium">${item.price}</p>
                     </div>

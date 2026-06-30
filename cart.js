@@ -22,12 +22,19 @@ function saveCart(cart) {
 }
 
 // Add item to cart
-// product object should look like { name: '...', price: '...', image: '...', desc: '...', size: '...' }
+// product object should look like { name: '...', price: '...', image: '...', desc: '...', size: '...', customMod: '...' }
 function addToCart(product) {
     const cart = getCart();
     
-    // Check if item already exists with same name, size, sleeve, and color
-    const existingItem = cart.find(item => item.name === product.name && (item.size || '') === (product.size || '') && (item.sleeve || '') === (product.sleeve || '') && (item.color || '') === (product.color || ''));
+    // Check if item already exists with same name, size, sleeve, color, and custom modification
+    const existingItem = cart.find(item => 
+        item.name === product.name && 
+        (item.size || '') === (product.size || '') && 
+        (item.sleeve || '') === (product.sleeve || '') && 
+        (item.color || '') === (product.color || '') &&
+        (item.customMod || '') === (product.customMod || '')
+    );
+    
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
@@ -40,9 +47,15 @@ function addToCart(product) {
     showToast(`Added ${product.name} to bag!`);
 }
 
-function removeFromCart(productName, productSize, productSleeve, productColor) {
+function removeFromCart(productName, productSize, productSleeve, productColor, productCustomMod = '') {
     let cart = getCart();
-    cart = cart.filter(item => !(item.name === productName && (item.size || '') === (productSize || '') && (item.sleeve || '') === (productSleeve || '') && (item.color || '') === (productColor || '')));
+    cart = cart.filter(item => !(
+        item.name === productName && 
+        (item.size || '') === (productSize || '') && 
+        (item.sleeve || '') === (productSleeve || '') && 
+        (item.color || '') === (productColor || '') &&
+        (item.customMod || '') === (productCustomMod || '')
+    ));
     saveCart(cart);
     
     // If we are on the cart page, we should re-render
@@ -51,13 +64,20 @@ function removeFromCart(productName, productSize, productSleeve, productColor) {
     }
 }
 
-function updateQuantity(productName, productSize, productSleeve, productColor, delta) {
+function updateQuantity(productName, productSize, productSleeve, productColor, productCustomMod, delta) {
     const cart = getCart();
-    const item = cart.find(i => i.name === productName && (i.size || '') === (productSize || '') && (i.sleeve || '') === (productSleeve || '') && (i.color || '') === (productColor || ''));
+    const item = cart.find(i => 
+        i.name === productName && 
+        (i.size || '') === (productSize || '') && 
+        (i.sleeve || '') === (productSleeve || '') && 
+        (i.color || '') === (productColor || '') &&
+        (i.customMod || '') === productCustomMod
+    );
     if (item) {
         item.quantity += delta;
         if (item.quantity <= 0) {
-            return removeFromCart(productName, productSize, productSleeve, productColor);
+            removeFromCart(productName, productSize, productSleeve, productColor, productCustomMod);
+            return;
         }
         saveCart(cart);
         if (window.location.pathname.endsWith('cart.html')) {

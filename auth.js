@@ -177,7 +177,8 @@ supabase.auth.onAuthStateChange(async (event, session) => {
                         customername: displayName,
                         customeremail: user.email,
                         total: total,
-                        status: "Pending"
+                        status: "Pending",
+                        items: JSON.stringify(cart)
                     }]).select();
                     
                     if (error) throw error;

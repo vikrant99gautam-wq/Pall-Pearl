@@ -28,6 +28,7 @@ function setupMenu(openBtn, overlay, drawer, closeBtn) {
         setTimeout(() => {
             overlay.classList.remove('opacity-0');
             drawer.classList.remove('-translate-x-full');
+            drawer.style.transform = 'translateX(0)';
         }, 10);
         document.body.style.overflow = 'hidden'; // Prevent background scrolling
     };
@@ -35,6 +36,7 @@ function setupMenu(openBtn, overlay, drawer, closeBtn) {
     const closeMenu = () => {
         overlay.classList.add('opacity-0');
         drawer.classList.add('-translate-x-full');
+        drawer.style.transform = '';
         setTimeout(() => {
             overlay.classList.add('hidden');
             document.body.style.overflow = '';

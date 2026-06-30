@@ -97,6 +97,32 @@ function renderOrdersTable(orders) {
     let html = "";
     orders.forEach(order => {
         const date = order.createdat ? new Date(order.createdat).toLocaleDateString() : 'N/A';
+        
+        let itemsHtml = '<span class="text-on-surface-variant italic">No details</span>';
+        if (order.items) {
+            try {
+                const items = JSON.parse(order.items);
+                if (items && items.length > 0) {
+                    itemsHtml = items.map(item => {
+                        let details = [];
+                        if (item.size) details.push(`Size: ${item.size}`);
+                        if (item.color) details.push(`Color: ${item.color}`);
+                        if (item.sleeve) details.push(`Style: ${item.sleeve}`);
+                        
+                        let mods = item.customMod ? `<br><span class="text-primary font-medium">Mod: ${item.customMod}</span>` : '';
+                        
+                        return `<div class="mb-2 pb-2 border-b border-outline-variant/20 last:border-0 last:mb-0 last:pb-0">
+                            <b>${item.quantity}x</b> ${item.name}
+                            <div class="text-xs text-on-surface-variant">${details.join(' | ')}${mods}</div>
+                        </div>`;
+                    }).join('');
+                }
+            } catch (e) {
+                console.error("Error parsing order items:", e);
+                itemsHtml = "Error loading details";
+            }
+        }
+        
         html += `
             <tr class="hover:bg-surface-container-highest transition-colors">
                 <td class="p-6 font-body-md text-on-surface">#${order.id.substring(0,8).toUpperCase()}</td>
@@ -104,15 +130,15 @@ function renderOrdersTable(orders) {
                     <div class="font-medium">${order.customername}</div>
                     <div class="text-sm text-on-surface-variant">${order.customeremail}</div>
                 </td>
+                <td class="p-6 font-body-md text-on-surface text-sm max-w-xs">
+                    ${itemsHtml}
+                </td>
                 <td class="p-6 font-body-md text-on-surface">${date}</td>
                 <td class="p-6 font-body-md font-medium text-primary">₹${parseFloat(order.total).toFixed(2)}</td>
-                <td class="p-6">
+                <td class="p-6 text-right">
                     <span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full font-label-sm uppercase tracking-widest text-xs">
                         ${order.status || 'Pending'}
                     </span>
-                </td>
-                <td class="p-6 text-right">
-                    <button class="text-primary hover:opacity-70 transition-opacity font-label-sm uppercase tracking-widest text-sm font-semibold">View</button>
                 </td>
             </tr>
         `;

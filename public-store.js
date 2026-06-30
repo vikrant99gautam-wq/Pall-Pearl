@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const firstImage = p.imageurl ? p.imageurl.split(',')[0].trim() : '';
             
             html += `
-            <a class="masonry-item block group relative" href="product-detail.html?name=${encodeURIComponent(p.name)}&price=${encodeURIComponent('₹' + p.price)}&desc=${encodeURIComponent(p.description || '')}&image=${encodeURIComponent(p.imageurl)}&category=${encodeURIComponent(p.category)}&colors=${encodeURIComponent(colors)}">
+            <a class="masonry-item block group relative" href="product-detail.html?name=${encodeURIComponent(p.name)}&price=${encodeURIComponent('₹' + p.price)}&desc=${encodeURIComponent(p.description || '')}&image=${encodeURIComponent(p.imageurl)}&category=${encodeURIComponent(p.category)}&colors=${encodeURIComponent(colors)}&v=3">
                 <div class="relative overflow-hidden rounded-xl mb-4 bg-surface-container-low ${aspect}">
                     <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" alt="${p.name}" src="${firstImage}"/>
                     
