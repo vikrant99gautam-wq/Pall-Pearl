@@ -134,48 +134,62 @@ window.syncCartToCloud = async (cart) => {
 };
 
 async function mergeAndSyncCart(cachedUser) {
-    // Force fetch the latest user data from the server to avoid stale cached metadata
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error) {
-        console.error("Cart Sync Error:", error);
-        return;
-    }
-    if (!user) return;
-
-    // Deep clone to avoid mutating the original cloudCart array during merge
-    const cloudCart = JSON.parse(JSON.stringify(user.user_metadata?.cart || []));
-    const originalCloudCartString = JSON.stringify(cloudCart);
-    
-    let localCart = [];
     try {
-        const cartStr = localStorage.getItem('pall_and_pearl_cart');
-        if (cartStr) localCart = JSON.parse(cartStr);
-    } catch (e) {}
-
-    const mergedMap = new Map();
-    const getKey = (item) => `${item.name}-${item.size||''}-${item.color||''}-${item.sleeve||''}-${item.customMod||''}`;
-    
-    cloudCart.forEach(item => mergedMap.set(getKey(item), item));
-    localCart.forEach(item => {
-        const key = getKey(item);
-        if (mergedMap.has(key)) {
-            const existing = mergedMap.get(key);
-            existing.quantity = Math.max(existing.quantity, item.quantity);
-        } else {
-            mergedMap.set(key, item);
+        // Force fetch the latest user data from the server to avoid stale cached metadata
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) {
+            console.error("Cart Sync Error:", error);
+            return;
         }
-    });
-    
-    const mergedCart = Array.from(mergedMap.values());
-    localStorage.setItem('pall_and_pearl_cart', JSON.stringify(mergedCart));
-    
-    if (typeof window.updateCartBadge === 'function') window.updateCartBadge();
-    if (window.location.pathname.endsWith('cart.html') && typeof window.renderCartPage === 'function') {
-        window.renderCartPage();
-    }
-    
-    if (originalCloudCartString !== JSON.stringify(mergedCart)) {
-        await supabase.auth.updateUser({ data: { cart: mergedCart } });
+        if (!user) return;
+
+        // Parse cloudCart safely
+        let cloudCartRaw = user.user_metadata?.cart;
+        if (typeof cloudCartRaw === 'string') {
+            try { cloudCartRaw = JSON.parse(cloudCartRaw); } catch(e) { cloudCartRaw = []; }
+        }
+        if (!Array.isArray(cloudCartRaw)) cloudCartRaw = [];
+
+        // Deep clone to avoid mutating the original cloudCart array during merge
+        const cloudCart = JSON.parse(JSON.stringify(cloudCartRaw));
+        const originalCloudCartString = JSON.stringify(cloudCart);
+        
+        let localCart = [];
+        try {
+            const cartStr = localStorage.getItem('pall_and_pearl_cart');
+            if (cartStr) localCart = JSON.parse(cartStr);
+            if (!Array.isArray(localCart)) localCart = [];
+        } catch (e) {
+            localCart = [];
+        }
+
+        const mergedMap = new Map();
+        const getKey = (item) => `${item.name}-${item.size||''}-${item.color||''}-${item.sleeve||''}-${item.customMod||''}`;
+        
+        cloudCart.forEach(item => mergedMap.set(getKey(item), item));
+        localCart.forEach(item => {
+            const key = getKey(item);
+            if (mergedMap.has(key)) {
+                const existing = mergedMap.get(key);
+                existing.quantity = Math.max(existing.quantity || 1, item.quantity || 1);
+            } else {
+                mergedMap.set(key, item);
+            }
+        });
+        
+        const mergedCart = Array.from(mergedMap.values());
+        localStorage.setItem('pall_and_pearl_cart', JSON.stringify(mergedCart));
+        
+        if (typeof window.updateCartBadge === 'function') window.updateCartBadge();
+        if (window.location.pathname.endsWith('cart.html') && typeof window.renderCartPage === 'function') {
+            window.renderCartPage();
+        }
+        
+        if (originalCloudCartString !== JSON.stringify(mergedCart)) {
+            await supabase.auth.updateUser({ data: { cart: mergedCart } });
+        }
+    } catch (e) {
+        console.error("Fatal error in mergeAndSyncCart:", e);
     }
 }
 
