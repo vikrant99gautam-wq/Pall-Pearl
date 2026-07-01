@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Details - Pall & Pearl</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400&family=DM+Sans:wght@400;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: "#a43560",
+                    "primary-container": "#ffd9e2",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#3e001e",
+                    surface: "#fff8f8",
+                    "surface-variant": "#f1dee1",
+                    "on-surface": "#201a1b",
+                    "on-surface-variant": "#514347",
+                    "surface-container": "#faeff0",
+                    "surface-bright": "#fff8f8",
+                    "surface-container-highest": "#e8dfe0",
+                    "outline-variant": "#d5c2c6",
+                    error: "#ba1a1a",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-error-container": "#410002"
+                },
+                fontFamily: {
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["DM Sans"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "body-md": ["DM Sans"],
+                    "label-sm": ["DM Sans"],
+                    "display-lg": ["Playfair Display"],
+                    "accent-script": ["Comfortaa"],
+                    "headline-lg-mobile": ["Playfair Display"]
+                },
+                spacing: {
+                    "section-gap": "120px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "64px"
+                }
+            }
+        }
+    }
+</script>
+<style>
+    body { font-family: 'DM Sans', sans-serif; }
+    h1, h2, h3, .brand { font-family: 'Playfair Display', serif; }
+    
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+    .smooth-shadow {
+        box-shadow: 0 10px 40px -10px rgba(164, 53, 96, 0.1);
+    }
+</style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+    
+<!-- TopNavBar (Simplified for app feel) -->
+<nav class="bg-surface/80 backdrop-blur-xl border-b border-outline-variant/20 sticky top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-[1440px] mx-auto">
+    <a href="profile.html" class="flex items-center text-primary hover:opacity-80 transition-opacity">
+        <span class="material-symbols-outlined mr-2">arrow_back</span>
+        <span class="font-body-md font-medium">Back to Profile</span>
+    </a>
+    <a class="font-headline-lg text-headline-lg text-primary italic tracking-tight" href="hero.html">
+        Pall <img src="logo.jpeg" alt="&" class="inline-block h-24 w-24 object-cover rounded-full mx-2 align-middle" onerror="this.onerror=null; this.src=''; this.alt='&'; this.className='inline-block'"> Pearl
+    </a>
+    <div class="w-24"></div> <!-- Spacer for flex alignment -->
+</nav>
+
+<main class="py-12 px-margin-mobile md:px-margin-desktop max-w-4xl mx-auto min-h-[80vh]">
+    <!-- Loading State -->
+    <div id="loading-state" class="flex flex-col items-center justify-center py-20">
+        <span class="material-symbols-outlined animate-spin text-primary text-4xl mb-4">refresh</span>
+        <p class="text-on-surface-variant">Loading order details...</p>
+    </div>
+
+    <!-- Error/Empty State -->
+    <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center">
+        <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">error_outline</span>
+        <h2 class="text-2xl text-on-surface font-headline-lg mb-2">Order Not Found</h2>
+        <p class="text-on-surface-variant mb-6">We couldn't find the details for this order.</p>
+        <a href="profile.html" class="px-6 py-2 bg-primary text-white rounded-full font-label-sm uppercase tracking-widest hover:opacity-90">Return to Profile</a>
+    </div>
+
+    <!-- Order Content -->
+    <div id="order-content" class="hidden">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div>
+                <h1 class="font-headline-lg text-3xl text-primary mb-2">Order Details</h1>
+                <p class="text-on-surface-variant text-sm">Placed on <span id="order-date" class="font-medium text-on-surface"></span></p>
+                <p class="text-on-surface-variant text-sm mt-1">Order #<span id="order-id" class="uppercase font-medium text-on-surface"></span></p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span id="order-status" class="px-4 py-1.5 rounded-full text-xs font-label-sm uppercase tracking-widest"></span>
+                <a id="btn-invoice" href="#" class="px-4 py-2 bg-primary text-white rounded-lg shadow-sm hover:opacity-90 flex items-center transition-opacity text-sm font-medium">
+                    <span class="material-symbols-outlined mr-2 text-sm">receipt_long</span> Invoice
+                </a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Shipping Info -->
+            <div class="md:col-span-2 glass-panel smooth-shadow rounded-2xl p-6">
+                <h2 class="font-headline-lg text-xl text-primary mb-4 flex items-center">
+                    <span class="material-symbols-outlined mr-2">local_shipping</span> Shipping Address
+                </h2>
+                <div class="text-on-surface font-body-md leading-relaxed">
+                    <p id="ship-name" class="font-medium text-lg mb-1"></p>
+                    <p id="ship-address" class="text-on-surface-variant"></p>
+                    <p id="ship-city-state" class="text-on-surface-variant"></p>
+                    <div class="mt-4 flex flex-col gap-1 text-sm text-on-surface-variant">
+                        <p class="flex items-center"><span class="material-symbols-outlined text-[18px] mr-2">call</span> <span id="ship-phone"></span></p>
+                        <p class="flex items-center"><span class="material-symbols-outlined text-[18px] mr-2">mail</span> <span id="ship-email"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="glass-panel smooth-shadow rounded-2xl p-6 flex flex-col justify-center">
+                <h2 class="font-headline-lg text-xl text-primary mb-4">Summary</h2>
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-on-surface-variant">Subtotal</span>
+                    <span id="summary-subtotal" class="font-medium text-on-surface"></span>
+                </div>
+                <div class="flex justify-between items-center mb-4 pb-4 border-b border-outline-variant/30">
+                    <span class="text-on-surface-variant">Shipping</span>
+                    <span class="font-medium text-on-surface">Calculated</span>
+                </div>
+                <div class="flex justify-between items-center text-lg">
+                    <span class="font-semibold text-primary">Total</span>
+                    <span id="summary-total" class="font-bold text-primary text-xl"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="glass-panel smooth-shadow rounded-2xl p-6 md:p-8">
+            <h2 class="font-headline-lg text-xl text-primary mb-6 flex items-center border-b border-outline-variant/30 pb-4">
+                <span class="material-symbols-outlined mr-2">shopping_bag</span> Items in this order
+            </h2>
+            <div id="order-items-list" class="flex flex-col gap-6">
+                <!-- Items injected via JS -->
+            </div>
+        </div>
+        
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module">
+import { supabase } from './supabase-config.js';
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('id');
+    
+    const uiLoading = document.getElementById('loading-state');
+    const uiEmpty = document.getElementById('empty-state');
+    const uiContent = document.getElementById('order-content');
+    
+    if (!orderId) {
+        uiLoading.classList.add('hidden');
+        uiEmpty.classList.remove('hidden');
+        uiEmpty.style.display = 'flex';
+        return;
+    }
+
+    try {
+        const { data: order, error } = await supabase
+            .from('orders')
+            .select('*')
+            .eq('id', orderId)
+            .single();
+
+        if (error || !order) {
+            throw error || new Error("Order not found");
+        }
+
+        // Parse items
+        let items = [];
+        try {
+            items = JSON.parse(order.items);
+        } catch(e) {
+            console.error("Error parsing items JSON", e);
+        }
+
+        let shippingInfo = null;
+        const actualItems = [];
+        
+        items.forEach(item => {
+            if (item.type === 'shipping_info') {
+                shippingInfo = item;
+            } else {
+                actualItems.push(item);
+            }
+        });
+
+        // Set Invoice button link
+        document.getElementById('btn-invoice').href = `invoice.html?id=${orderId}`;
+
+        // Header Info
+        const d = new Date(order.createdat || Date.now());
+        document.getElementById('order-date').textContent = d.toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        document.getElementById('order-id').textContent = order.id.substring(0,8);
+        
+        // Status Badge
+        const statusEl = document.getElementById('order-status');
+        const status = order.status || 'Pending';
+        statusEl.textContent = status;
+        
+        if (status.toLowerCase() === 'delivered') statusEl.className = 'px-4 py-1.5 rounded-full text-xs font-label-sm uppercase tracking-widest bg-green-100 text-green-800';
+        else if (status.toLowerCase() === 'processing' || status.toLowerCase() === 'shipped') statusEl.className = 'px-4 py-1.5 rounded-full text-xs font-label-sm uppercase tracking-widest bg-blue-100 text-blue-800';
+        else if (status.toLowerCase() === 'cancelled') statusEl.className = 'px-4 py-1.5 rounded-full text-xs font-label-sm uppercase tracking-widest bg-error-container text-on-error-container';
+        else statusEl.className = 'px-4 py-1.5 rounded-full text-xs font-label-sm uppercase tracking-widest bg-secondary-container text-on-secondary-container';
+
+        // Shipping Info
+        document.getElementById('ship-name').textContent = order.customername;
+        document.getElementById('ship-email').textContent = order.customeremail !== 'N/A' ? order.customeremail : 'No email provided';
+        
+        if (shippingInfo) {
+            document.getElementById('ship-phone').textContent = shippingInfo.phone || 'N/A';
+            document.getElementById('ship-address').textContent = shippingInfo.address || '';
+            document.getElementById('ship-city-state').textContent = `${shippingInfo.city || ''}, ${shippingInfo.state || ''} - ${shippingInfo.pincode || ''}`;
+        } else {
+            document.getElementById('ship-phone').textContent = 'N/A';
+            document.getElementById('ship-address').textContent = 'Address details not available';
+        }
+
+        // Summary Totals
+        const formattedTotal = `₹${parseFloat(order.total).toLocaleString('en-IN')}`;
+        document.getElementById('summary-subtotal').textContent = formattedTotal;
+        document.getElementById('summary-total').textContent = formattedTotal;
+
+        // Items List
+        const itemsContainer = document.getElementById('order-items-list');
+        let itemsHtml = '';
+        
+        actualItems.forEach((item, index) => {
+            let priceVal = typeof item.price === 'string' ? parseFloat(item.price.replace('₹', '').replace(/,/g, '')) : item.price;
+            priceVal = priceVal || 0;
+            const itemTotal = priceVal * (item.quantity || 1);
+            
+            let details = [];
+            if(item.size) details.push(`Size: ${item.size}`);
+            if(item.color) details.push(`Color: ${item.color}`);
+            if(item.sleeve) details.push(`Style: ${item.sleeve}`);
+            const detailsStr = details.length > 0 ? `<p class="text-sm text-on-surface-variant mt-1">${details.join(' | ')}</p>` : '';
+            
+            // Get first image if it's a comma separated list
+            const imgUrl = item.image ? item.image.split(',')[0].trim() : 'https://placehold.co/100x120/f1dee1/a43560?text=P+&+P';
+            
+            const isLast = index === actualItems.length - 1;
+            const borderClass = isLast ? '' : 'border-b border-outline-variant/20 pb-6';
+
+            itemsHtml += `
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 ${borderClass}">
+                    <img src="${imgUrl}" alt="${item.name}" class="w-24 h-32 sm:w-28 sm:h-36 object-cover rounded-xl bg-surface-container-highest shadow-sm shrink-0">
+                    <div class="flex-grow flex flex-col justify-center">
+                        <div class="flex justify-between items-start gap-4 mb-1">
+                            <h3 class="font-body-md text-lg text-on-surface font-medium">${item.name}</h3>
+                            <span class="font-semibold text-primary whitespace-nowrap">₹${itemTotal.toLocaleString('en-IN')}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm text-on-surface-variant mb-2">
+                            <span>Qty: ${item.quantity || 1} x ₹${priceVal.toLocaleString('en-IN')}</span>
+                        </div>
+                        ${detailsStr}
+                    </div>
+                </div>
+            `;
+        });
+        
+        itemsContainer.innerHTML = itemsHtml;
+
+        // Show UI
+        uiLoading.classList.add('hidden');
+        uiContent.classList.remove('hidden');
+        
+    } catch(e) {
+        console.error("Error fetching order", e);
+        uiLoading.classList.add('hidden');
+        uiEmpty.classList.remove('hidden');
+        uiEmpty.style.display = 'flex';
+    }
+});
+</script>
+</body>
+</html>

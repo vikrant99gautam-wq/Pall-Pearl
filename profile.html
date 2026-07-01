@@ -311,8 +311,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <p class="text-on-surface font-medium truncate max-w-xs md:max-w-md">${itemSummary}</p>
                         <p class="text-primary font-semibold mt-2">₹${parseFloat(order.total).toLocaleString('en-IN')}</p>
                     </div>
-                    <a href="invoice.html?id=${order.id}" class="px-6 py-2 border border-outline-variant hover:border-primary text-on-surface hover:text-primary rounded-lg text-sm font-medium transition-colors whitespace-nowrap">
-                        View / Download Invoice
+                    <a href="order-details.html?id=${order.id}" class="px-6 py-2 border border-outline-variant hover:border-primary text-on-surface hover:text-primary rounded-lg text-sm font-medium transition-colors whitespace-nowrap">
+                        View Details
                     </a>
                 </div>
             `;
