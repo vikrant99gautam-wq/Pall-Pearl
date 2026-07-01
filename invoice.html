@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Invoice - Pall &amp; Pearl</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400&amp;family=DM+Sans:wght@400;600&amp;family=Playfair+Display:ital,wght@0,500;0,600;1,500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: "#a43560",
+                }
+            }
+        }
+    }
+</script>
+<style>
+    body { font-family: 'DM Sans', sans-serif; }
+    h1, h2, h3, .brand { font-family: 'Playfair Display', serif; }
+    
+    @media print {
+        .no-print { display: none !important; }
+        body { background: white !important; }
+        .invoice-box { box-shadow: none !important; border: none !important; }
+    }
+</style>
+</head>
+<body class="bg-stone-50 min-h-screen p-4 md:p-8 flex justify-center">
+
+<div class="max-w-3xl w-full">
+    <!-- Action buttons -->
+    <div class="mb-6 flex justify-between items-center no-print">
+        <a href="index.html" class="flex items-center text-primary hover:opacity-80 transition-opacity">
+            <span class="material-symbols-outlined mr-1">arrow_back</span> Back to Home
+        </a>
+        <button onclick="window.print()" class="px-6 py-2 bg-primary text-white rounded-lg shadow hover:bg-opacity-90 flex items-center">
+            <span class="material-symbols-outlined mr-2 text-sm">print</span> Print / Download PDF
+        </button>
+    </div>
+
+    <!-- Invoice container -->
+    <div id="invoice-container" class="bg-white p-8 md:p-12 rounded-2xl shadow-sm invoice-box border border-stone-100 hidden">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-stone-200 pb-8 mb-8 gap-6">
+            <div>
+                <h1 class="brand text-4xl text-primary mb-2">Pall &amp; Pearl</h1>
+                <p class="text-stone-500 text-sm">Chatpate Tops for Chatpati Girls ✨</p>
+            </div>
+            <div class="text-left md:text-right">
+                <h2 class="text-2xl font-semibold text-stone-800 mb-1">INVOICE</h2>
+                <p class="text-stone-500 text-sm">Date: <span id="inv-date"></span></p>
+                <p class="text-stone-500 text-sm">Invoice #: <span id="inv-no"></span></p>
+            </div>
+        </div>
+
+        <!-- Addresses -->
+        <div class="flex flex-col md:flex-row justify-between gap-8 mb-10">
+            <div>
+                <h3 class="font-semibold text-stone-800 mb-2 uppercase text-xs tracking-wider text-stone-400">Billed From</h3>
+                <p class="text-stone-700 font-medium">Pall &amp; Pearl</p>
+                <p class="text-stone-500 text-sm mt-1">Contact via WhatsApp</p>
+            </div>
+            <div>
+                <h3 class="font-semibold text-stone-800 mb-2 uppercase text-xs tracking-wider text-stone-400">Billed To</h3>
+                <p id="cust-name" class="text-stone-700 font-medium"></p>
+                <p id="cust-phone" class="text-stone-500 text-sm mt-1"></p>
+                <p id="cust-email" class="text-stone-500 text-sm"></p>
+                <p id="cust-address" class="text-stone-500 text-sm mt-1 max-w-xs"></p>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="overflow-x-auto mb-8">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b-2 border-stone-100 text-stone-500 text-xs uppercase tracking-wider">
+                        <th class="py-3 px-2">Item Description</th>
+                        <th class="py-3 px-2 text-center">Qty</th>
+                        <th class="py-3 px-2 text-right">Price</th>
+                        <th class="py-3 px-2 text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody id="invoice-items">
+                    <!-- Items will be injected here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Totals -->
+        <div class="flex justify-end">
+            <div class="w-full md:w-1/2">
+                <div class="flex justify-between py-2 border-b border-stone-100">
+                    <span class="text-stone-500">Subtotal</span>
+                    <span id="inv-subtotal" class="font-medium text-stone-800"></span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-stone-100">
+                    <span class="text-stone-500">Shipping</span>
+                    <span class="font-medium text-stone-800">Calculated on WhatsApp</span>
+                </div>
+                <div class="flex justify-between py-4 text-xl font-semibold">
+                    <span class="text-primary">Total</span>
+                    <span id="inv-total" class="text-primary"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-16 pt-8 border-t border-stone-200 text-center text-stone-400 text-sm">
+            <p>Thank you for choosing Pall &amp; Pearl!</p>
+            <p class="mt-1">Please note this is an order summary. Final confirmation happens via WhatsApp.</p>
+        </div>
+    </div>
+    
+    <!-- Empty State -->
+    <div id="empty-state" class="text-center py-20 hidden">
+        <span class="material-symbols-outlined text-6xl text-stone-300 mb-4">receipt_long</span>
+        <h2 class="text-2xl text-stone-700 mb-2">No Invoice Found</h2>
+        <p class="text-stone-500 mb-6">We couldn't find your recent order details.</p>
+        <a href="index.html" class="inline-block px-6 py-2 bg-primary text-white rounded-lg">Return to Shop</a>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module">
+import { supabase } from './supabase-config.js';
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('id');
+    
+    const renderEmptyState = () => {
+        document.getElementById('empty-state').classList.remove('hidden');
+    };
+    
+    if (!orderId) {
+        // Fallback to local storage for backward compatibility if no ID provided
+        const orderDataStr = localStorage.getItem('latest_invoice');
+        if (orderDataStr) {
+            try {
+                renderInvoice(JSON.parse(orderDataStr));
+                return;
+            } catch (e) {
+                console.error("Local storage error:", e);
+            }
+        }
+        renderEmptyState();
+        return;
+    }
+
+    try {
+        const { data: order, error } = await supabase
+            .from('orders')
+            .select('*')
+            .eq('id', orderId)
+            .single();
+
+        if (error || !order) {
+            console.error("Supabase error:", error);
+            renderEmptyState();
+            return;
+        }
+
+        // Parse items and extract shipping info
+        let items = [];
+        try {
+            items = JSON.parse(order.items);
+        } catch(e) {
+            console.error("Error parsing items JSON", e);
+        }
+
+        let shippingInfo = null;
+        const actualItems = [];
+        
+        items.forEach(item => {
+            if (item.type === 'shipping_info') {
+                shippingInfo = item;
+            } else {
+                actualItems.push(item);
+            }
+        });
+
+        // Reconstruct order object for render function
+        const orderData = {
+            date: order.createdat || new Date().toISOString(),
+            id: order.id,
+            customer: {
+                fullName: order.customername,
+                email: order.customeremail,
+                phone: shippingInfo ? shippingInfo.phone : 'N/A',
+                address: shippingInfo ? shippingInfo.address : 'N/A',
+                city: shippingInfo ? shippingInfo.city : '',
+                state: shippingInfo ? shippingInfo.state : '',
+                pincode: shippingInfo ? shippingInfo.pincode : ''
+            },
+            items: actualItems,
+            totalAmount: order.total
+        };
+
+        renderInvoice(orderData);
+        
+    } catch(e) {
+        console.error("Error fetching invoice", e);
+        renderEmptyState();
+    }
+});
+
+function renderInvoice(order) {
+    document.getElementById('invoice-container').classList.remove('hidden');
+    
+    // Populate Data
+    const d = new Date(order.date || Date.now());
+    document.getElementById('inv-date').textContent = d.toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+    
+    // Invoice number based on ID or timestamp
+    const invNo = order.id ? order.id.substring(0,8).toUpperCase() : 'PP-' + Math.floor(d.getTime() / 1000).toString().substring(4);
+    document.getElementById('inv-no').textContent = invNo;
+    
+    // Customer
+    document.getElementById('cust-name').textContent = order.customer.fullName;
+    document.getElementById('cust-phone').textContent = order.customer.phone;
+    if(order.customer.email && order.customer.email !== 'N/A') document.getElementById('cust-email').textContent = order.customer.email;
+    
+    const addr = `${order.customer.address}, ${order.customer.city}, ${order.customer.state} - ${order.customer.pincode}`;
+    document.getElementById('cust-address').textContent = addr;
+    
+    // Items
+    const tbody = document.getElementById('invoice-items');
+    let html = '';
+    order.items.forEach(item => {
+        let priceVal = typeof item.price === 'string' ? parseFloat(item.price.replace('₹', '').replace(/,/g, '')) : item.price;
+        priceVal = priceVal || 0;
+        const total = priceVal * (item.quantity || 1);
+        
+        let details = [];
+        if(item.size) details.push(`Size: ${item.size}`);
+        if(item.color) details.push(`Color: ${item.color}`);
+        if(item.sleeve) details.push(`Style: ${item.sleeve}`);
+        const detailsStr = details.length > 0 ? `<div class="text-xs text-stone-500 mt-1">${details.join(' | ')}</div>` : '';
+        
+        const displayPrice = item.price && typeof item.price === 'string' ? item.price : `₹${priceVal.toLocaleString('en-IN')}`;
+
+        html += `
+            <tr class="border-b border-stone-100">
+                <td class="py-4 px-2">
+                    <div class="font-medium text-stone-800">${item.name}</div>
+                    ${detailsStr}
+                </td>
+                <td class="py-4 px-2 text-center text-stone-600">${item.quantity || 1}</td>
+                <td class="py-4 px-2 text-right text-stone-600">${displayPrice}</td>
+                <td class="py-4 px-2 text-right font-medium text-stone-800">₹${total.toLocaleString('en-IN')}</td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+    
+    // Totals
+    const totalFormatted = `₹${parseFloat(order.totalAmount || 0).toLocaleString('en-IN')}`;
+    document.getElementById('inv-subtotal').textContent = totalFormatted;
+    document.getElementById('inv-total').textContent = totalFormatted;
+}
+</script>
+</body>
+</html>

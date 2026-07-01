@@ -136,11 +136,20 @@ function renderOrdersTable(orders) {
         const date = order.createdat ? new Date(order.createdat).toLocaleDateString() : 'N/A';
         
         let itemsHtml = '<span class="text-on-surface-variant italic">No details</span>';
+        let shippingInfo = null;
+
         if (order.items) {
             try {
-                const items = JSON.parse(order.items);
-                if (items && items.length > 0) {
-                    itemsHtml = items.map(item => {
+                const parsedItems = JSON.parse(order.items);
+                if (parsedItems && parsedItems.length > 0) {
+                    
+                    const actualItems = [];
+                    parsedItems.forEach(item => {
+                        if (item.type === 'shipping_info') shippingInfo = item;
+                        else actualItems.push(item);
+                    });
+                    
+                    itemsHtml = actualItems.map(item => {
                         let details = [];
                         if (item.size) details.push(`Size: ${item.size}`);
                         if (item.color) details.push(`Color: ${item.color}`);
@@ -149,7 +158,7 @@ function renderOrdersTable(orders) {
                         let mods = item.customMod ? `<br><span class="text-primary font-medium">Mod: ${item.customMod}</span>` : '';
                         
                         return `<div class="mb-2 pb-2 border-b border-outline-variant/20 last:border-0 last:mb-0 last:pb-0">
-                            <b>${item.quantity}x</b> ${item.name}
+                            <b>${item.quantity || 1}x</b> ${item.name}
                             <div class="text-xs text-on-surface-variant">${details.join(' | ')}${mods}</div>
                         </div>`;
                     }).join('');
@@ -160,12 +169,27 @@ function renderOrdersTable(orders) {
             }
         }
         
+        let shippingHtml = '';
+        if (shippingInfo) {
+            shippingHtml = `
+                <div class="mt-2 text-xs text-on-surface-variant border-t border-outline-variant/20 pt-2">
+                    <div><b>📞</b> ${shippingInfo.phone}</div>
+                    <div class="mt-1 truncate max-w-[200px]" title="${shippingInfo.address}, ${shippingInfo.city}">
+                        📍 ${shippingInfo.city}, ${shippingInfo.state}
+                    </div>
+                </div>
+            `;
+        }
+
         html += `
             <tr class="hover:bg-surface-container-highest transition-colors">
-                <td class="p-6 font-body-md text-on-surface">#${order.id.substring(0,8).toUpperCase()}</td>
+                <td class="p-6 font-body-md text-on-surface">#${order.id.substring(0,8).toUpperCase()}
+                    <a href="invoice.html?id=${order.id}" target="_blank" class="block mt-2 text-xs text-primary hover:underline">View Invoice</a>
+                </td>
                 <td class="p-6 font-body-md text-on-surface">
                     <div class="font-medium">${order.customername}</div>
                     <div class="text-sm text-on-surface-variant">${order.customeremail}</div>
+                    ${shippingHtml}
                 </td>
                 <td class="p-6 font-body-md text-on-surface text-sm max-w-xs">
                     ${itemsHtml}

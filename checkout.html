@@ -118,7 +118,7 @@
 <body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
 <!-- TopNavBar -->
 <nav class="bg-surface/80 backdrop-blur-xl dark:bg-surface/80 text-primary dark:text-primary-fixed-dim font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg sticky top-0 w-full z-50 border-b border-white/20 dark:border-outline-variant/20 shadow-sm backdrop-saturate-150 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-[1440px] mx-auto">
-<a class="font-headline-lg text-headline-lg text-primary dark:text-primary-fixed-dim italic tracking-tight" href="hero.html">Pall &amp; Pearl</a>
+<a class="font-headline-lg text-headline-lg text-primary dark:text-primary-fixed-dim italic tracking-tight" href="hero.html">Pall <img src="logo.jpeg" alt="&" class="inline-block h-24 w-24 object-cover rounded-full mx-2 align-middle"> Pearl</a>
 <div class="hidden md:flex gap-8 items-center font-body-md text-body-md">
 <a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-300" href="collection.html">Collections</a>
 <a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-300" href="new-arrivals.html">New Arrivals</a>
@@ -224,10 +224,9 @@
         </div>
     </div>
 </main>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
-<script src="checkout.js?v=5"></script>
-<script src="public-store.js"></script> <!-- To keep cart sync -->
+<script type="module" src="supabase-config.js"></script>
+<script type="module" src="checkout.js?v=5"></script>
+<script type="module" src="public-store.js"></script> <!-- To keep cart sync -->
 </body>
 </html>

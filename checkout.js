@@ -1,3 +1,5 @@
+import { supabase } from './supabase-config.js';
+
 // Update this to the seller's actual WhatsApp number (include country code without + or 00)
 const SELLER_WHATSAPP = "918077021923"; 
 
@@ -22,34 +24,46 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Render items and calculate totals
     let totalAmount = 0;
-
-    // Render items
-    checkoutItemsContainer.innerHTML = checkoutCart.map(item => {
-        const priceStr = String(item.price || '0');
-        const price = parseFloat(priceStr.replace(/[₹,]/g, '').trim());
-        const itemQuantity = item.quantity || 1;
-        const itemTotal = price * itemQuantity;
+    let itemsHtml = '';
+    
+    checkoutCart.forEach(item => {
+        let price = parseFloat(String(item.price || '0').replace('₹', '').replace(/,/g, '')) || 0;
+        let itemTotal = price * (item.quantity || 1);
         totalAmount += itemTotal;
+        
+        let details = [];
+        if(item.size) details.push(`Size: ${item.size}`);
+        if(item.color) details.push(`Color: ${item.color}`);
+        if(item.sleeve) details.push(`Style: ${item.sleeve}`);
+        const detailsStr = details.length > 0 ? `<p class="text-xs text-on-surface-variant mt-1">${details.join(' | ')}</p>` : '';
 
-        return `
-            <div class="flex gap-4 items-center">
-                <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg border border-outline-variant/30">
-                <div class="flex-1">
-                    <h4 class="font-headline-lg-mobile text-sm text-primary mb-1">${item.name}</h4>
-                    <p class="font-body-md text-xs text-on-surface-variant">Size: ${item.size} | Qty: ${item.quantity}</p>
+        const imgUrl = item.image ? item.image.split(',')[0].trim() : 'https://placehold.co/100x120/f1dee1/a43560?text=P+&+P';
+
+        itemsHtml += `
+            <div class="flex gap-4 items-start pb-4 mb-4 border-b border-outline-variant/30 last:border-0 last:pb-0 last:mb-0">
+                <img src="${imgUrl}" alt="${item.name}" class="w-16 h-20 object-cover rounded-md bg-surface-container-highest flex-shrink-0">
+                <div class="flex-grow min-w-0">
+                    <h4 class="font-body-md text-on-surface font-medium truncate">${item.name}</h4>
+                    ${detailsStr}
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-sm text-on-surface-variant">Qty: ${item.quantity}</span>
+                        <span class="font-medium text-primary">₹${itemTotal.toLocaleString('en-IN')}</span>
+                    </div>
                 </div>
-                <div class="font-body-md font-semibold text-primary">₹${itemTotal.toLocaleString('en-IN')}</div>
             </div>
         `;
-    }).join('');
+    });
 
-    // Update totals
-    checkoutSubtotal.textContent = `₹${totalAmount.toLocaleString('en-IN')}`;
-    checkoutTotal.textContent = `₹${totalAmount.toLocaleString('en-IN')}`;
+    checkoutItemsContainer.innerHTML = itemsHtml;
+    
+    const formattedTotal = '₹' + totalAmount.toLocaleString('en-IN');
+    checkoutSubtotal.textContent = formattedTotal;
+    checkoutTotal.textContent = formattedTotal;
 
     // Handle WhatsApp Checkout
-    btnWhatsappCheckout.addEventListener('click', (e) => {
+    btnWhatsappCheckout.addEventListener('click', async (e) => {
         e.preventDefault();
 
         // Get form values
@@ -67,61 +81,81 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Build WhatsApp Message
-        let message = '\uD83C\uDF38 *Namaste from Pall & Pearl!* \u2728\n\n';
-        message += 'Thank you so much for shopping with us. \uD83D\uDC96\n';
-        message += 'Your order request has been received successfully!\n\n';
-        message += '━━━━━━━━━━━━━━━━━━\n';
-        message += '\uD83D\uDECD\uFE0F *ORDER SUMMARY*\n\n';
-        message += '\uD83D\uDC64 *Customer:* ' + fullName + '\n';
-        message += '\uD83D\uDCDE *Phone:* ' + phone + '\n';
-        if (email) message += '\uD83D\uDCE7 *Email:* ' + email + '\n';
-        message += '\n\uD83D\uDCCD *Shipping Address:*\n';
-        message += address + '\n' + city + ', ' + state + ' - ' + pincode + '\n\n';
-        message += '━━━━━━━━━━━━━━━━━━\n';
-        message += '\u2728 *Items Ordered*\n\n';
+        // Change button state
+        const originalBtnText = btnWhatsappCheckout.innerHTML;
+        btnWhatsappCheckout.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Processing...';
+        btnWhatsappCheckout.disabled = true;
 
-        checkoutCart.forEach((item) => {
-            message += '\uD83E\uDE77 *' + item.name + '*\n';
-            if (item.size) message += '• Size: ' + item.size + '\n';
-            if (item.color) message += '• Color: ' + item.color + '\n';
-            if (item.sleeve) message += '• Style: ' + item.sleeve + '\n';
-            message += '• Quantity: ' + item.quantity + '\n';
-            message += '• Price: ' + item.price + '\n';
-            if (item.image) {
-                const imgUrl = item.image.split(',')[0].trim();
-                message += '• Image: ' + imgUrl + '\n';
-            }
-            if (item.customization) {
-                message += '\n\uD83D\uDCDD *Customization Note:*\n' + item.customization + '\n';
-            }
-            message += '\n';
-        });
+        try {
+            // Bundle shipping info into the items array for the admin dashboard
+            const itemsWithShipping = [...checkoutCart, {
+                type: 'shipping_info',
+                phone: phone,
+                address: address,
+                city: city,
+                state: state,
+                pincode: pincode
+            }];
 
-        message += '━━━━━━━━━━━━━━━━━━\n';
-        message += '\uD83D\uDCB3 *Total Amount:* *₹' + totalAmount.toLocaleString('en-IN') + '*\n\n';
-        
-        message += '\uD83D\uDC96 *What happens next?*\n\n';
-        message += 'Our team will carefully review your order and our seller will personally contact you shortly to confirm all the details before processing your order.\n\n';
-        message += 'If you have any questions or want to make any changes, feel free to reply to this chat. We\'re always happy to help! \uD83D\uDE0A\n\n';
-        message += 'Thank you for choosing *Pall & Pearl* \uD83C\uDF37\n\n';
-        message += '*Chatpate Tops for Chatpati Girls* \u2728';
+            // Save to Supabase
+            const { data: orderData, error } = await supabase
+                .from('orders')
+                .insert([
+                    {
+                        customername: fullName,
+                        customeremail: email || 'N/A',
+                        total: totalAmount,
+                        items: JSON.stringify(itemsWithShipping),
+                        status: 'Pending'
+                    }
+                ])
+                .select();
 
-        // Encode and open WhatsApp
-        const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/${SELLER_WHATSAPP}?text=${encodedMessage}`;
-        
-        // Clear checkout cart after successful redirection preparation
-        localStorage.removeItem('checkout_cart');
-        // If the order came from the main cart, clear it too. 
-        // We'll clear the main cart since the order is placed.
-        localStorage.setItem('pall_and_pearl_cart', JSON.stringify([]));
+            if (error) throw error;
+            
+            const orderId = orderData[0].id;
 
-        window.open(whatsappUrl, '_blank');
-        
-        // Redirect back to home or profile after a short delay
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1000);
+            // Save locally for quick invoice access
+            const localOrderData = {
+                id: orderId,
+                customer: { fullName, phone, email, address, city, state, pincode },
+                items: checkoutCart,
+                totalAmount: totalAmount,
+                date: new Date().toISOString()
+            };
+            localStorage.setItem('latest_invoice', JSON.stringify(localOrderData));
+
+            // Build short WhatsApp Message
+            let message = '🌸 *Namaste from Pall & Pearl!* ✨\n\n';
+            message += 'Thank you for shopping with us! 💖\n';
+            message += 'I have placed a new order. Please find my order invoice here:\n\n';
+            
+            // Assuming site runs on the current origin
+            const invoiceLink = window.location.origin + '/invoice.html?id=' + orderId;
+            message += `👉 ${invoiceLink}\n\n`;
+            message += 'Chatpate Tops for Chatpati Girls ✨';
+
+            // Encode and open WhatsApp
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${SELLER_WHATSAPP}?text=${encodedMessage}`;
+            
+            // Clear carts
+            localStorage.removeItem('checkout_cart');
+            localStorage.setItem('pall_and_pearl_cart', JSON.stringify([]));
+
+            // Open Whatsapp
+            window.open(whatsappUrl, '_blank');
+            
+            // Redirect to invoice page
+            setTimeout(() => {
+                window.location.href = `invoice.html?id=${orderId}`;
+            }, 1000);
+            
+        } catch (err) {
+            console.error("Order error:", err);
+            alert("There was an error processing your order. Please try again.");
+            btnWhatsappCheckout.innerHTML = originalBtnText;
+            btnWhatsappCheckout.disabled = false;
+        }
     });
 });
