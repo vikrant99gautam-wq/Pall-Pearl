@@ -388,3 +388,49 @@ window.deleteProduct = async (id) => {
         }
     }
 };
+
+// --- MOBILE SIDEBAR LOGIC ---
+document.addEventListener('DOMContentLoaded', () => {
+    const btnOpenSidebar = document.getElementById('btn-open-sidebar');
+    const btnCloseSidebar = document.getElementById('btn-close-sidebar');
+    const adminSidebar = document.getElementById('admin-sidebar');
+    const mobileOverlay = document.getElementById('mobile-overlay');
+
+    function openSidebar() {
+        if (adminSidebar && mobileOverlay) {
+            mobileOverlay.classList.remove('hidden');
+            // small delay for transition
+            setTimeout(() => {
+                mobileOverlay.classList.remove('opacity-0');
+                adminSidebar.classList.remove('-translate-x-full');
+                adminSidebar.classList.add('translate-x-0');
+            }, 10);
+        }
+    }
+
+    function closeSidebar() {
+        if (adminSidebar && mobileOverlay) {
+            adminSidebar.classList.remove('translate-x-0');
+            adminSidebar.classList.add('-translate-x-full');
+            mobileOverlay.classList.add('opacity-0');
+            setTimeout(() => {
+                mobileOverlay.classList.add('hidden');
+            }, 300); // match transition duration
+        }
+    }
+
+    if (btnOpenSidebar) btnOpenSidebar.addEventListener('click', openSidebar);
+    if (btnCloseSidebar) btnCloseSidebar.addEventListener('click', closeSidebar);
+    if (mobileOverlay) mobileOverlay.addEventListener('click', closeSidebar);
+    
+    // Auto-close sidebar on mobile when a tab is clicked
+    const tabBtns = document.querySelectorAll('.admin-tab-btn');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (window.innerWidth < 768) { // md breakpoint
+                closeSidebar();
+            }
+        });
+    });
+});
+

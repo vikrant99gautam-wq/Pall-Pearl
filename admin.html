@@ -115,10 +115,18 @@
 </head>
 <body class="bg-[#FFFDFB] text-on-surface antialiased min-h-screen flex hidden" id="admin-body">
     
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-on-surface/40 backdrop-blur-sm z-40 hidden md:hidden transition-opacity opacity-0"></div>
+
     <!-- Sidebar -->
-    <aside class="w-64 bg-surface-container-high border-r border-outline-variant/30 flex flex-col justify-between hidden md:flex shrink-0 min-h-screen fixed left-0 top-0">
+    <aside id="admin-sidebar" class="w-64 bg-surface-container-high border-r border-outline-variant/30 flex flex-col justify-between shrink-0 h-[100dvh] fixed left-0 top-0 z-50 transition-transform duration-300 transform -translate-x-full md:translate-x-0">
         <div class="p-8">
-            <h1 class="font-display-lg-mobile text-primary text-3xl mb-12 leading-tight">Pall &amp;<br>Pearl <span class="block text-sm font-label-sm uppercase tracking-widest text-on-surface-variant mt-2">Admin</span></h1>
+            <div class="flex justify-between items-start mb-12">
+                <h1 class="font-display-lg-mobile text-primary text-3xl leading-tight">Pall &amp;<br>Pearl <span class="block text-sm font-label-sm uppercase tracking-widest text-on-surface-variant mt-2">Admin</span></h1>
+                <button id="btn-close-sidebar" class="md:hidden text-on-surface p-2 -mr-2 rounded-full hover:bg-surface-variant transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
             
             <nav class="space-y-4">
                 <button id="tab-btn-dashboard" class="admin-tab-btn w-full text-left py-3 px-4 rounded-xl bg-primary text-on-primary font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
@@ -147,6 +155,14 @@
     <main class="flex-grow ml-0 md:ml-64 p-6 md:p-12 relative min-h-screen">
         <!-- Ambient Background -->
         <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-primary-fixed/20 rounded-full blur-[80px] -z-10 pointer-events-none"></div>
+
+        <!-- Mobile Header -->
+        <div class="md:hidden flex justify-between items-center mb-8">
+            <h1 class="font-display-lg-mobile text-primary text-2xl font-semibold">Admin Panel</h1>
+            <button id="btn-open-sidebar" class="text-primary p-2 bg-surface-container-highest rounded-full hover:bg-outline-variant/30 transition-colors">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
 
         <!-- DASHBOARD TAB -->
         <div id="tab-dashboard" class="admin-tab block">
