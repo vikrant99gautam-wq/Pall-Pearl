@@ -137,14 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('latest_invoice', JSON.stringify(localOrderData));
 
             // Build short WhatsApp Message
-            let message = '🌸 *Namaste from Pall & Pearl!* ✨\n\n';
-            message += 'Thank you for shopping with us! 💖\n';
+            let message = '\uD83C\uDF38 *Namaste from Pall & Pearl!* \u2728\n\n';
+            message += 'Thank you for shopping with us! \uD83D\uDC96\n';
             message += 'I have placed a new order. Please find my order invoice here:\n\n';
             
             // Assuming site runs on the current origin
             const invoiceLink = window.location.origin + '/invoice.html?id=' + orderId;
-            message += `👉 ${invoiceLink}\n\n`;
-            message += 'Chatpate Tops for Chatpati Girls ✨';
+            message += `\uD83D\uDC49 ${invoiceLink}\n\n`;
+            message += '*The seller will contact you soon regarding the payment and shipping details.*\n\n';
+            message += 'Chatpate Tops for Chatpati Girls \u2728';
 
             // Encode and open WhatsApp
             const encodedMessage = encodeURIComponent(message);
@@ -157,9 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Open Whatsapp
             window.open(whatsappUrl, '_blank');
             
-            // Redirect to invoice page
+            // Redirect to order details page
             setTimeout(() => {
-                window.location.href = `invoice.html?id=${orderId}`;
+                window.location.href = `order-details.html?id=${orderId}`;
             }, 1000);
             
         } catch (err) {
