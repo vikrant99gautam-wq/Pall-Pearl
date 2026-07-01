@@ -182,7 +182,7 @@
                     </div>
                     <div class="flex justify-between font-body-md text-on-surface-variant">
                         <span>Shipping</span>
-                        <span>Complimentary</span>
+                        <span class="text-on-surface">₹60</span>
                     </div>
                 </div>
                 <div class="flex justify-between font-headline-lg-mobile text-xl text-primary mb-8">
@@ -206,16 +206,16 @@
         if (cart.length === 0) {
             container.innerHTML = '<p class="font-body-md text-on-surface-variant">Your bag is empty.</p>';
             document.getElementById("cart-subtotal").textContent = "₹0.00";
-            document.getElementById("cart-total").textContent = "₹0.00";
+            document.getElementById("cart-total").textContent = "₹60.00";
             return;
         }
 
         let html = "";
-        let total = 0;
+        let subtotal = 0;
 
         cart.forEach(item => {
             const itemPrice = parsePrice(item.price);
-            total += itemPrice * item.quantity;
+            subtotal += itemPrice * item.quantity;
             
             html += `
             <div class="flex flex-col md:flex-row gap-6 p-4 rounded-3xl glass-panel relative group">

@@ -58,9 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkoutItemsContainer.innerHTML = itemsHtml;
     
-    const formattedTotal = '₹' + totalAmount.toLocaleString('en-IN');
-    checkoutSubtotal.textContent = formattedTotal;
-    checkoutTotal.textContent = formattedTotal;
+    const subtotalFormatted = '₹' + totalAmount.toLocaleString('en-IN');
+    totalAmount += 60; // Flat shipping rate
+    const totalFormatted = '₹' + totalAmount.toLocaleString('en-IN');
+    
+    checkoutSubtotal.textContent = subtotalFormatted;
+    checkoutTotal.textContent = totalFormatted;
 
     // Handle WhatsApp Checkout
     btnWhatsappCheckout.addEventListener('click', async (e) => {

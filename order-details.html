@@ -134,7 +134,7 @@
                 </div>
                 <div class="flex justify-between items-center mb-4 pb-4 border-b border-outline-variant/30">
                     <span class="text-on-surface-variant">Shipping</span>
-                    <span class="font-medium text-on-surface">Calculated</span>
+                    <span class="font-medium text-on-surface">₹60</span>
                 </div>
                 <div class="flex justify-between items-center text-lg">
                     <span class="font-semibold text-primary">Total</span>
@@ -237,9 +237,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Summary Totals
-        const formattedTotal = `₹${parseFloat(order.total).toLocaleString('en-IN')}`;
-        document.getElementById('summary-subtotal').textContent = formattedTotal;
-        document.getElementById('summary-total').textContent = formattedTotal;
+        const total = parseFloat(order.total);
+        const subtotal = total > 60 ? total - 60 : total; // Fallback in case of old free shipping orders
+        document.getElementById('summary-subtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+        document.getElementById('summary-total').textContent = `₹${total.toLocaleString('en-IN')}`;
 
         // Items List
         const itemsContainer = document.getElementById('order-items-list');

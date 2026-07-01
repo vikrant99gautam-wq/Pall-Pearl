@@ -100,7 +100,7 @@
                 </div>
                 <div class="flex justify-between py-2 border-b border-stone-100">
                     <span class="text-stone-500">Shipping</span>
-                    <span class="font-medium text-stone-800">Calculated on WhatsApp</span>
+                    <span class="font-medium text-stone-800">?60</span>
                 </div>
                 <div class="flex justify-between py-4 text-xl font-semibold">
                     <span class="text-primary">Total</span>
@@ -258,11 +258,12 @@ function renderInvoice(order) {
         `;
     });
     tbody.innerHTML = html;
-    
     // Totals
-    const totalFormatted = `₹${parseFloat(order.totalAmount || 0).toLocaleString('en-IN')}`;
-    document.getElementById('inv-subtotal').textContent = totalFormatted;
-    document.getElementById('inv-total').textContent = totalFormatted;
+    const totalAmount = parseFloat(order.totalAmount || 0);
+    const subtotal = totalAmount > 60 ? totalAmount - 60 : totalAmount;
+    
+    document.getElementById('inv-subtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+    document.getElementById('inv-total').textContent = `₹${totalAmount.toLocaleString('en-IN')}`;
 }
 </script>
 </body>
