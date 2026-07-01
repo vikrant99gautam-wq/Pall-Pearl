@@ -197,13 +197,18 @@ function renderOrdersTable(orders) {
                 <td class="p-6 font-body-md text-on-surface">${date}</td>
                 <td class="p-6 font-body-md font-medium text-primary">₹${parseFloat(order.total).toFixed(2)}</td>
                 <td class="p-6 text-right">
-                    <select class="order-status-select bg-surface border border-outline-variant rounded-lg px-2 py-1 text-sm text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" data-order-id="${order.id}">
-                        <option value="Pending" ${(!order.status || order.status === 'Pending') ? 'selected' : ''}>Pending</option>
-                        <option value="Processing" ${(order.status === 'Processing') ? 'selected' : ''}>Processing</option>
-                        <option value="Shipped" ${(order.status === 'Shipped') ? 'selected' : ''}>Shipped</option>
-                        <option value="Delivered" ${(order.status === 'Delivered') ? 'selected' : ''}>Delivered</option>
-                        <option value="Cancelled" ${(order.status === 'Cancelled') ? 'selected' : ''}>Cancelled</option>
-                    </select>
+                    <div class="flex items-center justify-end gap-2">
+                        <select class="order-status-select bg-surface border border-outline-variant rounded-lg px-2 py-1 text-sm text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" data-order-id="${order.id}">
+                            <option value="Pending" ${(!order.status || order.status === 'Pending') ? 'selected' : ''}>Pending</option>
+                            <option value="Processing" ${(order.status === 'Processing') ? 'selected' : ''}>Processing</option>
+                            <option value="Shipped" ${(order.status === 'Shipped') ? 'selected' : ''}>Shipped</option>
+                            <option value="Delivered" ${(order.status === 'Delivered') ? 'selected' : ''}>Delivered</option>
+                            <option value="Cancelled" ${(order.status === 'Cancelled') ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                        <button class="delete-order-btn text-error hover:bg-error-container p-1 rounded transition-colors" data-order-id="${order.id}" title="Delete Order">
+                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                        </button>
+                    </div>
                     <div class="status-indicator hidden text-xs text-primary mt-1">Updated!</div>
                 </td>
             </tr>
@@ -213,15 +218,16 @@ function renderOrdersTable(orders) {
     tbody.innerHTML = html;
 }
 
-// Handle Order Status Updates
+// Handle Order Status Updates & Deletions
 document.addEventListener('DOMContentLoaded', () => {
     const tbody = document.getElementById("orders-table-body");
     if (tbody) {
+        // Handle Status Change
         tbody.addEventListener('change', async (e) => {
             if (e.target.classList.contains('order-status-select')) {
                 const orderId = e.target.getAttribute('data-order-id');
                 const newStatus = e.target.value;
-                const indicator = e.target.nextElementSibling;
+                const indicator = e.target.parentElement.nextElementSibling;
                 
                 e.target.disabled = true;
                 
@@ -240,6 +246,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert("Failed to update status. Please try again.");
                 } finally {
                     e.target.disabled = false;
+                }
+            }
+        });
+
+        // Handle Order Deletion
+        tbody.addEventListener('click', async (e) => {
+            const deleteBtn = e.target.closest('.delete-order-btn');
+            if (deleteBtn) {
+                const orderId = deleteBtn.getAttribute('data-order-id');
+                if (confirm("Are you sure you want to completely delete this order? This cannot be undone.")) {
+                    deleteBtn.disabled = true;
+                    deleteBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[20px]">refresh</span>';
+                    try {
+                        const { error } = await supabase
+                            .from('orders')
+                            .delete()
+                            .eq('id', orderId);
+                        
+                        if (error) throw error;
+                        
+                        // Remove row from DOM
+                        deleteBtn.closest('tr').remove();
+                    } catch (err) {
+                        console.error("Error deleting order:", err);
+                        alert("Failed to delete order.");
+                        deleteBtn.disabled = false;
+                        deleteBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">delete</span>';
+                    }
                 }
             }
         });
