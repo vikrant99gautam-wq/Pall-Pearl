@@ -97,13 +97,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 pincode: pincode
             }];
 
+            // Try to get logged in user
+            let customerEmail = email || 'N/A';
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user && user.email) {
+                    customerEmail = user.email;
+                }
+            } catch (e) {
+                console.warn("Could not get auth user for checkout", e);
+            }
+
             // Save to Supabase
             const { data: orderData, error } = await supabase
                 .from('orders')
                 .insert([
                     {
                         customername: fullName,
-                        customeremail: email || 'N/A',
+                        customeremail: customerEmail,
                         total: totalAmount,
                         items: JSON.stringify(itemsWithShipping),
                         status: 'Pending'
