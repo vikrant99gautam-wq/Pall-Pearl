@@ -197,9 +197,14 @@ function renderOrdersTable(orders) {
                 <td class="p-6 font-body-md text-on-surface">${date}</td>
                 <td class="p-6 font-body-md font-medium text-primary">₹${parseFloat(order.total).toFixed(2)}</td>
                 <td class="p-6 text-right">
-                    <span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full font-label-sm uppercase tracking-widest text-xs">
-                        ${order.status || 'Pending'}
-                    </span>
+                    <select class="order-status-select bg-surface border border-outline-variant rounded-lg px-2 py-1 text-sm text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" data-order-id="${order.id}">
+                        <option value="Pending" ${(!order.status || order.status === 'Pending') ? 'selected' : ''}>Pending</option>
+                        <option value="Processing" ${(order.status === 'Processing') ? 'selected' : ''}>Processing</option>
+                        <option value="Shipped" ${(order.status === 'Shipped') ? 'selected' : ''}>Shipped</option>
+                        <option value="Delivered" ${(order.status === 'Delivered') ? 'selected' : ''}>Delivered</option>
+                        <option value="Cancelled" ${(order.status === 'Cancelled') ? 'selected' : ''}>Cancelled</option>
+                    </select>
+                    <div class="status-indicator hidden text-xs text-primary mt-1">Updated!</div>
                 </td>
             </tr>
         `;
@@ -207,6 +212,39 @@ function renderOrdersTable(orders) {
     
     tbody.innerHTML = html;
 }
+
+// Handle Order Status Updates
+document.addEventListener('DOMContentLoaded', () => {
+    const tbody = document.getElementById("orders-table-body");
+    if (tbody) {
+        tbody.addEventListener('change', async (e) => {
+            if (e.target.classList.contains('order-status-select')) {
+                const orderId = e.target.getAttribute('data-order-id');
+                const newStatus = e.target.value;
+                const indicator = e.target.nextElementSibling;
+                
+                e.target.disabled = true;
+                
+                try {
+                    const { error } = await supabase
+                        .from('orders')
+                        .update({ status: newStatus })
+                        .eq('id', orderId);
+                        
+                    if (error) throw error;
+                    
+                    indicator.classList.remove('hidden');
+                    setTimeout(() => indicator.classList.add('hidden'), 2000);
+                } catch (err) {
+                    console.error("Error updating status:", err);
+                    alert("Failed to update status. Please try again.");
+                } finally {
+                    e.target.disabled = false;
+                }
+            }
+        });
+    }
+});
 
 // --- PRODUCT MANAGEMENT ---
 const btnAddProduct = document.getElementById('btn-add-product');

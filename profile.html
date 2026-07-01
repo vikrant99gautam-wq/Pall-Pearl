@@ -139,9 +139,7 @@
 <span class="material-symbols-outlined">menu</span>
 </button>
 <!-- Brand Logo -->
-<a class="font-display-lg text-headline-lg-mobile md:text-headline-lg text-on-surface dark:text-surface-bright tracking-tighter" href="hero.html">
-                Pall &amp; Pearl
-            </a>
+<a class="font-display-lg text-headline-lg-mobile md:text-headline-lg text-on-surface dark:text-surface-bright tracking-tighter" href="hero.html">Pall <img src="logo.jpeg" alt="&" class="inline-block h-24 w-24 object-cover rounded-full mx-2 align-middle"> Pearl</a>
 <!-- Desktop Navigation Links -->
 <div class="hidden md:flex items-center space-x-8">
 <a class="font-body-md text-body-md uppercase tracking-widest text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-colors duration-300" href="collection.html">Collections</a>
@@ -241,10 +239,8 @@
         <div class="w-full md:w-3/4 space-y-8">
             <section class="bg-surface rounded-3xl p-8 shadow-lg border border-surface-container-highest">
                 <h3 class="font-headline-sm text-2xl text-on-surface mb-6 border-b border-outline-variant pb-4">Order History</h3>
-                <div class="py-12 text-center">
-                    <span class="material-symbols-outlined text-6xl text-surface-container-highest mb-4">inventory_2</span>
-                    <p class="font-body-lg text-on-surface-variant mb-2">You haven't placed any orders yet.</p>
-                    <a href="collection.html" class="inline-block mt-4 px-6 py-2 rounded-full border border-primary text-primary font-label-sm uppercase tracking-widest hover:bg-primary hover:text-white transition-colors">Start Shopping</a>
+                <div id="orders-container" class="space-y-6">
+                    <div class="py-12 text-center text-on-surface-variant font-body-md">Loading orders...</div>
                 </div>
             </section>
         </div>
@@ -252,6 +248,85 @@
     </div>
 </main>
 <script type="module" src="auth.js"></script>
+
+<script type="module">
+import { supabase } from './supabase-config.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const container = document.getElementById('orders-container');
+    
+    try {
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (authError || !user) throw authError || new Error("Not logged in");
+
+        const { data: orders, error: dbError } = await supabase
+            .from('orders')
+            .select('*')
+            .eq('customeremail', user.email)
+            .order('createdat', { ascending: false });
+
+        if (dbError) throw dbError;
+
+        if (!orders || orders.length === 0) {
+            container.innerHTML = `
+                <div class="py-12 text-center">
+                    <span class="material-symbols-outlined text-6xl text-surface-container-highest mb-4">inventory_2</span>
+                    <p class="font-body-lg text-on-surface-variant mb-2">You haven't placed any orders yet.</p>
+                    <a href="collection.html" class="inline-block mt-4 px-6 py-2 rounded-full border border-primary text-primary font-label-sm uppercase tracking-widest hover:bg-primary hover:text-white transition-colors">Start Shopping</a>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        orders.forEach(order => {
+            const date = order.createdat ? new Date(order.createdat).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A';
+            const status = order.status || 'Pending';
+            
+            // Determine status color
+            let statusColor = 'bg-secondary-container text-on-secondary-container';
+            if (status.toLowerCase() === 'delivered') statusColor = 'bg-green-100 text-green-800';
+            else if (status.toLowerCase() === 'processing' || status.toLowerCase() === 'shipped') statusColor = 'bg-blue-100 text-blue-800';
+            else if (status.toLowerCase() === 'cancelled') statusColor = 'bg-error-container text-on-error-container';
+            
+            // Extract some item names for a quick preview
+            let itemSummary = "Order details";
+            try {
+                const items = JSON.parse(order.items);
+                const actualItems = items.filter(i => i.type !== 'shipping_info');
+                if (actualItems.length > 0) {
+                    const names = actualItems.slice(0, 2).map(i => i.name);
+                    itemSummary = names.join(', ');
+                    if (actualItems.length > 2) itemSummary += ` +${actualItems.length - 2} more`;
+                }
+            } catch(e){}
+
+            html += `
+                <div class="border border-outline-variant rounded-2xl p-6 bg-surface-bright flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="font-headline-sm text-lg text-on-surface">#${order.id.substring(0,8).toUpperCase()}</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-label-sm uppercase tracking-widest ${statusColor}">${status}</span>
+                        </div>
+                        <p class="text-on-surface-variant text-sm mb-1">${date}</p>
+                        <p class="text-on-surface font-medium truncate max-w-xs md:max-w-md">${itemSummary}</p>
+                        <p class="text-primary font-semibold mt-2">₹${parseFloat(order.total).toLocaleString('en-IN')}</p>
+                    </div>
+                    <a href="invoice.html?id=${order.id}" class="px-6 py-2 border border-outline-variant hover:border-primary text-on-surface hover:text-primary rounded-lg text-sm font-medium transition-colors whitespace-nowrap">
+                        View / Download Invoice
+                    </a>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+
+    } catch (e) {
+        console.error("Error loading orders:", e);
+        container.innerHTML = `<p class="text-error text-center py-6">Could not load orders. Please try again later.</p>`;
+    }
+});
+</script>
 
 <script src="cart.js"></script>
 <script src="wishlist.js"></script>
