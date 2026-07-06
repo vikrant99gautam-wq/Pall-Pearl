@@ -30,7 +30,7 @@ if (btnLogout) {
 }
 
 // Tab Switching Logic
-const tabs = ['dashboard', 'orders', 'products', 'customers'];
+const tabs = ['dashboard', 'orders', 'products', 'discounts'];
 tabs.forEach(tab => {
     const btn = document.getElementById(`tab-btn-${tab}`);
     if (btn) {
@@ -54,6 +54,7 @@ tabs.forEach(tab => {
             if (activePanel) activePanel.classList.remove('hidden');
             
             if (tab === 'products') loadProductsData();
+            if (tab === 'discounts') loadCouponsData();
         });
     }
 });

@@ -202,15 +202,28 @@
                 </div>
 
                 <div class="border-t border-outline-variant/30 pt-6 flex flex-col gap-3 mb-8">
+                    <div id="discount-section" class="flex flex-col gap-2 mb-2">
+                        <button type="button" id="btn-show-coupon" class="text-left font-label-sm text-primary underline w-max">Have a code?</button>
+                        <div id="coupon-input-container" class="hidden flex gap-2">
+                            <input type="text" id="coupon-code" class="w-full bg-surface-container border border-outline-variant rounded-xl px-4 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary uppercase" placeholder="Enter Code">
+                            <button type="button" id="btn-apply-coupon" class="px-6 py-2 rounded-xl bg-primary text-on-primary font-label-sm uppercase hover:opacity-90 transition-opacity">Apply</button>
+                        </div>
+                        <p id="coupon-message" class="text-sm hidden"></p>
+                    </div>
+
                     <div class="flex justify-between items-center text-on-surface-variant font-body-md mb-2">
                         <span>Subtotal</span>
                         <span id="checkout-subtotal">₹0.00</span>
                     </div>
-                    <div class="flex justify-between items-center text-on-surface-variant font-body-md mb-4">
+                    <div class="flex justify-between items-center text-on-surface-variant font-body-md mb-2">
                         <span>Shipping</span>
                         <span class="text-on-surface">₹60</span>
                     </div>
-                    <div class="border-t border-outline-variant/30 pt-4 flex justify-between items-center font-headline-lg-mobile text-xl text-primary">
+                    <div id="discount-row" class="hidden justify-between items-center text-primary font-body-md mb-2">
+                        <span>Discount (<span id="applied-coupon-name"></span>)</span>
+                        <span id="discount-amount">-₹0.00</span>
+                    </div>
+                    <div class="border-t border-outline-variant/30 pt-4 flex justify-between items-center font-headline-lg-mobile text-xl text-primary mt-2">
                         <span>Total</span>
                         <span id="checkout-total">₹0.00</span>
                     </div>

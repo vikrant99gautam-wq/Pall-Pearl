@@ -100,7 +100,11 @@
                 </div>
                 <div class="flex justify-between py-2 border-b border-stone-100">
                     <span class="text-stone-500">Shipping</span>
-                    <span class="font-medium text-stone-800">?60</span>
+                    <span class="font-medium text-stone-800">₹60</span>
+                </div>
+                <div id="inv-discount-row" class="hidden flex justify-between py-2 border-b border-stone-100">
+                    <span class="text-stone-500">Discount (<span id="inv-discount-code"></span>)</span>
+                    <span id="inv-discount-amount" class="font-medium text-primary"></span>
                 </div>
                 <div class="flex justify-between py-4 text-xl font-semibold">
                     <span class="text-primary">Total</span>
@@ -175,11 +179,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         let shippingInfo = null;
+        let discountInfo = null;
         const actualItems = [];
         
         items.forEach(item => {
             if (item.type === 'shipping_info') {
                 shippingInfo = item;
+            } else if (item.type === 'discount_info') {
+                discountInfo = item;
             } else {
                 actualItems.push(item);
             }
@@ -198,6 +205,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 state: shippingInfo ? shippingInfo.state : '',
                 pincode: shippingInfo ? shippingInfo.pincode : ''
             },
+            discount: discountInfo || null,
             items: actualItems,
             totalAmount: order.total
         };
@@ -260,9 +268,24 @@ function renderInvoice(order) {
     tbody.innerHTML = html;
     // Totals
     const totalAmount = parseFloat(order.totalAmount || 0);
-    const subtotal = totalAmount > 60 ? totalAmount - 60 : totalAmount;
+    let itemsTotal = 0;
+    order.items.forEach(item => {
+        let priceVal = typeof item.price === 'string' ? parseFloat(item.price.replace('₹', '').replace(/,/g, '')) : item.price;
+        priceVal = priceVal || 0;
+        itemsTotal += priceVal * (item.quantity || 1);
+    });
     
-    document.getElementById('inv-subtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+    document.getElementById('inv-subtotal').textContent = `₹${itemsTotal.toLocaleString('en-IN')}`;
+    
+    if (order.discount) {
+        const discRow = document.getElementById('inv-discount-row');
+        if (discRow) {
+            discRow.classList.remove('hidden');
+            document.getElementById('inv-discount-code').textContent = order.discount.code;
+            document.getElementById('inv-discount-amount').textContent = `-₹${order.discount.amount.toLocaleString('en-IN')}`;
+        }
+    }
+    
     document.getElementById('inv-total').textContent = `₹${totalAmount.toLocaleString('en-IN')}`;
 }
 </script>

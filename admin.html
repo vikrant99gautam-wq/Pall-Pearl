@@ -138,8 +138,8 @@
                 <button id="tab-btn-products" class="admin-tab-btn w-full text-left py-3 px-4 rounded-xl hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
                     <span class="material-symbols-outlined">inventory_2</span> Products
                 </button>
-                <button id="tab-btn-customers" class="admin-tab-btn w-full text-left py-3 px-4 rounded-xl hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
-                    <span class="material-symbols-outlined">group</span> Customers
+                <button id="tab-btn-discounts" class="admin-tab-btn w-full text-left py-3 px-4 rounded-xl hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
+                    <span class="material-symbols-outlined">sell</span> Discounts
                 </button>
             </nav>
         </div>
@@ -294,14 +294,58 @@
             </div>
         </div>
         
-        <!-- CUSTOMERS TAB -->
-        <div id="tab-customers" class="admin-tab hidden">
-            <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary mb-8">Customer Management</h2>
+        <!-- DISCOUNTS TAB -->
+        <div id="tab-discounts" class="admin-tab hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary">Discounts & Coupons</h2>
+                <button id="btn-add-coupon" class="px-6 py-3 rounded-xl bg-primary text-on-primary font-label-sm uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center gap-2">
+                    <span class="material-symbols-outlined">add</span> Add Coupon
+                </button>
+            </div>
             
-            <div class="glass-panel p-12 text-center rounded-3xl smooth-shadow">
-                <span class="material-symbols-outlined text-6xl text-on-surface-variant/30 mb-4">construction</span>
-                <h3 class="font-headline-lg-mobile text-2xl text-on-surface mb-2">Coming Soon</h3>
-                <p class="font-body-md text-on-surface-variant max-w-md mx-auto">The customer directory is currently under construction.</p>
+            <div class="glass-panel rounded-3xl overflow-hidden smooth-shadow">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-surface-container-high border-b border-outline-variant/30">
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Code</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Discount (%)</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest">Status</th>
+                                <th class="p-6 font-label-sm text-on-surface-variant uppercase tracking-widest text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="coupons-table-body" class="divide-y divide-outline-variant/20">
+                            <tr>
+                                <td colspan="4" class="p-6 text-center font-body-md text-on-surface-variant">Loading coupons...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Coupon Modal -->
+        <div id="coupon-modal" class="fixed inset-0 bg-black/60 z-[200] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all">
+            <div class="bg-surface relative rounded-3xl max-w-md w-full p-8 shadow-2xl">
+                <button type="button" id="btn-close-coupon-modal" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface hover:text-error hover:bg-error-container transition-colors z-10">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                <h3 class="font-headline-lg-mobile text-2xl text-primary mb-6">Add New Coupon</h3>
+                <form id="coupon-form" class="flex flex-col gap-4">
+                    <div>
+                        <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2" for="coupon-code">Coupon Code</label>
+                        <input type="text" id="coupon-code" required class="w-full bg-surface-container border border-outline-variant rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary uppercase" placeholder="e.g. WELCOME10">
+                    </div>
+                    <div>
+                        <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2" for="coupon-discount">Discount (%)</label>
+                        <input type="number" id="coupon-discount" required min="1" max="100" class="w-full bg-surface-container border border-outline-variant rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary" placeholder="e.g. 10">
+                    </div>
+                    <div class="flex items-center gap-2 mt-2">
+                        <input type="checkbox" id="coupon-active" class="w-5 h-5 accent-primary rounded" checked>
+                        <label class="font-body-md text-on-surface-variant" for="coupon-active">Is Active?</label>
+                    </div>
+                    <button type="submit" id="btn-save-coupon" class="w-full mt-4 py-3 rounded-xl bg-primary text-on-primary font-label-sm uppercase tracking-widest hover:opacity-90 transition-opacity">Save Coupon</button>
+                </form>
             </div>
         </div>
 

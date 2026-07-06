@@ -58,12 +58,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkoutItemsContainer.innerHTML = itemsHtml;
     
+    let finalTotal = totalAmount + 60; // Initial total with shipping
     const subtotalFormatted = '₹' + totalAmount.toLocaleString('en-IN');
-    totalAmount += 60; // Flat shipping rate
-    const totalFormatted = '₹' + totalAmount.toLocaleString('en-IN');
-    
     checkoutSubtotal.textContent = subtotalFormatted;
-    checkoutTotal.textContent = totalFormatted;
+    checkoutTotal.textContent = '₹' + finalTotal.toLocaleString('en-IN');
+
+    // Coupon Logic
+    let appliedCoupon = null;
+    let discountAmount = 0;
+    
+    const btnShowCoupon = document.getElementById('btn-show-coupon');
+    const couponInputContainer = document.getElementById('coupon-input-container');
+    const btnApplyCoupon = document.getElementById('btn-apply-coupon');
+    const couponCodeInput = document.getElementById('coupon-code');
+    const couponMessage = document.getElementById('coupon-message');
+    const discountRow = document.getElementById('discount-row');
+    const discountAmountDisplay = document.getElementById('discount-amount');
+    const appliedCouponNameDisplay = document.getElementById('applied-coupon-name');
+
+    if (btnShowCoupon) {
+        btnShowCoupon.addEventListener('click', () => {
+            couponInputContainer.classList.toggle('hidden');
+        });
+    }
+
+    if (btnApplyCoupon) {
+        btnApplyCoupon.addEventListener('click', async () => {
+            const code = couponCodeInput.value.trim().toUpperCase();
+            if (!code) return;
+
+            btnApplyCoupon.disabled = true;
+            btnApplyCoupon.textContent = '...';
+            couponMessage.classList.add('hidden');
+
+            try {
+                const { data, error } = await supabase
+                    .from('coupons')
+                    .select('*')
+                    .eq('code', code)
+                    .eq('is_active', true)
+                    .single();
+
+                if (error || !data) {
+                    couponMessage.textContent = 'Invalid or expired coupon code.';
+                    couponMessage.classList.remove('hidden', 'text-primary');
+                    couponMessage.classList.add('text-error');
+                    
+                    // Reset discount
+                    appliedCoupon = null;
+                    discountAmount = 0;
+                    finalTotal = totalAmount + 60;
+                    discountRow.classList.add('hidden');
+                    discountRow.classList.remove('flex');
+                } else {
+                    // Valid Coupon
+                    appliedCoupon = data;
+                    discountAmount = (totalAmount * (data.discount_percentage / 100));
+                    finalTotal = (totalAmount - discountAmount) + 60;
+                    
+                    couponMessage.textContent = `${data.discount_percentage}% discount applied!`;
+                    couponMessage.classList.remove('hidden', 'text-error');
+                    couponMessage.classList.add('text-primary');
+                    
+                    appliedCouponNameDisplay.textContent = data.code;
+                    discountAmountDisplay.textContent = '-₹' + discountAmount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    discountRow.classList.remove('hidden');
+                    discountRow.classList.add('flex');
+                }
+                
+                checkoutTotal.textContent = '₹' + finalTotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                
+            } catch (e) {
+                console.error("Coupon error", e);
+            } finally {
+                btnApplyCoupon.disabled = false;
+                btnApplyCoupon.textContent = 'Apply';
+            }
+        });
+    }
 
     // Handle WhatsApp Checkout
     btnWhatsappCheckout.addEventListener('click', async (e) => {
@@ -100,6 +172,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 pincode: pincode
             }];
 
+            if (appliedCoupon) {
+                itemsWithShipping.push({
+                    type: 'discount_info',
+                    code: appliedCoupon.code,
+                    percentage: appliedCoupon.discount_percentage,
+                    amount: discountAmount
+                });
+            }
+
             // Try to get logged in user
             let customerEmail = email || 'N/A';
             try {
@@ -118,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     {
                         customername: fullName,
                         customeremail: customerEmail,
-                        total: totalAmount,
+                        total: finalTotal,
                         items: JSON.stringify(itemsWithShipping),
                         status: 'Pending'
                     }
@@ -134,7 +215,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: orderId,
                 customer: { fullName, phone, email, address, city, state, pincode },
                 items: checkoutCart,
-                totalAmount: totalAmount,
+                discount: appliedCoupon ? { code: appliedCoupon.code, amount: discountAmount, percentage: appliedCoupon.discount_percentage } : null,
+                totalAmount: finalTotal,
                 date: new Date().toISOString()
             };
             localStorage.setItem('latest_invoice', JSON.stringify(localOrderData));
