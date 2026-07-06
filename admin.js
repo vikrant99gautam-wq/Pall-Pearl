@@ -435,3 +435,131 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// -------------------------------------------------------------
+// COUPON MANAGEMENT LOGIC
+// -------------------------------------------------------------
+const couponModal = document.getElementById('coupon-modal');
+const btnAddCoupon = document.getElementById('btn-add-coupon');
+const btnCloseCouponModal = document.getElementById('btn-close-coupon-modal');
+const couponForm = document.getElementById('coupon-form');
+const btnSaveCoupon = document.getElementById('btn-save-coupon');
+const couponsTableBody = document.getElementById('coupons-table-body');
+
+if (btnAddCoupon) {
+    btnAddCoupon.addEventListener('click', () => {
+        couponForm.reset();
+        couponModal.classList.remove('hidden');
+    });
+}
+if (btnCloseCouponModal) {
+    btnCloseCouponModal.addEventListener('click', () => {
+        couponModal.classList.add('hidden');
+    });
+}
+
+window.loadCouponsData = async function() {
+    if (!couponsTableBody) return;
+    
+    try {
+        const { data: coupons, error } = await supabase
+            .from('coupons')
+            .select('*')
+            .order('created_at', { ascending: false });
+            
+        if (error) throw error;
+        
+        if (!coupons || coupons.length === 0) {
+            couponsTableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center font-body-md text-on-surface-variant">No coupons found.</td></tr>`;
+            return;
+        }
+        
+        let html = '';
+        coupons.forEach(coupon => {
+            const statusClass = coupon.is_active ? 'text-primary bg-primary-fixed/20' : 'text-on-surface-variant bg-surface-container-highest';
+            const statusText = coupon.is_active ? 'Active' : 'Inactive';
+            
+            html += `
+                <tr class="hover:bg-surface-container-highest transition-colors">
+                    <td class="p-6 font-body-md text-on-surface font-semibold tracking-wider">${coupon.code}</td>
+                    <td class="p-6 font-body-md text-on-surface">${coupon.discount_percentage}%</td>
+                    <td class="p-6 font-body-md text-on-surface">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold ${statusClass}">${statusText}</span>
+                    </td>
+                    <td class="p-6 text-right">
+                        <button onclick="toggleCouponStatus('${coupon.id}', ${!coupon.is_active})" class="p-2 text-on-surface-variant hover:text-primary transition-colors" title="${coupon.is_active ? 'Deactivate' : 'Activate'}">
+                            <span class="material-symbols-outlined">${coupon.is_active ? 'toggle_on' : 'toggle_off'}</span>
+                        </button>
+                        <button onclick="deleteCoupon('${coupon.id}')" class="p-2 text-on-surface-variant hover:text-error transition-colors" title="Delete Coupon">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+        couponsTableBody.innerHTML = html;
+        
+    } catch (e) {
+        console.error("Error loading coupons: ", e);
+        couponsTableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-error">Error loading coupons. Note: Supabase 'coupons' table must exist.</td></tr>`;
+    }
+}
+
+if (couponForm) {
+    couponForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const code = document.getElementById('coupon-code').value.trim().toUpperCase();
+        const discount_percentage = parseFloat(document.getElementById('coupon-discount').value);
+        const is_active = document.getElementById('coupon-active').checked;
+        
+        if (!code || isNaN(discount_percentage)) return;
+        
+        btnSaveCoupon.disabled = true;
+        btnSaveCoupon.textContent = 'Saving...';
+        
+        try {
+            const { error } = await supabase
+                .from('coupons')
+                .insert([{ code, discount_percentage, is_active }]);
+                
+            if (error) {
+                if (error.code === '23505') {
+                    throw new Error('Coupon code already exists.');
+                }
+                throw error;
+            }
+            
+            couponModal.classList.add('hidden');
+            window.loadCouponsData();
+        } catch (error) {
+            console.error("Error saving coupon", error);
+            alert("Error: " + error.message);
+        } finally {
+            btnSaveCoupon.disabled = false;
+            btnSaveCoupon.textContent = 'Save Coupon';
+        }
+    });
+}
+
+window.toggleCouponStatus = async function(id, newState) {
+    if(!confirm(`Are you sure you want to ${newState ? 'activate' : 'deactivate'} this coupon?`)) return;
+    try {
+        const { error } = await supabase.from('coupons').update({ is_active: newState }).eq('id', id);
+        if (error) throw error;
+        window.loadCouponsData();
+    } catch (e) {
+        console.error("Error toggling coupon", e);
+        alert("Failed to update coupon status.");
+    }
+};
+
+window.deleteCoupon = async function(id) {
+    if(!confirm("Are you sure you want to completely delete this coupon?")) return;
+    try {
+        const { error } = await supabase.from('coupons').delete().eq('id', id);
+        if (error) throw error;
+        window.loadCouponsData();
+    } catch (e) {
+        console.error("Error deleting coupon", e);
+        alert("Failed to delete coupon.");
+    }
+};
