@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const firstImage = p.imageurl ? p.imageurl.split(',')[0].trim() : '';
             
             html += `
-            <a class="masonry-item block group relative" href="product-detail.html?name=${encodeURIComponent(p.name)}&price=${encodeURIComponent('₹' + p.price)}&desc=${encodeURIComponent(p.description || '')}&image=${encodeURIComponent(p.imageurl)}&category=${encodeURIComponent(p.category)}&colors=${encodeURIComponent(colors)}&v=3">
+            <a class="masonry-item block group relative" href="product-detail.html?name=${encodeURIComponent(p.name)}&price=${encodeURIComponent('₹' + p.price)}&strike_price=${encodeURIComponent(p.strike_price || '')}&desc=${encodeURIComponent(p.description || '')}&image=${encodeURIComponent(p.imageurl)}&category=${encodeURIComponent(p.category)}&colors=${encodeURIComponent(colors)}&v=3">
                 <div class="relative overflow-hidden rounded-xl mb-4 bg-surface-container-low ${aspect}">
                     <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" alt="${p.name}" src="${firstImage}"/>
                     
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="flex flex-col">
                     <h3 class="font-headline-lg-mobile text-[20px] text-on-surface leading-tight mb-1">${p.name}</h3>
                     <p class="font-body-md text-on-surface-variant mb-2">${p.category}</p>
-                    <p class="font-body-md font-semibold text-primary">₹${p.price}</p>
+                    <p class="font-body-md font-semibold text-primary">${p.strike_price ? `<del class="text-on-surface-variant/70 font-normal mr-2">₹${p.strike_price}</del>` : ''}₹${p.price}</p>
                 </div>
             </a>
             `;

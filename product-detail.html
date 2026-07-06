@@ -170,7 +170,10 @@
 <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-wider">New Arrival</span>
 </div>
 <h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface mb-2" id="product-title">Midnight Velvet Kurti</h1>
-<p class="font-body-lg text-body-lg text-primary mb-6" id="product-price">₹195.00</p>
+<p class="font-body-lg text-body-lg text-primary mb-6 flex items-center gap-2">
+    <del id="product-strike-price" class="text-on-surface-variant/70 text-[18px] font-normal hidden"></del>
+    <span id="product-price">₹195.00</span>
+</p>
 <p class="font-body-md text-body-md text-on-surface-variant mb-8 leading-relaxed" id="product-desc">Drape yourself in twilight elegance. This premium velvet kurti features delicate zari embroidery inspired by moonlit gardens. Designed for the modern muse who seeks comfort without compromising on opulent style.</p>
 <!-- Color Selection -->
 <div class="mb-8" id="color-section" style="display: none;">
@@ -272,6 +275,7 @@
         
         const name = params.get("name");
         const price = params.get("price");
+        const strikePrice = params.get("strike_price");
         const desc = params.get("desc");
         const image = params.get("image");
         const category = params.get("category");
@@ -286,6 +290,11 @@
         }
         if (price) {
             document.getElementById("product-price").textContent = price;
+        }
+        if (strikePrice) {
+            const strikeEl = document.getElementById("product-strike-price");
+            strikeEl.textContent = '₹' + strikePrice;
+            strikeEl.classList.remove("hidden");
         }
         if (image) {
             const urls = image.split(',').map(u => u.trim()).filter(u => u);

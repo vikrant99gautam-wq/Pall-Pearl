@@ -12,6 +12,7 @@ const inputPrice = document.getElementById('product-price');
 const inputCategory = document.getElementById('product-category');
 const inputDesc = document.getElementById('product-desc');
 const inputColors = document.getElementById('product-colors');
+const inputStrikePrice = document.getElementById('product-strike-price');
 
 const btnSave = document.getElementById('btn-save-product');
 
@@ -50,6 +51,7 @@ async function loadProduct(id) {
             inputCategory.value = product.category;
             inputDesc.value = product.description || '';
             inputColors.value = product.colors || '';
+            if (inputStrikePrice) inputStrikePrice.value = product.strike_price || '';
             
             if (product.imageurl) {
                 const urls = product.imageurl.split(',').map(u => u.trim());
@@ -118,6 +120,7 @@ if (productForm) {
         const category = inputCategory.value;
         const desc = inputDesc.value;
         const colors = inputColors.value;
+        const strikePrice = inputStrikePrice && inputStrikePrice.value ? parseFloat(inputStrikePrice.value) : null;
         
         btnSave.disabled = true;
         btnSave.textContent = 'Saving...';
@@ -143,7 +146,7 @@ if (productForm) {
             const finalImageUrl = finalUrls.join(',');
             
             const productData = {
-                name, price, category, imageurl: finalImageUrl, description: desc, colors
+                name, price, strike_price: strikePrice, category, imageurl: finalImageUrl, description: desc, colors
             };
             
             btnSave.textContent = 'Saving Details...';
