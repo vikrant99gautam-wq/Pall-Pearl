@@ -636,28 +636,52 @@ async function loadBannersData() {
             'festive_edit': 'Recommended Size: 800x800 (Square)',
             'hero_main': 'Recommended Size: 800x1200 (Portrait)',
             'hero_side': 'Recommended Size: 800x1200 (Portrait)',
-            'hero_small': 'Recommended Size: 600x600 (Square)'
+            'hero_small': 'Recommended Size: 600x600 (Square)',
+            'coll_tops': 'Recommended Size: 1000x1200 (Portrait)',
+            'coll_kurtis': 'Recommended Size: 1000x1200 (Portrait)',
+            'coll_dresses': 'Recommended Size: 1000x1200 (Portrait)',
+            'coll_coords': 'Recommended Size: 1000x1200 (Portrait)'
         };
         
+        const bannerGroups = {
+            'Hero Section': ['hero_main', 'hero_side', 'hero_small'],
+            'Homepage Masonry': ['new_arrivals', 'tops', 'kurtis', 'coord_sets', 'summer_edit', 'festive_edit'],
+            'Collection Pages': ['coll_tops', 'coll_kurtis', 'coll_dresses', 'coll_coords']
+        };
+        
+        const groupedBanners = {};
+        for (const [groupName, ids] of Object.entries(bannerGroups)) {
+            groupedBanners[groupName] = banners.filter(b => ids.includes(b.id));
+        }
+        
         let html = '';
-        banners.forEach(banner => {
-            html += `
-                <div class="glass-panel p-6 rounded-2xl flex flex-col gap-4">
-                    <h3 class="font-headline-lg-mobile text-xl text-primary">${banner.title}</h3>
-                    <p class="text-on-surface-variant font-label-sm">${banner.subtitle}</p>
-                    
-                    <div class="w-full h-48 rounded-xl overflow-hidden bg-surface-container flex items-center justify-center relative">
-                        <img src="${banner.image_url}" id="preview-${banner.id}" class="w-full h-full object-cover" onerror="this.src=''; this.alt='No Image'">
+        
+        for (const [groupName, groupItems] of Object.entries(groupedBanners)) {
+            if (groupItems.length === 0) continue;
+            
+            html += `<div class="col-span-full mt-8 mb-2 border-b border-outline-variant/30 pb-2">
+                        <h2 class="font-headline-lg-mobile text-2xl text-primary">${groupName}</h2>
+                     </div>`;
+                     
+            groupItems.forEach(banner => {
+                html += `
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col gap-4">
+                        <h3 class="font-headline-lg-mobile text-xl text-primary">${banner.title}</h3>
+                        <p class="text-on-surface-variant font-label-sm">${banner.subtitle}</p>
+                        
+                        <div class="w-full h-48 rounded-xl overflow-hidden bg-surface-container flex items-center justify-center relative">
+                            <img src="${banner.image_url}" id="preview-${banner.id}" class="w-full h-full object-cover" onerror="this.src=''; this.alt='No Image'">
+                        </div>
+                        
+                        <div>
+                            <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Upload New Image</label>
+                            <input type="file" id="file-${banner.id}" accept="image/*" class="w-full font-body-md file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-fixed file:text-on-primary-fixed hover:file:bg-primary-fixed-dim">
+                            <p class="text-[11px] text-on-surface-variant mt-2 italic">${dimensions[banner.id] || 'Upload a high-quality image'}</p>
+                        </div>
                     </div>
-                    
-                    <div>
-                        <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Upload New Image</label>
-                        <input type="file" id="file-${banner.id}" accept="image/*" class="w-full font-body-md file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-fixed file:text-on-primary-fixed hover:file:bg-primary-fixed-dim">
-                        <p class="text-[11px] text-on-surface-variant mt-2 italic">${dimensions[banner.id] || 'Upload a high-quality image'}</p>
-                    </div>
-                </div>
-            `;
-        });
+                `;
+            });
+        }
         
         bannersGrid.innerHTML = html;
         
