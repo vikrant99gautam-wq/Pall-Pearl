@@ -142,6 +142,9 @@
                 <button id="tab-btn-discounts" class="admin-tab-btn w-full text-left py-3 px-4 rounded-xl hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
                     <span class="material-symbols-outlined">sell</span> Discounts
                 </button>
+                <button id="tab-btn-banners" class="admin-tab-btn w-full text-left py-3 px-4 rounded-xl hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-label-sm uppercase tracking-widest transition-colors flex items-center gap-3">
+                    <span class="material-symbols-outlined">imagesmode</span> Banners
+                </button>
             </nav>
         </div>
         
@@ -322,6 +325,18 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <!-- Banners Tab Content -->
+        <div id="tab-banners" class="admin-tab hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary">Homepage Banners</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="banners-grid">
+                <!-- Banners will be loaded here dynamically -->
+                <div class="p-6 text-center font-body-md text-on-surface-variant w-full col-span-full">Loading banners...</div>
             </div>
         </div>
 

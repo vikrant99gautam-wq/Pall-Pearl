@@ -30,7 +30,7 @@ if (btnLogout) {
 }
 
 // Tab Switching Logic
-const tabs = ['dashboard', 'orders', 'products', 'discounts'];
+const tabs = ['dashboard', 'orders', 'products', 'discounts', 'banners'];
 tabs.forEach(tab => {
     const btn = document.getElementById(`tab-btn-${tab}`);
     if (btn) {
@@ -55,6 +55,7 @@ tabs.forEach(tab => {
             
             if (tab === 'products') loadProductsData();
             if (tab === 'discounts') loadCouponsData();
+            if (tab === 'banners') loadBannersData();
         });
     }
 });
@@ -563,3 +564,94 @@ window.deleteCoupon = async function(id) {
         alert("Failed to delete coupon.");
     }
 };
+
+
+// ==========================================
+// BANNERS LOGIC
+// ==========================================
+async function loadBannersData() {
+    const bannersGrid = document.getElementById('banners-grid');
+    try {
+        const { data: banners, error } = await supabase
+            .from('homepage_banners')
+            .select('*');
+            
+        if (error) throw error;
+        
+        let html = '';
+        banners.forEach(banner => {
+            html += `
+                <div class="glass-panel p-6 rounded-2xl flex flex-col gap-4">
+                    <h3 class="font-headline-lg-mobile text-xl text-primary">${banner.title}</h3>
+                    <p class="text-on-surface-variant font-label-sm">${banner.subtitle}</p>
+                    
+                    <div class="w-full h-48 rounded-xl overflow-hidden bg-surface-container flex items-center justify-center relative">
+                        <img src="${banner.image_url}" id="preview-${banner.id}" class="w-full h-full object-cover" onerror="this.src=''; this.alt='No Image'">
+                    </div>
+                    
+                    <div>
+                        <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Upload New Image</label>
+                        <input type="file" id="file-${banner.id}" accept="image/*" class="w-full font-body-md file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-fixed file:text-on-primary-fixed hover:file:bg-primary-fixed-dim">
+                    </div>
+                </div>
+            `;
+        });
+        
+        bannersGrid.innerHTML = html;
+        
+    } catch (e) {
+        console.error("Error loading banners:", e);
+        bannersGrid.innerHTML = `<div class="col-span-full p-6 text-center text-error">Failed to load banners. Make sure you ran the SQL script!</div>`;
+    }
+}
+
+const btnSaveBanners = document.getElementById('btn-save-banners');
+if (btnSaveBanners) {
+    btnSaveBanners.addEventListener('click', async () => {
+        btnSaveBanners.disabled = true;
+        const originalText = btnSaveBanners.innerHTML;
+        btnSaveBanners.innerHTML = `<span class="material-symbols-outlined">sync</span> Saving...`;
+        
+        try {
+            const { data: banners } = await supabase.from('homepage_banners').select('*');
+            
+            for (const banner of banners) {
+                const fileInput = document.getElementById(`file-${banner.id}`);
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `banner_${banner.id}_${Math.random().toString(36).substring(2, 10)}.${fileExt}`;
+                    
+                    // Upload to product-images bucket
+                    const { error: uploadError } = await supabase.storage
+                        .from('product-images')
+                        .upload(fileName, file);
+                        
+                    if (uploadError) throw uploadError;
+                    
+                    const { data: publicUrlData } = supabase.storage
+                        .from('product-images')
+                        .getPublicUrl(fileName);
+                        
+                    // Update Database
+                    const { error: updateError } = await supabase
+                        .from('homepage_banners')
+                        .update({ image_url: publicUrlData.publicUrl })
+                        .eq('id', banner.id);
+                        
+                    if (updateError) throw updateError;
+                }
+            }
+            
+            alert("Banners updated successfully!");
+            loadBannersData(); // Refresh UI
+            
+        } catch (e) {
+            console.error(e);
+            alert("Error saving banners: " + e.message);
+        } finally {
+            btnSaveBanners.disabled = false;
+            btnSaveBanners.innerHTML = originalText;
+        }
+    });
+}
