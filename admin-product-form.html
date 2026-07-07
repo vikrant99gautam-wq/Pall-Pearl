@@ -175,6 +175,20 @@
                             </select>
                         </div>
                         
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-1 md:col-span-2">
+                            <div>
+                                <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Quantity Available</label>
+                                <input type="number" id="product-quantity" value="10" required min="0" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 font-body-md text-on-surface focus:ring-2 focus:ring-primary outline-none">
+                            </div>
+                            <div class="flex items-center h-full pt-6">
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                  <input type="checkbox" id="product-sold-out" class="sr-only peer">
+                                  <div class="w-11 h-6 bg-surface-dim peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-error"></div>
+                                  <span class="ml-3 font-label-sm text-on-surface-variant uppercase tracking-widest">Mark as Sold Out</span>
+                                </label>
+                            </div>
+                        </div>
+                        
                         <!-- Image 1 (Main) -->
                         <div class="col-span-1 md:col-span-2 bg-surface rounded-2xl p-6 border border-outline-variant/30">
                             <h3 class="font-label-sm text-on-surface-variant uppercase tracking-widest mb-4">Main Product Image (Required)</h3>

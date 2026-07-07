@@ -217,9 +217,10 @@
 <textarea id="custom-mod" class="w-full bg-surface-container border border-outline-variant rounded-xl p-4 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none h-24" placeholder="Any custom modifications or notes? Let us know here..."></textarea>
 </div>
 <!-- Actions -->
+<div id="stock-status-container" class="mb-4"></div>
 <div class="flex flex-col gap-4 mb-12">
-<button onclick="try { addProductToCart(); } catch(e) { alert('Cart error: ' + e); }" class="w-full py-4 rounded-xl glass-panel text-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-container transition-all">Add to Bag</button>
-<button onclick="try { buyNowCheckout(); } catch(e) { alert('Buy error: ' + e); }" class="w-full py-4 rounded-xl glass-panel text-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-container transition-all">
+<button id="btn-add-to-cart" onclick="try { addProductToCart(); } catch(e) { alert('Cart error: ' + e); }" class="w-full py-4 rounded-xl glass-panel text-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-container transition-all">Add to Bag</button>
+<button id="btn-buy-now" onclick="try { buyNowCheckout(); } catch(e) { alert('Buy error: ' + e); }" class="w-full py-4 rounded-xl glass-panel text-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-container transition-all">
                         Buy Now
                     </button>
 </div>
@@ -491,6 +492,30 @@
                         btn.textContent = vColor;
                         btn.dataset.colorName = vColor;
                         
+                        if (isSelected) {
+                            const stockContainer = document.getElementById("stock-status-container");
+                            const btnAdd = document.getElementById("btn-add-to-cart");
+                            const btnBuy = document.getElementById("btn-buy-now");
+                            
+                            if (variant.is_sold_out || (variant.quantity !== null && variant.quantity <= 0)) {
+                                stockContainer.innerHTML = '<span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-error/10 text-error"><span class="material-symbols-outlined mr-2">block</span>SOLD OUT</span>';
+                                btnAdd.disabled = true;
+                                btnBuy.disabled = true;
+                                btnAdd.classList.add('opacity-50', 'cursor-not-allowed');
+                                btnBuy.classList.add('opacity-50', 'cursor-not-allowed');
+                                btnAdd.classList.remove('hover:bg-surface-container');
+                                btnBuy.classList.remove('hover:bg-surface-container');
+                                btnAdd.textContent = "Sold Out";
+                                btnBuy.textContent = "Sold Out";
+                                btnAdd.onclick = null;
+                                btnBuy.onclick = null;
+                            } else if (variant.quantity !== null && variant.quantity > 0 && variant.quantity <= 5) {
+                                stockContainer.innerHTML = `<span class="inline-flex items-center text-sm font-semibold text-error"><span class="material-symbols-outlined text-[20px] mr-1">warning</span>Only ${variant.quantity} left in stock! Hurry!</span>`;
+                            } else {
+                                stockContainer.innerHTML = '';
+                            }
+                        }
+                        
                         btn.addEventListener("click", () => {
                             // Redirect to this variant
                             const url = new URL(window.location.href);
@@ -506,6 +531,29 @@
                     });
                 } else {
                     document.getElementById("color-section").style.display = "none";
+                    // Handle stock for product with no variants
+                    const variant = data[0];
+                    const stockContainer = document.getElementById("stock-status-container");
+                    const btnAdd = document.getElementById("btn-add-to-cart");
+                    const btnBuy = document.getElementById("btn-buy-now");
+                    
+                    if (variant.is_sold_out || (variant.quantity !== null && variant.quantity <= 0)) {
+                        stockContainer.innerHTML = '<span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-error/10 text-error"><span class="material-symbols-outlined mr-2">block</span>SOLD OUT</span>';
+                        btnAdd.disabled = true;
+                        btnBuy.disabled = true;
+                        btnAdd.classList.add('opacity-50', 'cursor-not-allowed');
+                        btnBuy.classList.add('opacity-50', 'cursor-not-allowed');
+                        btnAdd.classList.remove('hover:bg-surface-container');
+                        btnBuy.classList.remove('hover:bg-surface-container');
+                        btnAdd.textContent = "Sold Out";
+                        btnBuy.textContent = "Sold Out";
+                        btnAdd.onclick = null;
+                        btnBuy.onclick = null;
+                    } else if (variant.quantity !== null && variant.quantity > 0 && variant.quantity <= 5) {
+                        stockContainer.innerHTML = `<span class="inline-flex items-center text-sm font-semibold text-error"><span class="material-symbols-outlined text-[20px] mr-1">warning</span>Only ${variant.quantity} left in stock! Hurry!</span>`;
+                    } else {
+                        stockContainer.innerHTML = '';
+                    }
                 }
             }
         });
