@@ -527,12 +527,19 @@
         'festive_edit': "window.location.href='festive-collection.html'"
     };
 
+    const heroMap = {
+        'hero_main': 'Purple Kurti',
+        'hero_side': 'Navy Kurti',
+        'hero_small': 'Pink Top Detail'
+    };
+
     async function loadDynamicBanners() {
         try {
             const { data: banners, error } = await supabase.from('homepage_banners').select('*');
             if (error) throw error;
             
             banners.forEach(banner => {
+                // 1. Update Masonry Cards
                 const onclickAttr = bannerMap[banner.id];
                 if (onclickAttr) {
                     const card = document.querySelector(`div[onclick="${onclickAttr}"]`);
@@ -544,6 +551,15 @@
                         if (img && banner.image_url) img.src = banner.image_url;
                         if (h3 && banner.title) h3.textContent = banner.title;
                         if (p && banner.subtitle) p.textContent = banner.subtitle;
+                    }
+                }
+                
+                // 2. Update Hero Images
+                const heroAlt = heroMap[banner.id];
+                if (heroAlt) {
+                    const heroImg = document.querySelector(`img[alt="${heroAlt}"]`);
+                    if (heroImg && banner.image_url) {
+                        heroImg.src = banner.image_url;
                     }
                 }
             });

@@ -564,47 +564,6 @@ window.deleteCoupon = async function(id) {
         alert("Failed to delete coupon.");
     }
 };
-
-
-// ==========================================
-// BANNERS LOGIC
-// ==========================================
-async function loadBannersData() {
-    const bannersGrid = document.getElementById('banners-grid');
-    try {
-        const { data: banners, error } = await supabase
-            .from('homepage_banners')
-            .select('*');
-            
-        if (error) throw error;
-        
-        let html = '';
-        banners.forEach(banner => {
-            html += `
-                <div class="glass-panel p-6 rounded-2xl flex flex-col gap-4">
-                    <h3 class="font-headline-lg-mobile text-xl text-primary">${banner.title}</h3>
-                    <p class="text-on-surface-variant font-label-sm">${banner.subtitle}</p>
-                    
-                    <div class="w-full h-48 rounded-xl overflow-hidden bg-surface-container flex items-center justify-center relative">
-                        <img src="${banner.image_url}" id="preview-${banner.id}" class="w-full h-full object-cover" onerror="this.src=''; this.alt='No Image'">
-                    </div>
-                    
-                    <div>
-                        <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Upload New Image</label>
-                        <input type="file" id="file-${banner.id}" accept="image/*" class="w-full font-body-md file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-fixed file:text-on-primary-fixed hover:file:bg-primary-fixed-dim">
-                    </div>
-                </div>
-            `;
-        });
-        
-        bannersGrid.innerHTML = html;
-        
-    } catch (e) {
-        console.error("Error loading banners:", e);
-        bannersGrid.innerHTML = `<div class="col-span-full p-6 text-center text-error">Failed to load banners. Make sure you ran the SQL script!</div>`;
-    }
-}
-
 const btnSaveBanners = document.getElementById('btn-save-banners');
 if (btnSaveBanners) {
     btnSaveBanners.addEventListener('click', async () => {
@@ -654,4 +613,56 @@ if (btnSaveBanners) {
             btnSaveBanners.innerHTML = originalText;
         }
     });
+}
+
+// ==========================================
+// BANNERS LOGIC
+// ==========================================
+async function loadBannersData() {
+    const bannersGrid = document.getElementById('banners-grid');
+    try {
+        const { data: banners, error } = await supabase
+            .from('homepage_banners')
+            .select('*');
+            
+        if (error) throw error;
+        
+        const dimensions = {
+            'new_arrivals': 'Recommended Size: 800x1200 (Portrait)',
+            'tops': 'Recommended Size: 800x800 (Square)',
+            'kurtis': 'Recommended Size: 800x1000 (Portrait)',
+            'coord_sets': 'Recommended Size: 800x700 (Landscape)',
+            'summer_edit': 'Recommended Size: 1000x800 (Landscape)',
+            'festive_edit': 'Recommended Size: 800x800 (Square)',
+            'hero_main': 'Recommended Size: 800x1200 (Portrait)',
+            'hero_side': 'Recommended Size: 800x1200 (Portrait)',
+            'hero_small': 'Recommended Size: 600x600 (Square)'
+        };
+        
+        let html = '';
+        banners.forEach(banner => {
+            html += `
+                <div class="glass-panel p-6 rounded-2xl flex flex-col gap-4">
+                    <h3 class="font-headline-lg-mobile text-xl text-primary">${banner.title}</h3>
+                    <p class="text-on-surface-variant font-label-sm">${banner.subtitle}</p>
+                    
+                    <div class="w-full h-48 rounded-xl overflow-hidden bg-surface-container flex items-center justify-center relative">
+                        <img src="${banner.image_url}" id="preview-${banner.id}" class="w-full h-full object-cover" onerror="this.src=''; this.alt='No Image'">
+                    </div>
+                    
+                    <div>
+                        <label class="block font-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Upload New Image</label>
+                        <input type="file" id="file-${banner.id}" accept="image/*" class="w-full font-body-md file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-fixed file:text-on-primary-fixed hover:file:bg-primary-fixed-dim">
+                        <p class="text-[11px] text-on-surface-variant mt-2 italic">${dimensions[banner.id] || 'Upload a high-quality image'}</p>
+                    </div>
+                </div>
+            `;
+        });
+        
+        bannersGrid.innerHTML = html;
+        
+    } catch (e) {
+        console.error("Error loading banners:", e);
+        bannersGrid.innerHTML = `<div class="col-span-full p-6 text-center text-error">Failed to load banners. Make sure you ran the SQL script!</div>`;
+    }
 }
