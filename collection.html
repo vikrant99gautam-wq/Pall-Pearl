@@ -247,6 +247,37 @@
 <script src="wishlist.js"></script>
 <script type="module" src="auth.js"></script>
     <script type="module" src="public-store.js"></script>
+<script type="module">
+    import { supabase } from './supabase-config.js';
+    
+    const collectionMap = {
+        'coll_tops': 'Tops Collection',
+        'coll_kurtis': 'Kurtis Collection',
+        'coll_dresses': 'Dresses Collection',
+        'coll_coords': 'Co-ord Sets Collection'
+    };
+
+    async function loadDynamicCollections() {
+        try {
+            const { data: banners, error } = await supabase.from('homepage_banners').select('*');
+            if (error) throw error;
+            
+            banners.forEach(banner => {
+                const altAttr = collectionMap[banner.id];
+                if (altAttr) {
+                    const img = document.querySelector(`img[alt="${altAttr}"]`);
+                    if (img && banner.image_url) {
+                        img.src = banner.image_url;
+                    }
+                }
+            });
+        } catch (error) {
+            console.error("Error loading dynamic collection banners:", error);
+        }
+    }
+    
+    loadDynamicCollections();
+</script>
 
 <!-- Mobile Menu Overlay -->
 <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
