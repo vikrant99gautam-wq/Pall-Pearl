@@ -251,7 +251,18 @@
         }
     </style>
     <link rel="icon" type="image/jpeg" href="logo.jpeg">
+
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+        }
+        .animate-marquee {
+            animation: marquee 15s linear infinite;
+        }
+    </style>
 </head>
+
 <body class="bg-[#FFFDFB] text-on-surface antialiased overflow-x-hidden min-h-screen flex flex-col">
 <!-- Background Blobs & Ribbons - Flowing across both columns -->
 <div class="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
@@ -608,15 +619,24 @@
 
 <!-- Navbar Scroll Logic -->
 <script>
+    let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
         const nav = document.querySelector('nav');
-        if (window.scrollY > 40) {
-            nav.classList.remove('top-10');
-            nav.classList.add('top-0');
+        if (window.scrollY > lastScrollY && window.scrollY > 100) {
+            // Scrolling down -> hide navbar
+            nav.style.transform = 'translateY(-150%)';
         } else {
-            nav.classList.add('top-10');
-            nav.classList.remove('top-0');
+            // Scrolling up -> show navbar
+            nav.style.transform = 'translateY(0)';
+            if (window.scrollY > 40) {
+                nav.classList.remove('top-10');
+                nav.classList.add('top-0');
+            } else {
+                nav.classList.add('top-10');
+                nav.classList.remove('top-0');
+            }
         }
+        lastScrollY = window.scrollY;
     });
 </script>
 </body>
