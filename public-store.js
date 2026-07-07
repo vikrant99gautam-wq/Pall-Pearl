@@ -30,20 +30,35 @@ document.addEventListener("DOMContentLoaded", async () => {
             const defaultColor = colors.split(',')[0]?.trim() || '';
             const firstImage = p.imageurl ? p.imageurl.split(',')[0].trim() : '';
             
+            let badgeHTML = '';
+            if (p.is_sold_out || (p.quantity !== null && p.quantity <= 0)) {
+                badgeHTML = `<div class="absolute top-4 left-4 bg-error/90 backdrop-blur-sm px-3 py-1 rounded-full z-10 shadow-sm"><span class="font-label-sm text-white uppercase flex items-center tracking-wider"><span class="material-symbols-outlined text-[14px] mr-1">block</span>Sold Out</span></div>`;
+            } else if (p.quantity !== null && p.quantity > 0 && p.quantity <= 5) {
+                badgeHTML = `<div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm border border-error/20 px-3 py-1 rounded-full z-10 shadow-sm"><span class="font-label-sm text-error uppercase flex items-center tracking-wider"><span class="material-symbols-outlined text-[14px] mr-1">warning</span>Only ${p.quantity} Left</span></div>`;
+            } else if (index < 2) {
+                badgeHTML = `<div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full z-10 shadow-sm"><span class="font-label-sm text-primary uppercase tracking-wider">New</span></div>`;
+            }
+            
+            let hoverActions = '';
+            if (!p.is_sold_out && (p.quantity === null || p.quantity > 0)) {
+                hoverActions = `
+                    <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
+                        <button onclick="event.preventDefault(); addToCart({name: '${p.name.replace(/'/g, "\\'")}', price: '₹${p.price}', image: '${firstImage}', desc: '${defaultColor}', size: 'M', color: '${defaultColor}'})" class="glass-panel w-full py-3 px-4 rounded-xl flex justify-between items-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-white/90">
+                            <span class="font-label-sm uppercase text-on-surface tracking-widest">Quick Add</span>
+                            <span class="material-symbols-outlined text-on-surface">shopping_bag</span>
+                        </button>
+                    </div>`;
+            }
+            
             html += `
             <a class="masonry-item block group relative" href="product-detail.html?name=${encodeURIComponent(p.name)}&price=${encodeURIComponent('₹' + p.price)}&strike_price=${encodeURIComponent(p.strike_price || '')}&desc=${encodeURIComponent(p.description || '')}&image=${encodeURIComponent(p.imageurl)}&category=${encodeURIComponent(p.category)}&colors=${encodeURIComponent(colors)}&v=3">
                 <div class="relative overflow-hidden rounded-xl mb-4 bg-surface-container-low ${aspect}">
                     <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" alt="${p.name}" src="${firstImage}"/>
                     
-                    ${index < 2 ? `<div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full"><span class="font-label-sm text-primary uppercase">New</span></div>` : ''}
+                    ${badgeHTML}
                     
                     <!-- Hover Actions -->
-                    <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
-                        <button onclick="event.preventDefault(); addToCart({name: '${p.name.replace(/'/g, "\\'")}', price: '₹${p.price}', image: '${firstImage}', desc: '${defaultColor}', size: 'M', color: '${defaultColor}'})" class="glass-panel w-full py-3 px-4 rounded-xl flex justify-between items-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-white/90">
-                            <span class="font-label-sm uppercase text-on-surface">Quick Add</span>
-                            <span class="material-symbols-outlined text-on-surface">shopping_bag</span>
-                        </button>
-                    </div>
+                    ${hoverActions}
                     <button onclick="event.preventDefault(); toggleWishlist({name: '${p.name.replace(/'/g, "\\'")}', price: '₹${p.price}', image: '${firstImage}', desc: '${defaultColor}'}, this)" class="wishlist-btn absolute top-4 right-4 w-10 h-10 rounded-full glass-panel flex items-center justify-center text-on-surface hover:text-primary transition-colors opacity-0 group-hover:opacity-100 z-10" data-name="${p.name.replace(/'/g, "\\'")}">
                         <span class="material-symbols-outlined">favorite</span>
                     </button>
