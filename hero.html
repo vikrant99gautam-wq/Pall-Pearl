@@ -552,6 +552,61 @@
 <script src="cart.js"></script>
 <script src="wishlist.js"></script>
 <script type="module" src="auth.js"></script>
+<script type="module">
+    import { supabase } from './supabase-config.js';
+    
+    const bannerMap = {
+        'new_arrivals': "window.location.href='new-arrivals.html'",
+        'tops': "window.location.href='tops.html'",
+        'kurtis': "window.location.href='kurtis.html'",
+        'coord_sets': "window.location.href='coord-sets.html'",
+        'summer_edit': "window.location.href='summer-collection.html'",
+        'festive_edit': "window.location.href='festive-collection.html'"
+    };
+
+    const heroMap = {
+        'hero_main': 'Purple Kurti',
+        'hero_side': 'Navy Kurti',
+        'hero_small': 'Pink Top Detail'
+    };
+
+    async function loadDynamicBanners() {
+        try {
+            const { data: banners, error } = await supabase.from('homepage_banners').select('*');
+            if (error) throw error;
+            
+            banners.forEach(banner => {
+                // 1. Update Masonry Cards
+                const onclickAttr = bannerMap[banner.id];
+                if (onclickAttr) {
+                    const card = document.querySelector(`div[onclick="${onclickAttr}"]`);
+                    if (card) {
+                        const img = card.querySelector('img.card-image');
+                        const h3 = card.querySelector('h3');
+                        const p = card.querySelector('p');
+                        
+                        if (img && banner.image_url) img.src = banner.image_url;
+                        if (h3 && banner.title) h3.textContent = banner.title;
+                        if (p && banner.subtitle) p.textContent = banner.subtitle;
+                    }
+                }
+                
+                // 2. Update Hero Images
+                const heroAlt = heroMap[banner.id];
+                if (heroAlt) {
+                    const heroImg = document.querySelector(`img[alt="${heroAlt}"]`);
+                    if (heroImg && banner.image_url) {
+                        heroImg.src = banner.image_url;
+                    }
+                }
+            });
+        } catch (error) {
+            console.error("Error loading dynamic banners:", error);
+        }
+    }
+    
+    loadDynamicBanners();
+</script>
 <!-- Mobile Menu Overlay -->
 <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
 
