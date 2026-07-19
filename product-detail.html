@@ -503,10 +503,25 @@
                         const vColor = variant.colors.trim();
                         const isSelected = vColor === selectedVariantColor;
                         
+                        const colorMap = {
+                            'Pink': '#ec4899',
+                            'Red': '#ef4444',
+                            'Blue': '#3b82f6',
+                            'Maroon': '#800000',
+                            'Black': '#000000',
+                            'Purple': '#a855f7',
+                            'Green': '#22c55e',
+                            'Rani Pink': '#ff007f'
+                        };
+                        
+                        const hexColor = colorMap[vColor] || '#ccc';
                         const btn = document.createElement("button");
-                        btn.className = "color-btn px-4 py-2 rounded-xl border transition-colors font-body-md font-semibold text-sm " + 
-                                        (isSelected ? "border-2 border-primary bg-primary-fixed/20 text-primary" : "border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary");
-                        btn.textContent = vColor;
+                        btn.className = "color-btn flex items-center gap-2 px-3 py-2 rounded-lg border bg-surface transition-all " + 
+                                        (isSelected ? "border-primary ring-1 ring-primary" : "border-outline-variant/30 hover:border-primary");
+                        btn.innerHTML = `
+                            <span class="w-5 h-5 rounded-full inline-block border border-outline-variant/50 shadow-sm" style="background-color: ${hexColor};"></span>
+                            <span class="font-body-md text-sm ${isSelected ? 'font-semibold text-primary' : 'text-on-surface'}">${vColor}</span>
+                        `;
                         btn.dataset.colorName = vColor;
                         
                         if (isSelected) {
