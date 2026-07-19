@@ -25,7 +25,7 @@ function saveWishlist(list) {
 function toggleWishlist(product, buttonElement) {
     let list = getWishlist();
     const existingIndex = list.findIndex(item => item.name === product.name);
-    
+
     if (existingIndex >= 0) {
         // Remove it
         list.splice(existingIndex, 1);
@@ -52,9 +52,9 @@ function toggleWishlist(product, buttonElement) {
         }
         showToast(`Added ${product.name} to wishlist!`);
     }
-    
+
     saveWishlist(list);
-    
+
     // If we are on the wishlist page, re-render
     if (window.location.pathname.endsWith('wishlist.html')) {
         renderWishlistPage();
@@ -65,7 +65,7 @@ function removeFromWishlist(productName) {
     let list = getWishlist();
     list = list.filter(item => item.name !== productName);
     saveWishlist(list);
-    
+
     if (window.location.pathname.endsWith('wishlist.html')) {
         renderWishlistPage();
     }
@@ -75,7 +75,7 @@ function removeFromWishlist(productName) {
 function updateWishlistBadge() {
     const list = getWishlist();
     const totalItems = list.length;
-    
+
     // Look for all wishlist badges
     const badges = document.querySelectorAll('.wishlist-badge');
     badges.forEach(badge => {
@@ -97,13 +97,13 @@ function showToast(message) {
         toast.className = 'fixed bottom-4 right-4 bg-primary text-white px-6 py-3 rounded-full shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-[100] font-label-sm uppercase tracking-widest';
         document.body.appendChild(toast);
     }
-    
+
     toast.textContent = message;
-    
+
     requestAnimationFrame(() => {
         toast.classList.remove('translate-y-20', 'opacity-0');
     });
-    
+
     setTimeout(() => {
         toast.classList.add('translate-y-20', 'opacity-0');
     }, 3000);
@@ -112,7 +112,7 @@ function showToast(message) {
 // Initialize on load to set proper heart states
 document.addEventListener("DOMContentLoaded", () => {
     updateWishlistBadge();
-    
+
     // Auto-fill hearts on page load for items already in wishlist
     // This requires the buttons to have a data-product-name attribute or something similar, 
     // but since we are generating the buttons dynamically we'll try to find them if possible.

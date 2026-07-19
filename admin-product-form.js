@@ -11,7 +11,6 @@ const inputName = document.getElementById('product-name');
 const inputPrice = document.getElementById('product-price');
 const inputCategory = document.getElementById('product-category');
 const inputDesc = document.getElementById('product-desc');
-const inputColors = document.getElementById('product-colors');
 const inputStrikePrice = document.getElementById('product-strike-price');
 const inputQuantity = document.getElementById('product-quantity');
 const inputSoldOut = document.getElementById('product-sold-out');
@@ -52,7 +51,10 @@ async function loadProduct(id) {
             inputPrice.value = product.price;
             inputCategory.value = product.category;
             inputDesc.value = product.description || '';
-            inputColors.value = product.colors || '';
+            if (product.colors) {
+                const radio = document.querySelector(`input[name="product_color"][value="${product.colors}"]`);
+                if (radio) radio.checked = true;
+            }
             if (inputStrikePrice) inputStrikePrice.value = product.strike_price || '';
             if (inputQuantity) inputQuantity.value = product.quantity !== null ? product.quantity : 10;
             if (inputSoldOut) inputSoldOut.checked = product.is_sold_out || false;
@@ -123,7 +125,8 @@ if (productForm) {
         const price = parseFloat(inputPrice.value);
         const category = inputCategory.value;
         const desc = inputDesc.value;
-        const colors = inputColors.value;
+        const colorRadio = document.querySelector('input[name="product_color"]:checked');
+        const colors = colorRadio ? colorRadio.value : '';
         const strikePrice = inputStrikePrice && inputStrikePrice.value ? parseFloat(inputStrikePrice.value) : null;
         const quantity = inputQuantity ? parseInt(inputQuantity.value) : 10;
         const isSoldOut = inputSoldOut ? inputSoldOut.checked : false;
